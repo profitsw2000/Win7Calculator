@@ -1,4 +1,5 @@
 plugins {
+    //alias(libs.plugins.win7calc.main.gradle.plugin)
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
