@@ -23,4 +23,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Win7Calculator"
 include(":app")
- 
+include(":core")
+include(":data")
