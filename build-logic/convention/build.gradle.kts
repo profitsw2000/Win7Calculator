@@ -9,9 +9,13 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("mainGradlePlugin") {
-            id = "win7calc.main.gradle.plugin"
-            implementationClass = "MainGradlePlugin"
+        register("mainApplicationGradlePlugin") {
+            id = "win7calc.main.app.gradle.plugin"
+            implementationClass = "MainApplicationGradlePlugin"
+        }
+        register("mainLibraryGradlePlugin") {
+            id = "win7calc.main.lib.gradle.plugin"
+            implementationClass = "MainLibraryGradlePlugin"
         }
     }
 }

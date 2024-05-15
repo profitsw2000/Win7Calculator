@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.win7calc.main.gradle.plugin)
+    alias(libs.plugins.win7calc.main.app.gradle.plugin)
 }
 
 android {
