@@ -8,11 +8,26 @@
     android:padding="24dp"
     tools:context=".StandardCalculatorScreen">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/main_calculator_display"
+        app:layout_constraintDimensionRatio="w,1:4"
+        app:layout_constraintEnd_toEndOf="@+id/button26"
+        app:layout_constraintStart_toStartOf="@+id/button22"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button22"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/main_calculator_shadowed_button"
         android:padding="0dp"
         android:text="MC"
@@ -20,7 +35,7 @@
         app:layout_constraintDimensionRatio="w,10:8"
         app:layout_constraintEnd_toStartOf="@+id/button23"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:layout_constraintVertical_bias="0.53" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -374,10 +389,44 @@
         android:background="@drawable/main_calculator_dark_button"
         android:padding="0dp"
         android:text="="
-        app:layout_constraintDimensionRatio="w,10:8"
+        app:layout_constraintBottom_toBottomOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button50"
         app:layout_constraintTop_toTopOf="@+id/button50" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/main_calculator_light_button"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="@id/button2"
+        app:layout_constraintEnd_toEndOf="@+id/button48"
+        app:layout_constraintStart_toStartOf="@+id/button47"
+        app:layout_constraintTop_toBottomOf="@+id/button47" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/main_calculator_light_button"
+        android:text=","
+        app:layout_constraintDimensionRatio="w,8:10"
+        app:layout_constraintEnd_toEndOf="@+id/button49"
+        app:layout_constraintStart_toStartOf="@+id/button49"
+        app:layout_constraintTop_toTopOf="@+id/button" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/main_calculator_dark_button"
+        android:text="+"
+        app:layout_constraintBottom_toBottomOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="@+id/button50"
+        app:layout_constraintStart_toStartOf="@+id/button50"
+        app:layout_constraintTop_toTopOf="@+id/button2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
