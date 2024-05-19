@@ -4,33 +4,29 @@
     <item>
         <shape
             android:shape="rectangle">
-            <solid android:color="#8797AA"/>
-            <corners android:radius="2dp"/>
+            <solid android:color="#FF8797AA"/>
+            <corners android:radius="@dimen/main_calculator_button_corner_radius"/>
         </shape>
     </item>
 
     <item
-        android:bottom="2dp"
-        android:left="2dp"
-        android:right="2dp"
-        android:top="2dp">
+        android:bottom="@dimen/main_calculator_buttons_stroke_half_size"
+        android:left="@dimen/main_calculator_buttons_stroke_half_size"
+        android:right="@dimen/main_calculator_buttons_stroke_half_size"
+        android:top="@dimen/main_calculator_buttons_stroke_half_size">
         <shape
             android:shape="rectangle">
             <solid android:color="@color/white"/>
-            <corners android:radius="2dp"/>
+            <corners android:radius="@dimen/main_calculator_button_corner_radius"/>
         </shape>
     </item>
 
     <item
-        android:bottom="4dp"
-        android:left="4dp"
-        android:right="4dp"
-        android:top="4dp"
+        android:bottom="@dimen/main_calculator_buttons_stroke_size"
+        android:left="@dimen/main_calculator_buttons_stroke_size"
+        android:right="@dimen/main_calculator_buttons_stroke_size"
+        android:top="@dimen/main_calculator_buttons_stroke_size"
         android:drawable="@drawable/dark_button_background">
-            <shape
-                android:shape="rectangle">
-                <corners android:radius="5dp"/>
-            </shape>
     </item>
 
 </layer-list>
