@@ -184,7 +184,7 @@
             android:layout_marginTop="@dimen/calculator_space_between_buttons_size"
             android:layout_marginEnd="@dimen/calculator_space_between_buttons_half_size"
             android:background="@drawable/main_calculator_dark_button"
-            android:scaleType="fitxy"
+            android:scaleType="fitXY"
             android:src="@drawable/backspace_arrow_img"
             app:layout_constraintBottom_toTopOf="@+id/button37"
             app:layout_constraintDimensionRatio="w,10:8"
