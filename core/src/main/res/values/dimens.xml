@@ -5,4 +5,11 @@
     <dimen name="main_calculator_buttons_stroke_size">4dp</dimen>
     <dimen name="main_calculator_buttons_stroke_half_size">2dp</dimen>
     <dimen name="main_calculator_button_corner_radius">2dp</dimen>
+    <dimen name="calculator_menu_item_text_size">18sp</dimen>
+    <dimen name="calculator_menu_space_between_items_text">24dp</dimen>
+    <dimen name="calculator_menu_stroke_size">2dp</dimen>
+    <dimen name="calculator_menu_items_vertical_margin">4dp</dimen>
+    <dimen name="calculator_space_between_buttons_double_size">16dp</dimen>
+    <dimen name="calculator_space_between_buttons_half_size">4dp</dimen>
+    <dimen name="calculator_space_between_buttons_size">8dp</dimen>
 </resources>

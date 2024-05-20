@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Win7Calculator</string>
+    <string name="calculator_menu_view_item_text">Вид</string>
+    <string name="calculator_menu_edit_item_text">Правка</string>
+    <string name="calculator_menu_help_item_text">Справка</string>
 </resources>

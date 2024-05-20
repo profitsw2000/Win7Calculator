@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="calculator_menu_item_text_size">18sp</dimen>
-    <dimen name="calculator_menu_space_between_items_text">24dp</dimen>
-    <dimen name="calculator_menu_stroke_size">2dp</dimen>
-    <dimen name="calculator_menu_items_vertical_margin">4dp</dimen>
-    <dimen name="calculator_space_between_buttons_double_size">16dp</dimen>
-    <dimen name="calculator_space_between_buttons_half_size">4dp</dimen>
-    <dimen name="calculator_space_between_buttons_size">8dp</dimen>
+    <dimen name="main_calculator_button_maximum_text_size">100sp</dimen>
+    <dimen name="main_calculator_button_minimum_text_size">8sp</dimen>
+    <dimen name="main_calculator_operation_buttons_padding">12dp</dimen>
+    <dimen name="main_calculator_digit_buttons_padding">6dp</dimen>
+    <dimen name="main_calculator_buttons_text_auto_size_step_granularity">2sp</dimen>
 </resources>
