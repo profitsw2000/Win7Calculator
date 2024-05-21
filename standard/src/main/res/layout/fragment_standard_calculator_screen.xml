@@ -88,27 +88,51 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="10dp"
                 android:text="M"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView3"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="12dp"
-                android:includeFontPadding="false"
-                android:text="0"
-                android:textSize="48sp"
-                android:maxLines="1"
-                android:autoSizeMaxTextSize="@dimen/main_calculator_button_maximum_text_size"
-                android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
-                android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
+                android:layout_marginBottom="8dp"
+                android:autoSizeMaxTextSize="52sp"
+                android:autoSizeMinTextSize="22sp"
+                android:autoSizeStepGranularity="10sp"
                 android:autoSizeTextType="uniform"
+                android:gravity="end|bottom"
+                android:includeFontPadding="false"
+                android:maxLength="16"
+                android:maxLines="1"
+                android:text="012345678901234"
+                android:textSize="44sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="12 / 5"
+                android:textSize="20sp"
+                android:gravity="end|bottom"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/textView3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
