@@ -83,6 +83,33 @@
             app:layout_constraintStart_toStartOf="@+id/button22"
             app:layout_constraintTop_toTopOf="parent">
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="M"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="12dp"
+                android:includeFontPadding="false"
+                android:text="0"
+                android:textSize="48sp"
+                android:maxLines="1"
+                android:autoSizeMaxTextSize="@dimen/main_calculator_button_maximum_text_size"
+                android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
+                android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
+                android:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatButton
