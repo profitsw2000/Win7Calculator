@@ -6,6 +6,7 @@ import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 
 class OperationResultState(
     private val mainString: String,
+    private val historyString: String,
     private val memoryWritten: Boolean
 ) : GeneralCalculatorState {
     override fun consumeAction(action: CalculatorAction): CalculatorState {
@@ -18,7 +19,7 @@ class OperationResultState(
             CalculatorAction.ClearMemory -> TODO()
             is CalculatorAction.Digit -> TODO()
             CalculatorAction.Divide -> TODO()
-            CalculatorAction.EqualCjk -> TODO()
+            CalculatorAction.Equal -> TODO()
             CalculatorAction.Multiply -> TODO()
             CalculatorAction.Percentage -> TODO()
             CalculatorAction.PlusMinus -> TODO()

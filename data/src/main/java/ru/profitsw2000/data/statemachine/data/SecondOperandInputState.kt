@@ -19,7 +19,7 @@ class SecondOperandInputState(
             CalculatorAction.ClearMemory -> TODO()
             is CalculatorAction.Digit -> TODO()
             CalculatorAction.Divide -> TODO()
-            CalculatorAction.EqualCjk -> TODO()
+            CalculatorAction.Equal -> TODO()
             CalculatorAction.Multiply -> TODO()
             CalculatorAction.Percentage -> TODO()
             CalculatorAction.PlusMinus -> TODO()

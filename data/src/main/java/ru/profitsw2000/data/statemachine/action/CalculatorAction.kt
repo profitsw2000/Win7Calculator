@@ -1,7 +1,7 @@
 package ru.profitsw2000.data.statemachine.action
 
 sealed class CalculatorAction {
-    class Digit(digit: String) : CalculatorAction()
+    data class Digit(val digit: String) : CalculatorAction()
     data object ClearMemory : CalculatorAction()
     data object ReadMemory : CalculatorAction()
     data object SaveToMemory : CalculatorAction()
@@ -18,6 +18,5 @@ sealed class CalculatorAction {
     data object Recipoc : CalculatorAction()
     data object Subtract : CalculatorAction()
     data object Add : CalculatorAction()
-    data object EqualCjk : CalculatorAction()
-
+    data object Equal : CalculatorAction()
 }
