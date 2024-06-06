@@ -1,5 +1,7 @@
 package ru.profitsw2000.data.data
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import ru.profitsw2000.data.BUTTON_ADD_CODE
 import ru.profitsw2000.data.BUTTON_BACKSPACE_CODE
 import ru.profitsw2000.data.BUTTON_CLEAR_ALL_CODE
@@ -22,13 +24,23 @@ import ru.profitsw2000.data.domain.GeneralCalculatorRepository
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.data.InitialState
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
+import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import kotlin.properties.Delegates
 
 class GeneralCalculatorRepositoryImpl() : GeneralCalculatorRepository {
 
-    private var currentState by Delegates.observable<CalculatorState>(InitialState(false)) { _, oldValue, newValue ->
+    private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(false)) { _, oldValue, newValue ->
         renderGeneralCalculatorState(newValue, oldValue)
     }
+
+    private val mainStringMutableDataSource: MutableStateFlow<String> = MutableStateFlow("0")
+    val mainStringDataSource: StateFlow<String> = mainStringMutableDataSource
+
+    private val historyStringMutableDataSource: MutableStateFlow<String> = MutableStateFlow("")
+    val historyStringDataSource: StateFlow<String> = historyStringMutableDataSource
+
+    private val memorySignMutableDataSource: MutableStateFlow<String> = MutableStateFlow("")
+    val memorySignDataSource: StateFlow<String> = memorySignMutableDataSource
 
     override fun operationClicked(buttonCode: Int) {
         when(buttonCode) {
@@ -58,10 +70,17 @@ class GeneralCalculatorRepositoryImpl() : GeneralCalculatorRepository {
     }
 
     private fun updateCurrentState(action: CalculatorAction) {
-        currentState = currentState.consumeAction(action)
+        currentState = currentState.consumeAction(action) as GeneralCalculatorState
     }
 
-    private fun renderGeneralCalculatorState(newState: CalculatorState, oldState: CalculatorState) {
+    private fun renderGeneralCalculatorState(newState: GeneralCalculatorState, oldState: GeneralCalculatorState) {
+        when(newState) {
+            is InitialState -> setMemoryValue(newState.memoryWritten)
+        }
+    }
 
+    private fun setMemoryValue(memoryWritten: Boolean) {
+        if (memoryWritten) memorySignMutableDataSource.value = "M"
+        else memorySignMutableDataSource.value = ""
     }
 }
