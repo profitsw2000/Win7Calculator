@@ -17,6 +17,7 @@ class InitialState(
             CalculatorAction.Recipoc -> recipocOperation(memoryWritten)
             CalculatorAction.SquareRoot -> squareRootOperation(memoryWritten)
             CalculatorAction.Subtract -> primitiveMathOperation(memoryWritten, "-")
+            CalculatorAction.ClearMemory -> clearMemory()
             else -> this
         }
     }
@@ -39,5 +40,9 @@ class InitialState(
 
     private fun recipocOperation(memoryWritten: Boolean): GeneralCalculatorState {
         return ErrorState("Деление на ноль невозможно", "recipoc(0)", memoryWritten)
+    }
+
+    private fun clearMemory(): GeneralCalculatorState {
+        return InitialState(false)
     }
 }
