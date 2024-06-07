@@ -27,7 +27,7 @@ import ru.profitsw2000.standard.R
 import ru.profitsw2000.standard.databinding.FragmentStandardCalculatorScreenBinding
 import ru.profitsw2000.standard.presentation.viewmodel.StandardCalculatorViewModel
 
-class StandardCalculatorScreen : Fragment() {
+class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_calculator_screen) {
 
     private var _binding: FragmentStandardCalculatorScreenBinding? = null
     private val binding get() = _binding!!
@@ -137,5 +137,10 @@ class StandardCalculatorScreen : Fragment() {
             BUTTON_PERCENTAGE_CODE) }
         reciprocButton.setOnClickListener { standardCalculatorViewModel.performOperation(
             BUTTON_RECIPROC_CODE) }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = StandardCalculatorScreenFragment()
     }
 }
