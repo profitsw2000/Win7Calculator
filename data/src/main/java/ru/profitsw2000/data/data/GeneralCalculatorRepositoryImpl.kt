@@ -38,13 +38,13 @@ class GeneralCalculatorRepositoryImpl() : GeneralCalculatorRepository {
     }
 
     private val mainStringMutableDataSource: MutableStateFlow<String> = MutableStateFlow("0")
-    val mainStringDataSource: StateFlow<String> = mainStringMutableDataSource
+    override val mainStringDataSource: StateFlow<String> = mainStringMutableDataSource
 
     private val historyStringMutableDataSource: MutableStateFlow<String> = MutableStateFlow("")
-    val historyStringDataSource: StateFlow<String> = historyStringMutableDataSource
+    override val historyStringDataSource: StateFlow<String> = historyStringMutableDataSource
 
     private val memorySignMutableDataSource: MutableStateFlow<String> = MutableStateFlow("")
-    val memorySignDataSource: StateFlow<String> = memorySignMutableDataSource
+    override val memorySignDataSource: StateFlow<String> = memorySignMutableDataSource
 
     override fun operationClicked(buttonCode: Int) {
         when(buttonCode) {
