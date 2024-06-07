@@ -22,7 +22,11 @@ import ru.profitsw2000.data.BUTTON_SQUARE_ROOT_CODE
 import ru.profitsw2000.data.BUTTON_SUBTRACT_CODE
 import ru.profitsw2000.data.domain.GeneralCalculatorRepository
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
+import ru.profitsw2000.data.statemachine.data.ErrorState
+import ru.profitsw2000.data.statemachine.data.FirstOperandInputState
 import ru.profitsw2000.data.statemachine.data.InitialState
+import ru.profitsw2000.data.statemachine.data.OperationResultState
+import ru.profitsw2000.data.statemachine.data.SecondOperandInputState
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import kotlin.properties.Delegates
@@ -76,11 +80,26 @@ class GeneralCalculatorRepositoryImpl() : GeneralCalculatorRepository {
     private fun renderGeneralCalculatorState(newState: GeneralCalculatorState, oldState: GeneralCalculatorState) {
         when(newState) {
             is InitialState -> setMemoryValue(newState.memoryWritten)
+            is FirstOperandInputState -> setMainAndMemoryValues(newState.mainString, newState.memoryWritten)
+            is SecondOperandInputState -> setCalculatorDisplayValues(newState.mainString, newState.historyString, newState.memoryWritten)
+            is OperationResultState -> setCalculatorDisplayValues(newState.mainString, newState.historyString, newState.memoryWritten)
+            is ErrorState -> setCalculatorDisplayValues(newState.mainString, newState.historyString, newState.memoryWritten)
+            else -> {}
         }
     }
 
     private fun setMemoryValue(memoryWritten: Boolean) {
         if (memoryWritten) memorySignMutableDataSource.value = "M"
         else memorySignMutableDataSource.value = ""
+    }
+
+    private fun setMainAndMemoryValues(mainString: String, memoryWritten: Boolean) {
+        setMemoryValue(memoryWritten)
+        mainStringMutableDataSource.value = mainString
+    }
+
+    private fun setCalculatorDisplayValues(mainString: String, historyString: String, memoryWritten: Boolean) {
+        setMainAndMemoryValues(mainString, memoryWritten)
+        historyStringMutableDataSource.value = historyString
     }
 }

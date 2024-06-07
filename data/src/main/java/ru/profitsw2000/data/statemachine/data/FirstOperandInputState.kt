@@ -5,8 +5,8 @@ import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 
 class FirstOperandInputState(
-    private val mainString: String,
-    private val memoryWritten: Boolean
+    val mainString: String,
+    val memoryWritten: Boolean
 ) : GeneralCalculatorState {
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action){
