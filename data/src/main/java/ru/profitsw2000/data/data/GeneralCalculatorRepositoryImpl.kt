@@ -31,7 +31,7 @@ import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import kotlin.properties.Delegates
 
-class GeneralCalculatorRepositoryImpl() : GeneralCalculatorRepository {
+class GeneralCalculatorRepositoryImpl : GeneralCalculatorRepository {
 
     private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(false)) { _, oldValue, newValue ->
         renderGeneralCalculatorState(newValue, oldValue)
