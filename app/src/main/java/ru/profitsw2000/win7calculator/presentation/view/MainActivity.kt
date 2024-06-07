@@ -1,10 +1,11 @@
-package ru.profitsw2000.win7calculator
+package ru.profitsw2000.win7calculator.presentation.view
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import ru.profitsw2000.win7calculator.R
 import ru.profitsw2000.win7calculator.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
