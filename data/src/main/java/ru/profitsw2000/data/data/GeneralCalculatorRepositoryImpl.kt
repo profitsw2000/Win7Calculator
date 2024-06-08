@@ -79,7 +79,7 @@ class GeneralCalculatorRepositoryImpl : GeneralCalculatorRepository {
 
     private fun renderGeneralCalculatorState(newState: GeneralCalculatorState, oldState: GeneralCalculatorState) {
         when(newState) {
-            is InitialState -> setMemoryValue(newState.memoryWritten)
+            is InitialState -> setCalculatorDisplayValues("0", "", newState.memoryWritten)
             is FirstOperandInputState -> setMainAndMemoryValues(newState.mainString, newState.memoryWritten)
             is SecondOperandInputState -> setCalculatorDisplayValues(newState.mainString, newState.historyString, newState.memoryWritten)
             is OperationResultState -> setCalculatorDisplayValues(newState.mainString, newState.historyString, newState.memoryWritten)

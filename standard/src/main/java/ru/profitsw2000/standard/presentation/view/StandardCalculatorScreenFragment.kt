@@ -48,6 +48,7 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeData()
         initViews()
     }
 
@@ -137,6 +138,30 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
             BUTTON_PERCENTAGE_CODE) }
         reciprocButton.setOnClickListener { standardCalculatorViewModel.performOperation(
             BUTTON_RECIPROC_CODE) }
+    }
+
+    private fun observeData() {
+        observeMainStringData()
+        observeHistoryStringData()
+        observeMemorySignData()
+    }
+
+    private fun observeMainStringData() = with(binding) {
+        standardCalculatorViewModel.calculatorDisplayMainString.observe(viewLifecycleOwner) {
+            this.inputAndResultTextView.text = it
+        }
+    }
+
+    private fun observeHistoryStringData() = with(binding) {
+        standardCalculatorViewModel.calculatorDisplayHistoryString.observe(viewLifecycleOwner) {
+            this.operationHistoryTextView.text = it
+        }
+    }
+
+    private fun observeMemorySignData() = with(binding) {
+        standardCalculatorViewModel.calculatorDisplayMemorySign.observe(viewLifecycleOwner) {
+            this.memorySignTextView.text = it
+        }
     }
 
     companion object {
