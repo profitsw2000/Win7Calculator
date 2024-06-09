@@ -1,13 +1,10 @@
 package ru.profitsw2000.data.domain
 
 import kotlinx.coroutines.flow.StateFlow
+import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 
 interface GeneralCalculatorRepository : CommonCalculatorRepository {
 
-    val mainStringDataSource: StateFlow<String>
-
-    val historyStringDataSource: StateFlow<String>
-
-    val memorySignDataSource: StateFlow<String>
+    val generalCalculatorDataSource: StateFlow<GeneralCalculatorDataModel>
 
 }

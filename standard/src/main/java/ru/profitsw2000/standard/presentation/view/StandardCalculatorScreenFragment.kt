@@ -23,6 +23,7 @@ import ru.profitsw2000.data.BUTTON_PLUS_MINUS_CODE
 import ru.profitsw2000.data.BUTTON_RECIPROC_CODE
 import ru.profitsw2000.data.BUTTON_SQUARE_ROOT_CODE
 import ru.profitsw2000.data.BUTTON_SUBTRACT_CODE
+import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 import ru.profitsw2000.standard.R
 import ru.profitsw2000.standard.databinding.FragmentStandardCalculatorScreenBinding
 import ru.profitsw2000.standard.presentation.viewmodel.StandardCalculatorViewModel
@@ -141,27 +142,15 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
     }
 
     private fun observeData() {
-        observeMainStringData()
-        observeHistoryStringData()
-        observeMemorySignData()
-    }
-
-    private fun observeMainStringData() = with(binding) {
-        standardCalculatorViewModel.calculatorDisplayMainString.observe(viewLifecycleOwner) {
-            this.inputAndResultTextView.text = it
+        standardCalculatorViewModel.generalCalculatorDataModelLiveData.observe(viewLifecycleOwner) {
+            populateDisplayTextViews(it)
         }
     }
 
-    private fun observeHistoryStringData() = with(binding) {
-        standardCalculatorViewModel.calculatorDisplayHistoryString.observe(viewLifecycleOwner) {
-            this.operationHistoryTextView.text = it
-        }
-    }
-
-    private fun observeMemorySignData() = with(binding) {
-        standardCalculatorViewModel.calculatorDisplayMemorySign.observe(viewLifecycleOwner) {
-            this.memorySignTextView.text = it
-        }
+    private fun populateDisplayTextViews(generalCalculatorDataModel: GeneralCalculatorDataModel) = with(binding) {
+        inputAndResultTextView.text = generalCalculatorDataModel.mainString
+        operationHistoryTextView.text = generalCalculatorDataModel.historyString
+        //TODO - populate memory sign
     }
 
     companion object {

@@ -6,7 +6,6 @@ import ru.profitsw2000.data.BUTTON_ADD_CODE
 import ru.profitsw2000.data.BUTTON_BACKSPACE_CODE
 import ru.profitsw2000.data.BUTTON_CLEAR_ALL_CODE
 import ru.profitsw2000.data.BUTTON_CLEAR_ENTERED_CODE
-import ru.profitsw2000.data.BUTTON_DIGIT_CODE
 import ru.profitsw2000.data.BUTTON_DIVIDE_CODE
 import ru.profitsw2000.data.BUTTON_EQUAL_CODE
 import ru.profitsw2000.data.BUTTON_MEMORY_ADD_CODE
@@ -21,30 +20,25 @@ import ru.profitsw2000.data.BUTTON_RECIPROC_CODE
 import ru.profitsw2000.data.BUTTON_SQUARE_ROOT_CODE
 import ru.profitsw2000.data.BUTTON_SUBTRACT_CODE
 import ru.profitsw2000.data.domain.GeneralCalculatorRepository
+import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.data.ErrorState
 import ru.profitsw2000.data.statemachine.data.FirstOperandInputState
 import ru.profitsw2000.data.statemachine.data.InitialState
 import ru.profitsw2000.data.statemachine.data.OperationResultState
 import ru.profitsw2000.data.statemachine.data.SecondOperandInputState
-import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import kotlin.properties.Delegates
 
 class GeneralCalculatorRepositoryImpl : GeneralCalculatorRepository {
 
-    private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(false)) { _, oldValue, newValue ->
+    private val generalCalculatorInitialValue = GeneralCalculatorDataModel("0", "", false, 0)
+    private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(generalCalculatorInitialValue)) { _, oldValue, newValue ->
         renderGeneralCalculatorState(newValue, oldValue)
     }
 
-    private val mainStringMutableDataSource: MutableStateFlow<String> = MutableStateFlow("0")
-    override val mainStringDataSource: StateFlow<String> = mainStringMutableDataSource
-
-    private val historyStringMutableDataSource: MutableStateFlow<String> = MutableStateFlow("")
-    override val historyStringDataSource: StateFlow<String> = historyStringMutableDataSource
-
-    private val memorySignMutableDataSource: MutableStateFlow<String> = MutableStateFlow("")
-    override val memorySignDataSource: StateFlow<String> = memorySignMutableDataSource
+    private val generalCalculatorMutableDataSource: MutableStateFlow<GeneralCalculatorDataModel> = MutableStateFlow(generalCalculatorInitialValue)
+    override val generalCalculatorDataSource: StateFlow<GeneralCalculatorDataModel> = generalCalculatorMutableDataSource
 
     override fun operationClicked(buttonCode: Int) {
         when(buttonCode) {
@@ -79,27 +73,12 @@ class GeneralCalculatorRepositoryImpl : GeneralCalculatorRepository {
 
     private fun renderGeneralCalculatorState(newState: GeneralCalculatorState, oldState: GeneralCalculatorState) {
         when(newState) {
-            is InitialState -> setCalculatorDisplayValues("0", "", newState.memoryWritten)
-            is FirstOperandInputState -> setMainAndMemoryValues(newState.mainString, newState.memoryWritten)
-            is SecondOperandInputState -> setCalculatorDisplayValues(newState.mainString, newState.historyString, newState.memoryWritten)
-            is OperationResultState -> setCalculatorDisplayValues(newState.mainString, newState.historyString, newState.memoryWritten)
-            is ErrorState -> setCalculatorDisplayValues(newState.mainString, newState.historyString, newState.memoryWritten)
+            is InitialState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
+            is FirstOperandInputState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
+            is SecondOperandInputState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
+            is OperationResultState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
+            is ErrorState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
             else -> {}
         }
-    }
-
-    private fun setMemoryValue(memoryWritten: Boolean) {
-        if (memoryWritten) memorySignMutableDataSource.value = "M"
-        else memorySignMutableDataSource.value = ""
-    }
-
-    private fun setMainAndMemoryValues(mainString: String, memoryWritten: Boolean) {
-        setMemoryValue(memoryWritten)
-        mainStringMutableDataSource.value = mainString
-    }
-
-    private fun setCalculatorDisplayValues(mainString: String, historyString: String, memoryWritten: Boolean) {
-        setMainAndMemoryValues(mainString, memoryWritten)
-        historyStringMutableDataSource.value = historyString
     }
 }

@@ -4,14 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import ru.profitsw2000.data.domain.GeneralCalculatorRepository
+import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 
 class StandardCalculatorViewModel(
     private val generalCalculatorRepository: GeneralCalculatorRepository
 ) : ViewModel() {
 
-    val calculatorDisplayMainString: LiveData<String> = generalCalculatorRepository.mainStringDataSource.asLiveData()
-    val calculatorDisplayHistoryString: LiveData<String> = generalCalculatorRepository.historyStringDataSource.asLiveData()
-    val calculatorDisplayMemorySign: LiveData<String> = generalCalculatorRepository.memorySignDataSource.asLiveData()
+    val generalCalculatorDataModelLiveData: LiveData<GeneralCalculatorDataModel> = generalCalculatorRepository.generalCalculatorDataSource.asLiveData()
 
     fun performOperation(buttonCode: Int) {
         generalCalculatorRepository.operationClicked(buttonCode)

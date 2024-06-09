@@ -1,5 +1,7 @@
 package ru.profitsw2000.data
 
+import ru.profitsw2000.data.model.GeneralCalculatorDataModel
+
 const val BUTTON_MEMORY_CLEAR_CODE = 0x01
 const val BUTTON_MEMORY_READ_CODE = 0x02
 const val BUTTON_MEMORY_SAVE_CODE = 0x03
