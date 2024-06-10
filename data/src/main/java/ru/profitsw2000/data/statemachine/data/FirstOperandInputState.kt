@@ -12,9 +12,9 @@ class FirstOperandInputState(
         return when(action){
             CalculatorAction.Add -> InitialState(generalCalculatorDataModel)
             CalculatorAction.AddToMemory -> addNumberToMemory(generalCalculatorDataModel)
-            CalculatorAction.Backspace -> InitialState(generalCalculatorDataModel)
+            CalculatorAction.Backspace -> deleteLastDigit(generalCalculatorDataModel)
             CalculatorAction.Clear -> clearAllData(generalCalculatorDataModel)
-            CalculatorAction.ClearEntered -> InitialState(generalCalculatorDataModel)
+            CalculatorAction.ClearEntered -> clearAllData(generalCalculatorDataModel)
             CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataModel)
             is CalculatorAction.Digit -> appendDigit(generalCalculatorDataModel, action.digit)
             CalculatorAction.Divide -> InitialState(generalCalculatorDataModel)
@@ -109,5 +109,14 @@ class FirstOperandInputState(
      */
     private fun clearAllData(generalCalculatorDataModel: GeneralCalculatorDataModel): GeneralCalculatorState {
         return InitialState(GeneralCalculatorDataModel(memoryNumber = generalCalculatorDataModel.memoryNumber))
+    }
+
+    private fun deleteLastDigit(generalCalculatorDataModel: GeneralCalculatorDataModel): GeneralCalculatorState {
+        return if (generalCalculatorDataModel.mainString.length > 1) {
+            FirstOperandInputState(generalCalculatorDataModel.copy(mainString = generalCalculatorDataModel.mainString.dropLast(1)))
+        } else {
+            if (generalCalculatorDataModel.mainString != "0") InitialState(generalCalculatorDataModel.copy(mainString = "0"))
+            else InitialState(generalCalculatorDataModel.copy())
+        }
     }
 }
