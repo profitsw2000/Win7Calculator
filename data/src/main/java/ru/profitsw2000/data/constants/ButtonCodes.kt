@@ -1,4 +1,4 @@
-package ru.profitsw2000.data
+package ru.profitsw2000.data.constants
 
 import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 

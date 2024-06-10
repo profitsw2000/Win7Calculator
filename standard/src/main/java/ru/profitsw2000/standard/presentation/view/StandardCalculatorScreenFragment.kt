@@ -6,23 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.profitsw2000.data.BUTTON_ADD_CODE
-import ru.profitsw2000.data.BUTTON_BACKSPACE_CODE
-import ru.profitsw2000.data.BUTTON_CLEAR_ALL_CODE
-import ru.profitsw2000.data.BUTTON_CLEAR_ENTERED_CODE
-import ru.profitsw2000.data.BUTTON_DIVIDE_CODE
-import ru.profitsw2000.data.BUTTON_EQUAL_CODE
-import ru.profitsw2000.data.BUTTON_MEMORY_ADD_CODE
-import ru.profitsw2000.data.BUTTON_MEMORY_CLEAR_CODE
-import ru.profitsw2000.data.BUTTON_MEMORY_READ_CODE
-import ru.profitsw2000.data.BUTTON_MEMORY_SAVE_CODE
-import ru.profitsw2000.data.BUTTON_MEMORY_SUBTRACT_CODE
-import ru.profitsw2000.data.BUTTON_MULTIPLY_CODE
-import ru.profitsw2000.data.BUTTON_PERCENTAGE_CODE
-import ru.profitsw2000.data.BUTTON_PLUS_MINUS_CODE
-import ru.profitsw2000.data.BUTTON_RECIPROC_CODE
-import ru.profitsw2000.data.BUTTON_SQUARE_ROOT_CODE
-import ru.profitsw2000.data.BUTTON_SUBTRACT_CODE
+import ru.profitsw2000.data.constants.BUTTON_ADD_CODE
+import ru.profitsw2000.data.constants.BUTTON_BACKSPACE_CODE
+import ru.profitsw2000.data.constants.BUTTON_CLEAR_ALL_CODE
+import ru.profitsw2000.data.constants.BUTTON_CLEAR_ENTERED_CODE
+import ru.profitsw2000.data.constants.BUTTON_DIVIDE_CODE
+import ru.profitsw2000.data.constants.BUTTON_EQUAL_CODE
+import ru.profitsw2000.data.constants.BUTTON_MEMORY_ADD_CODE
+import ru.profitsw2000.data.constants.BUTTON_MEMORY_CLEAR_CODE
+import ru.profitsw2000.data.constants.BUTTON_MEMORY_READ_CODE
+import ru.profitsw2000.data.constants.BUTTON_MEMORY_SAVE_CODE
+import ru.profitsw2000.data.constants.BUTTON_MEMORY_SUBTRACT_CODE
+import ru.profitsw2000.data.constants.BUTTON_MULTIPLY_CODE
+import ru.profitsw2000.data.constants.BUTTON_PERCENTAGE_CODE
+import ru.profitsw2000.data.constants.BUTTON_PLUS_MINUS_CODE
+import ru.profitsw2000.data.constants.BUTTON_RECIPROC_CODE
+import ru.profitsw2000.data.constants.BUTTON_SQUARE_ROOT_CODE
+import ru.profitsw2000.data.constants.BUTTON_SUBTRACT_CODE
+import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.NO_ERROR_CODE
 import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 import ru.profitsw2000.standard.R
 import ru.profitsw2000.standard.databinding.FragmentStandardCalculatorScreenBinding
@@ -72,39 +74,53 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
 
     private fun initMemoryButtons() = with(binding) {
         mcButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_MEMORY_CLEAR_CODE) }
+            BUTTON_MEMORY_CLEAR_CODE
+        ) }
         mrButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_MEMORY_READ_CODE) }
+            BUTTON_MEMORY_READ_CODE
+        ) }
         msButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_MEMORY_SAVE_CODE) }
+            BUTTON_MEMORY_SAVE_CODE
+        ) }
         mplusButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_MEMORY_ADD_CODE) }
+            BUTTON_MEMORY_ADD_CODE
+        ) }
         mminusButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_MEMORY_SUBTRACT_CODE) }
+            BUTTON_MEMORY_SUBTRACT_CODE
+        ) }
     }
 
     private fun initClearButtons() = with(binding) {
         backspaceButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_BACKSPACE_CODE) }
+            BUTTON_BACKSPACE_CODE
+        ) }
         ceButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_CLEAR_ENTERED_CODE) }
+            BUTTON_CLEAR_ENTERED_CODE
+        ) }
         cButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_CLEAR_ALL_CODE) }
+            BUTTON_CLEAR_ALL_CODE
+        ) }
     }
 
     private fun initBasicOperationButtons() = with(binding) {
         plusMinusButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_PLUS_MINUS_CODE) }
+            BUTTON_PLUS_MINUS_CODE
+        ) }
         divideButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_DIVIDE_CODE) }
+            BUTTON_DIVIDE_CODE
+        ) }
         multiplyButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_MULTIPLY_CODE) }
+            BUTTON_MULTIPLY_CODE
+        ) }
         minusButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_SUBTRACT_CODE) }
+            BUTTON_SUBTRACT_CODE
+        ) }
         addButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_ADD_CODE) }
+            BUTTON_ADD_CODE
+        ) }
         equalButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_EQUAL_CODE) }
+            BUTTON_EQUAL_CODE
+        ) }
     }
 
     private fun initDigitButtons() = with(binding) {
@@ -134,11 +150,14 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
 
     private fun initSimpleOperationButtons() = with(binding) {
         sqrtButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_SQUARE_ROOT_CODE) }
+            BUTTON_SQUARE_ROOT_CODE
+        ) }
         percentageButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_PERCENTAGE_CODE) }
+            BUTTON_PERCENTAGE_CODE
+        ) }
         reciprocButton.setOnClickListener { standardCalculatorViewModel.performOperation(
-            BUTTON_RECIPROC_CODE) }
+            BUTTON_RECIPROC_CODE
+        ) }
     }
 
     private fun observeData() {
@@ -148,8 +167,24 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
     }
 
     private fun populateDisplayTextViews(generalCalculatorDataModel: GeneralCalculatorDataModel) = with(binding) {
-        inputAndResultTextView.text = generalCalculatorDataModel.mainString
+        populateMainString(generalCalculatorDataModel)
+        populateHistoryString(generalCalculatorDataModel)
+        populateMemorySign(generalCalculatorDataModel)
+    }
+
+    private fun populateMainString(generalCalculatorDataModel: GeneralCalculatorDataModel) = with(binding) {
+        inputAndResultTextView.text = when(generalCalculatorDataModel.errorCode) {
+            NO_ERROR_CODE -> generalCalculatorDataModel.mainString
+            DIVIDE_ON_ZERO_ERROR_CODE -> resources.getString(ru.profitsw2000.core.R.string.divide_on_zero_error_text)
+            else -> resources.getString(ru.profitsw2000.core.R.string.unknown_error_text)
+        }
+    }
+
+    private fun populateHistoryString(generalCalculatorDataModel: GeneralCalculatorDataModel) = with(binding) {
         operationHistoryTextView.text = generalCalculatorDataModel.historyString
+    }
+
+    private fun populateMemorySign(generalCalculatorDataModel: GeneralCalculatorDataModel) = with(binding) {
         if (generalCalculatorDataModel.memoryNumber != null) {
             memorySignTextView.text = resources.getString(ru.profitsw2000.core.R.string.calculator_display_memory_sign)
         } else {
