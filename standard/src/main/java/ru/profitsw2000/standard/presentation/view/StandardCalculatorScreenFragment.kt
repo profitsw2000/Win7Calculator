@@ -150,7 +150,11 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
     private fun populateDisplayTextViews(generalCalculatorDataModel: GeneralCalculatorDataModel) = with(binding) {
         inputAndResultTextView.text = generalCalculatorDataModel.mainString
         operationHistoryTextView.text = generalCalculatorDataModel.historyString
-        //TODO - populate memory sign
+        if (generalCalculatorDataModel.memoryNumber != null) {
+            memorySignTextView.text = resources.getString(ru.profitsw2000.core.R.string.calculator_display_memory_sign)
+        } else {
+            memorySignTextView.text = ""
+        }
     }
 
     companion object {

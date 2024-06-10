@@ -1,8 +1,8 @@
 package ru.profitsw2000.data.model
 
 data class GeneralCalculatorDataModel(
-    val mainString: String,
-    val historyString: String,
-    val memoryWritten: Boolean,
-    val errorCode: Int
+    val mainString: String = "0",
+    val historyString: String = "",
+    val memoryNumber: Double? = null,
+    val errorCode: Int = 0
 )

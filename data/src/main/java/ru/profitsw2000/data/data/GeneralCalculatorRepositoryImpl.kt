@@ -32,12 +32,11 @@ import kotlin.properties.Delegates
 
 class GeneralCalculatorRepositoryImpl : GeneralCalculatorRepository {
 
-    private val generalCalculatorInitialValue = GeneralCalculatorDataModel("0", "", false, 0)
-    private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(generalCalculatorInitialValue)) { _, oldValue, newValue ->
+    private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(GeneralCalculatorDataModel())) { _, oldValue, newValue ->
         renderGeneralCalculatorState(newValue, oldValue)
     }
 
-    private val generalCalculatorMutableDataSource: MutableStateFlow<GeneralCalculatorDataModel> = MutableStateFlow(generalCalculatorInitialValue)
+    private val generalCalculatorMutableDataSource: MutableStateFlow<GeneralCalculatorDataModel> = MutableStateFlow(GeneralCalculatorDataModel())
     override val generalCalculatorDataSource: StateFlow<GeneralCalculatorDataModel> = generalCalculatorMutableDataSource
 
     override fun operationClicked(buttonCode: Int) {
