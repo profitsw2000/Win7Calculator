@@ -19,6 +19,7 @@ class InitialState(
             CalculatorAction.SquareRoot -> squareRootOperation(generalCalculatorDataModel.memoryNumber)
             CalculatorAction.Subtract -> primitiveMathOperation(generalCalculatorDataModel.memoryNumber, "-")
             CalculatorAction.ClearMemory -> clearMemory()
+            CalculatorAction.Clear -> clearAll(generalCalculatorDataModel)
             else -> this
         }
     }
@@ -45,5 +46,9 @@ class InitialState(
 
     private fun clearMemory(): GeneralCalculatorState {
         return InitialState(GeneralCalculatorDataModel())
+    }
+
+    private fun clearAll(generalCalculatorDataModel: GeneralCalculatorDataModel): GeneralCalculatorState {
+        return InitialState(GeneralCalculatorDataModel(memoryNumber = generalCalculatorDataModel.memoryNumber))
     }
 }
