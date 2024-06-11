@@ -21,7 +21,7 @@ class FirstOperandInputState(
             CalculatorAction.Equal -> InitialState(generalCalculatorDataModel)
             CalculatorAction.Multiply -> InitialState(generalCalculatorDataModel)
             CalculatorAction.Percentage -> InitialState(generalCalculatorDataModel)
-            CalculatorAction.PlusMinus -> InitialState(generalCalculatorDataModel)
+            CalculatorAction.PlusMinus -> negateOperand(generalCalculatorDataModel)
             CalculatorAction.ReadMemory -> readMemory(generalCalculatorDataModel)
             CalculatorAction.Recipoc -> InitialState(generalCalculatorDataModel)
             CalculatorAction.SaveToMemory -> saveToMemory(generalCalculatorDataModel)
@@ -111,12 +111,57 @@ class FirstOperandInputState(
         return InitialState(GeneralCalculatorDataModel(memoryNumber = generalCalculatorDataModel.memoryNumber))
     }
 
+    /**
+     * Function removes last character(digit) in mainString field of calculator data
+     * @param generalCalculatorDataModel - contains current calculator data
+     * @return FirstOperandInputState with new mainString field of calculator data if string contains
+     * more than 1 character, otherwise InitialState with mainString field turns to "0"
+     */
     private fun deleteLastDigit(generalCalculatorDataModel: GeneralCalculatorDataModel): GeneralCalculatorState {
         return if (generalCalculatorDataModel.mainString.length > 1) {
             FirstOperandInputState(generalCalculatorDataModel.copy(mainString = generalCalculatorDataModel.mainString.dropLast(1)))
         } else {
-            if (generalCalculatorDataModel.mainString != "0") InitialState(generalCalculatorDataModel.copy(mainString = "0"))
-            else InitialState(generalCalculatorDataModel.copy())
+            InitialState(generalCalculatorDataModel.copy(mainString = "0"))
+        }
+    }
+
+    /**
+     * Changes sign of the entered number. It's contained in mainString field of calculator data.
+     * @param generalCalculatorDataModel - contains current calculator data
+     * @return FirstOperandInputState with new mainString field of calculator data
+     */
+    private fun negateOperand(generalCalculatorDataModel: GeneralCalculatorDataModel): GeneralCalculatorState {
+        val negatedNumber = (0 - calculatorStringToDouble(generalCalculatorDataModel.mainString))
+        return FirstOperandInputState(generalCalculatorDataModel.copy(
+            mainString = doubleToCalculatorString(negatedNumber)
+        ))
+    }
+
+
+
+    /**
+     * Converts string to double
+     * @param calculatorString - string to convert
+     * @return converted number
+     */
+    private fun calculatorStringToDouble(calculatorString: String): Double {
+        return try {
+            calculatorString.replace(",", ".").toDouble()
+        } catch (numberFormatException: NumberFormatException) {
+            0.0
+        }
+    }
+
+    /**
+     * Converts double number to string for calculator display
+     * @param number - double type number to convert to string
+     * @return string, formatted specifically for calculator display
+     */
+    private fun doubleToCalculatorString(number: Double): String {
+        return if(number.rem(1).equals(0.0)) {
+            String.format("%,0f", number)
+        } else {
+            number.toString()
         }
     }
 }
