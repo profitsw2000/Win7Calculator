@@ -1,5 +1,6 @@
 package ru.profitsw2000.data.statemachine.data
 
+import android.graphics.Path.Op
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.OperationType
 import ru.profitsw2000.data.model.generalCalculatorDataEntity
@@ -12,26 +13,60 @@ class InitialState(
 ) : GeneralCalculatorState {
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {
-            CalculatorAction.Add -> primitiveMathOperation(generalCalculatorDataEntity.memoryNumber, "+")
-            is CalculatorAction.Digit -> digitClicked(generalCalculatorDataEntity.memoryNumber, action.digit)
-            CalculatorAction.Divide -> primitiveMathOperation(generalCalculatorDataEntity.memoryNumber, "/")
-            CalculatorAction.Multiply -> primitiveMathOperation(generalCalculatorDataEntity.memoryNumber, "*")
-            CalculatorAction.Percentage -> percentageOperation(generalCalculatorDataEntity.memoryNumber)
-            CalculatorAction.Recipoc -> recipocOperation(generalCalculatorDataEntity.memoryNumber)
-            CalculatorAction.SquareRoot -> squareRootOperation(generalCalculatorDataEntity.memoryNumber)
-            CalculatorAction.Subtract -> primitiveMathOperation(generalCalculatorDataEntity.memoryNumber, "-")
-            CalculatorAction.ClearMemory -> clearMemory()
-            CalculatorAction.Clear -> clearAll(generalCalculatorDataEntity)
-            else -> this
+            CalculatorAction.Add -> TODO()
+            CalculatorAction.AddToMemory -> TODO()
+            CalculatorAction.Backspace -> TODO()
+            CalculatorAction.Clear -> TODO()
+            CalculatorAction.ClearEntered -> TODO()
+            CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataEntity)
+            is CalculatorAction.Digit -> TODO()
+            CalculatorAction.Divide -> TODO()
+            CalculatorAction.Equal -> TODO()
+            CalculatorAction.Multiply -> TODO()
+            CalculatorAction.Percentage -> TODO()
+            CalculatorAction.PlusMinus -> TODO()
+            CalculatorAction.ReadMemory -> readMemory(generalCalculatorDataEntity)
+            CalculatorAction.Recipoc -> TODO()
+            CalculatorAction.SaveToMemory -> TODO()
+            CalculatorAction.SquareRoot -> TODO()
+            CalculatorAction.Subtract -> TODO()
+            CalculatorAction.SubtractFromMemory -> TODO()
         }
     }
 
-    private fun primitiveMathOperation(memoryNumber: Double?, operationSign: String): GeneralCalculatorState {
-        return SecondOperandInputState(GeneralCalculatorDataEntity("0","0 $operationSign", 0.0, OperationType.NO_OPERATION, memoryNumber, 0))
+    /**
+     * Clear internal memory of calculator
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return InitialState with cleared memory of calculator data
+     */
+    private fun clearMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        return InitialState(generalCalculatorDataEntity.copy(memoryNumber = null))
+    }
+
+    /**
+     * Reads internal memory and copy it to mainString of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return InitialState with new main string field of calculator data
+     */
+    private fun readMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        return if (generalCalculatorDataEntity.memoryNumber == null) {
+            InitialState(generalCalculatorDataEntity.copy())
+        } else {
+            InitialState(
+                generalCalculatorDataEntity.copy(mainString = doubleToCalculatorString(generalCalculatorDataEntity.memoryNumber))
+            )
+        }
+    }
+
+    private fun primitiveMathOperation(
+        generalCalculatorDataEntity: GeneralCalculatorDataEntity,
+        operationType: OperationType
+    ): GeneralCalculatorState {
+        return PrimitiveMathOperationState(generalCalculatorDataEntity.copy(operationType = operationType))
     }
 
     private fun digitClicked(memoryNumber: Double?, digit: String): GeneralCalculatorState {
-        return FirstOperandInputState(generalCalculatorDataEntity(digit,"", memoryNumber, 0))
+        return FirstOperandInputState(GeneralCalculatorDataEntity(digit,"", memoryNumber, 0))
     }
 
     private fun percentageOperation(memoryNumber: Double?): GeneralCalculatorState {
@@ -46,11 +81,38 @@ class InitialState(
         return ErrorState(generalCalculatorDataEntity("Деление на ноль невозможно", "reciproc(0)", memoryNumber, 0))
     }
 
-    private fun clearMemory(): GeneralCalculatorState {
-        return InitialState(GeneralCalculatorDataEntity())
+    private fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        return InitialState(generalCalculatorDataEntity.copy(
+            mainString = "0",
+            historyString = "",
+            operand = 0.0,
+            operationType = OperationType.NO_OPERATION
+        ))
     }
 
-    private fun clearAll(generalCalculatorDataEntity: generalCalculatorDataEntity): GeneralCalculatorState {
-        return InitialState(generalCalculatorDataEntity(memoryNumber = generalCalculatorDataEntity.memoryNumber))
+    /**
+     * Converts string to double
+     * @param calculatorString - string to convert
+     * @return converted number
+     */
+    private fun calculatorStringToDouble(calculatorString: String): Double {
+        return try {
+            calculatorString.replace(",", ".").toDouble()
+        } catch (numberFormatException: NumberFormatException) {
+            0.0
+        }
+    }
+
+    /**
+     * Converts double number to string for calculator display
+     * @param number - double type number to convert to string
+     * @return string, formatted specifically for calculator display
+     */
+    private fun doubleToCalculatorString(number: Double): String {
+        return if(number.rem(1).equals(0.0)) {
+            String.format("%,0f", number)
+        } else {
+            number.toString()
+        }
     }
 }

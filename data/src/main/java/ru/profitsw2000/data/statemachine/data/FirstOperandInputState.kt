@@ -139,8 +139,6 @@ class FirstOperandInputState(
         ))
     }
 
-
-
     /**
      * Converts string to double
      * @param calculatorString - string to convert
