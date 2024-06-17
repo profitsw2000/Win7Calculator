@@ -195,7 +195,8 @@ class InitialState(
         return PrimitiveMathOperationState(
             generalCalculatorDataEntity.copy(
                 historyString = historyString,
-                operationType = operationType
+                operationType = operationType,
+                operand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
             )
         )
     }

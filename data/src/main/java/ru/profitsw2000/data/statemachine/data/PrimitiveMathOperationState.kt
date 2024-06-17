@@ -30,4 +30,17 @@ class PrimitiveMathOperationState (
             CalculatorAction.SubtractFromMemory -> TODO()
         }
     }
+
+
+
+    /**
+     * Clear internal memory of calculator
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return Same with cleared memory of calculator data
+     */
+    private fun clearMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        return PrimitiveMathOperationState(generalCalculatorDataEntity.copy(memoryNumber = null))
+    }
+
+
 }
