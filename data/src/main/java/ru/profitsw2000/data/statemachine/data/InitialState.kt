@@ -10,7 +10,7 @@ import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import kotlin.math.sqrt
 
 class InitialState(
-    val generalCalculatorDataEntity: GeneralCalculatorDataEntity
+    override val generalCalculatorDataEntity: GeneralCalculatorDataEntity
 ) : GeneralCalculatorState {
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {

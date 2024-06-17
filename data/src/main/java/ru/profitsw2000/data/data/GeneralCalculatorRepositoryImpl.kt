@@ -20,6 +20,8 @@ import ru.profitsw2000.data.constants.BUTTON_RECIPROC_CODE
 import ru.profitsw2000.data.constants.BUTTON_SQUARE_ROOT_CODE
 import ru.profitsw2000.data.constants.BUTTON_SUBTRACT_CODE
 import ru.profitsw2000.data.domain.GeneralCalculatorRepository
+import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
+import ru.profitsw2000.data.mappers.GeneralCalculatorMapper
 import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.data.ErrorState
@@ -30,9 +32,13 @@ import ru.profitsw2000.data.statemachine.data.SecondOperandInputState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import kotlin.properties.Delegates
 
-class GeneralCalculatorRepositoryImpl : GeneralCalculatorRepository {
+class GeneralCalculatorRepositoryImpl(
+    private val generalCalculatorMapper: GeneralCalculatorMapper
+) : GeneralCalculatorRepository {
 
-    private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(GeneralCalculatorDataModel())) { _, oldValue, newValue ->
+    private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(
+        GeneralCalculatorDataEntity()
+    )) { _, oldValue, newValue ->
         renderGeneralCalculatorState(newValue, oldValue)
     }
 
@@ -71,13 +77,6 @@ class GeneralCalculatorRepositoryImpl : GeneralCalculatorRepository {
     }
 
     private fun renderGeneralCalculatorState(newState: GeneralCalculatorState, oldState: GeneralCalculatorState) {
-        when(newState) {
-            is InitialState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
-            is FirstOperandInputState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
-            is SecondOperandInputState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
-            is OperationResultState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
-            is ErrorState -> generalCalculatorMutableDataSource.value = newState.generalCalculatorDataModel
-            else -> {}
-        }
+        generalCalculatorMutableDataSource.value = generalCalculatorMapper.map(newState.generalCalculatorDataEntity)
     }
 }

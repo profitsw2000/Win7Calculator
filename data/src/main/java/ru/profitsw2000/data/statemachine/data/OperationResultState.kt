@@ -6,7 +6,7 @@ import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 
 class OperationResultState(
-    val generalCalculatorDataEntity: GeneralCalculatorDataEntity
+    override val generalCalculatorDataEntity: GeneralCalculatorDataEntity
 ) : GeneralCalculatorState {
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {

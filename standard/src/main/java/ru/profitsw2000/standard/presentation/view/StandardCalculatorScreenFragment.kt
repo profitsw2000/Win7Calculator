@@ -185,11 +185,7 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
     }
 
     private fun populateMemorySign(generalCalculatorDataModel: GeneralCalculatorDataModel) = with(binding) {
-        if (generalCalculatorDataModel.memoryNumber != null) {
-            memorySignTextView.text = resources.getString(ru.profitsw2000.core.R.string.calculator_display_memory_sign)
-        } else {
-            memorySignTextView.text = ""
-        }
+        memorySignTextView.text = generalCalculatorDataModel.memorySign
     }
 
     companion object {
