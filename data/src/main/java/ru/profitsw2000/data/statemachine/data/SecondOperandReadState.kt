@@ -15,24 +15,24 @@ class SecondOperandReadState(
 
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {
-            CalculatorAction.Add -> TODO()
-            CalculatorAction.AddToMemory -> TODO()
+            CalculatorAction.Add -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.PLUS, "+")
+            CalculatorAction.AddToMemory -> addNumberToMemory(generalCalculatorDataEntity)
             CalculatorAction.Backspace -> this
-            CalculatorAction.Clear -> TODO()
-            CalculatorAction.ClearEntered -> TODO()
-            CalculatorAction.ClearMemory -> TODO()
-            is CalculatorAction.Digit -> TODO()
-            CalculatorAction.Divide -> TODO()
-            CalculatorAction.Equal -> TODO()
-            CalculatorAction.Multiply -> TODO()
-            CalculatorAction.Percentage -> TODO()
-            CalculatorAction.PlusMinus -> TODO()
-            CalculatorAction.ReadMemory -> this
-            CalculatorAction.Recipoc -> TODO()
-            CalculatorAction.SaveToMemory -> TODO()
-            CalculatorAction.SquareRoot -> TODO()
-            CalculatorAction.Subtract -> TODO()
-            CalculatorAction.SubtractFromMemory -> TODO()
+            CalculatorAction.Clear -> clearAll(generalCalculatorDataEntity)
+            CalculatorAction.ClearEntered -> clearMainString(generalCalculatorDataEntity)
+            CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataEntity)
+            is CalculatorAction.Digit -> inputDigit(generalCalculatorDataEntity, action.digit)
+            CalculatorAction.Divide -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.DIVIDE, "/")
+            CalculatorAction.Equal -> calculateResult(generalCalculatorDataEntity)
+            CalculatorAction.Multiply -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.MULTIPLY, "*")
+            CalculatorAction.Percentage -> percentageOperation(generalCalculatorDataEntity)
+            CalculatorAction.PlusMinus -> negateOperand(generalCalculatorDataEntity)
+            CalculatorAction.ReadMemory -> readMemory(generalCalculatorDataEntity)
+            CalculatorAction.Recipoc -> reciprocOperation(generalCalculatorDataEntity)
+            CalculatorAction.SaveToMemory -> saveToMemory(generalCalculatorDataEntity)
+            CalculatorAction.SquareRoot -> calculateSquareRoot(generalCalculatorDataEntity)
+            CalculatorAction.Subtract -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.MINUS, "-")
+            CalculatorAction.SubtractFromMemory -> subtractNumberFromMemory(generalCalculatorDataEntity)
         }
     }
 
@@ -273,6 +273,72 @@ class SecondOperandReadState(
     }
 
     /**
+     * Writes digit in string format to mainString field of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @param digitToInput - contains string with digit that has to be added to mainString of calculator data
+     * @return SecondOperandInputState with new mainString and historyString fields of calculator data
+     */
+    private fun inputDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToInput: String): GeneralCalculatorState {
+
+        return if (digitToInput == ",") SecondOperandInputState(
+            generalCalculatorDataEntity.copy(
+                mainString = "0,",
+                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+            )
+        )
+        else SecondOperandInputState(
+            generalCalculatorDataEntity.copy(
+                mainString = digitToInput,
+                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+            )
+        )
+    }
+
+    /**
+     * Make calculation and update calculator data - in mainString field result of operation,
+     * historyString field appended with performed action and operationType updated depending
+     * on clicked math operation sign.
+     * @param1 generalCalculatorDataEntity - contains current calculator data,
+     * @param2 operationType - type of next primitive math operation
+     * @param3 operationString - operation sign, need to be added in history string
+     * @return PrimitiveMathOperationState with new operationType field and updated historyString,
+     * mainString and operand fields of calculator data.
+     */
+    private fun primitiveMathOperation(
+        generalCalculatorDataEntity: GeneralCalculatorDataEntity,
+        operationType: OperationType,
+        operationString: String
+    ): GeneralCalculatorState {
+
+        val historyString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
+            "${generalCalculatorDataEntity.historyString} " +
+                    "${generalCalculatorDataEntity.mainString} " +
+                    "$operationString"
+        } else {
+            "${generalCalculatorDataEntity.historyString} " +
+                    "$operationString"
+        }
+        val firstOperand = generalCalculatorDataEntity.operand
+        val secondOperand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+        val operationResult = when(generalCalculatorDataEntity.operationType) {
+            OperationType.PLUS -> firstOperand + secondOperand
+            OperationType.MINUS -> firstOperand - secondOperand
+            OperationType.MULTIPLY -> firstOperand * secondOperand
+            OperationType.DIVIDE -> firstOperand / secondOperand
+            OperationType.NO_OPERATION -> 0.0
+        }
+
+        return PrimitiveMathOperationState(
+            generalCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(operationResult),
+                historyString = historyString,
+                operand = operationResult,
+                operationType = operationType
+            )
+        )
+    }
+
+    /**
      * Converts string to double
      * @param calculatorString - string to convert
      * @return converted number
@@ -298,6 +364,11 @@ class SecondOperandReadState(
         }
     }
 
+    /**
+     * Define, whether the last character of the string is math operation sign or not
+     * @param historyString - string to define last char
+     * @return true if last char is math operation sign, false if not
+     */
     private fun isLastOperationChar(historyString: String): Boolean {
         return (historyString.last() in listOf('+', '-', '*', '/'))
     }
