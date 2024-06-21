@@ -261,14 +261,8 @@ class PrimitiveMathOperationState (
      */
     private fun appendDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToAppend: String): GeneralCalculatorState {
 
-        return if (generalCalculatorDataEntity.mainString.length > 16) {
-            SecondOperandInputState(generalCalculatorDataEntity)
-        } else if(generalCalculatorDataEntity.mainString.length < 2) {
-            if (digitToAppend == ",") SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = "0,"))
-            else SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = digitToAppend))
-        } else {
-            SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.mainString.plus(digitToAppend)))
-        }
+        return if (digitToAppend == ",") SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = "0,"))
+        else SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = digitToAppend))
     }
 
     /**

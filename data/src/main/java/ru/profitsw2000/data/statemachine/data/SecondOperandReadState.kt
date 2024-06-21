@@ -74,34 +74,40 @@ class SecondOperandReadState(
     /**
      * Save number from main string to memoryNumber field
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return InitialState with same calculator data but with new memoryNumber. mainString field converted to number and written to memoryNumber field.
+     * @return SecondOperandReadState with same calculator data but with new memoryNumber. mainString field converted to number and written to memoryNumber field.
      */
     private fun saveToMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return PrimitiveMathOperationState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.mainString.toDouble()))
+        return SecondOperandReadState(
+            generalCalculatorDataEntity.copy(
+                memoryNumber = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+            )
+        )
     }
 
     /**
      * Add number to number in memory of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return Same state with same calculator data but with other memoryNumber. mainString field converted to number and added to memoryNumber field.
+     * @return SecondOperandReadState with same calculator data but with other memoryNumber. mainString field converted to number and added to memoryNumber field.
      */
     private fun addNumberToMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        val operandNumber: Double = generalCalculatorDataEntity.mainString.toDouble()
+        val operandNumber: Double = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+
         return if (generalCalculatorDataEntity.memoryNumber != null)
-            PrimitiveMathOperationState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.plus(operandNumber)))
-        else PrimitiveMathOperationState(generalCalculatorDataEntity.copy(memoryNumber = operandNumber))
+            SecondOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.plus(operandNumber)))
+        else SecondOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = operandNumber))
     }
 
     /**
      * Subtract number from number in memory of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return Same state with same calculator data but with other memoryNumber. mainString field converted to number and memoryNumber field subtracted by that number.
+     * @return SecondOperandReadState with same calculator data but with other memoryNumber. mainString field converted to number and memoryNumber field subtracted by that number.
      */
     private fun subtractNumberFromMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        val operandNumber: Double = generalCalculatorDataEntity.mainString.toDouble()
+        val operandNumber: Double = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+
         return if (generalCalculatorDataEntity.memoryNumber != null)
-            PrimitiveMathOperationState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.minus(operandNumber)))
-        else PrimitiveMathOperationState(generalCalculatorDataEntity.copy(memoryNumber = -(operandNumber)))
+            SecondOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.minus(operandNumber)))
+        else SecondOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = -(operandNumber)))
     }
 
     /**
@@ -111,10 +117,14 @@ class SecondOperandReadState(
      * @return SecondOperandInputState where mainString field calculator data contain "0"
      */
     private fun clearMainString(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
+        val historyString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) generalCalculatorDataEntity.historyString
+        else generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+
         return SecondOperandInputState(
             generalCalculatorDataEntity.copy(
                 mainString = "0",
-                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+                historyString = historyString
             )
         )
     }
@@ -145,9 +155,9 @@ class SecondOperandReadState(
         val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
         val lastActionString = "negate(${generalCalculatorDataEntity.historyString.takeLastWhile { it != ' ' }})"
         val appendedHistoryString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
-            "${generalCalculatorDataEntity.historyString} negate(${generalCalculatorDataEntity.mainString})"
+            "${generalCalculatorDataEntity.historyString}negate(${generalCalculatorDataEntity.mainString})"
         } else {
-            "$baseString $lastActionString"
+            "$baseString$lastActionString"
         }
 
         return SecondOperandReadState(
@@ -170,9 +180,9 @@ class SecondOperandReadState(
         val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
         val lastActionString = "sqrt(${generalCalculatorDataEntity.historyString.takeLastWhile { it != ' ' }})"
         val appendedHistoryString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
-            "${generalCalculatorDataEntity.historyString} sqrt(${generalCalculatorDataEntity.mainString})"
+            "${generalCalculatorDataEntity.historyString}sqrt(${generalCalculatorDataEntity.mainString})"
         } else {
-            "$baseString $lastActionString"
+            "$baseString$lastActionString"
         }
 
         return SecondOperandReadState(
@@ -195,9 +205,9 @@ class SecondOperandReadState(
         val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
         val lastActionString = "reciproc(${generalCalculatorDataEntity.historyString.takeLastWhile { it != ' ' }})"
         val appendedHistoryString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
-            "${generalCalculatorDataEntity.historyString} reciproc(${generalCalculatorDataEntity.mainString})"
+            "${generalCalculatorDataEntity.historyString}reciproc(${generalCalculatorDataEntity.mainString})"
         } else {
-            "$baseString $lastActionString"
+            "$baseString$lastActionString"
         }
 
         return try {
@@ -209,13 +219,13 @@ class SecondOperandReadState(
             )
         } catch (arithmeticException: ArithmeticException) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
                         "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = DIVIDE_ON_ZERO_ERROR_CODE
             ))
         } catch (exception: Exception) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
                         "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = UNKNOWN_ERROR_CODE
             ))
@@ -232,9 +242,9 @@ class SecondOperandReadState(
 
         val percentageResult = (generalCalculatorDataEntity.operand/100)*calculatorStringToDouble(generalCalculatorDataEntity.mainString)
         val appendedHistoryString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
-            "${generalCalculatorDataEntity.historyString} ${doubleToCalculatorString(percentageResult)}"
+            "${generalCalculatorDataEntity.historyString}${doubleToCalculatorString(percentageResult)}"
         } else {
-            "${generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")} ${doubleToCalculatorString(percentageResult)}"
+            "${generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")}${doubleToCalculatorString(percentageResult)}"
         }
 
         return SecondOperandReadState(
@@ -283,13 +293,13 @@ class SecondOperandReadState(
         return if (digitToInput == ",") SecondOperandInputState(
             generalCalculatorDataEntity.copy(
                 mainString = "0,",
-                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "").dropLast(1)
             )
         )
         else SecondOperandInputState(
             generalCalculatorDataEntity.copy(
                 mainString = digitToInput,
-                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "").dropLast(1)
             )
         )
     }

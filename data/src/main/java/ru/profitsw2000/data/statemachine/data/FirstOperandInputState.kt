@@ -99,13 +99,14 @@ class FirstOperandInputState(
      * @return FirstOperandInputState with new mainString field of calculator data
      */
     private fun appendDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToAppend: String): GeneralCalculatorState {
-        return if (generalCalculatorDataEntity.mainString.length > 16) {
-            FirstOperandInputState(generalCalculatorDataEntity)
-        } else if(generalCalculatorDataEntity.mainString.length < 2) {
-            FirstOperandInputState(generalCalculatorDataEntity.copy(mainString = digitToAppend))
-        } else {
-            FirstOperandInputState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.mainString.plus(digitToAppend)))
-        }
+        return if (generalCalculatorDataEntity.mainString == "0" && digitToAppend == "0") this
+        else if (generalCalculatorDataEntity.mainString.contains(",") && digitToAppend == ",") this
+        else if (generalCalculatorDataEntity.mainString.length >= 16) this
+        else FirstOperandInputState(
+            generalCalculatorDataEntity.copy(
+                mainString = "${generalCalculatorDataEntity.mainString}${digitToAppend}"
+            )
+        )
     }
 
     /**
@@ -125,6 +126,9 @@ class FirstOperandInputState(
      */
     private fun deleteLastDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return if (generalCalculatorDataEntity.mainString.length > 1) {
+            FirstOperandInputState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.mainString.dropLast(1)))
+        } else if (generalCalculatorDataEntity.mainString.length == 2
+            && generalCalculatorDataEntity.mainString.first() != '-') {
             FirstOperandInputState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.mainString.dropLast(1)))
         } else {
             InitialState(generalCalculatorDataEntity.copy(mainString = "0"))
