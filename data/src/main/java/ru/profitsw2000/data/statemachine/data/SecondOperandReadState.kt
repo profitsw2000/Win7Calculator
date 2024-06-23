@@ -171,7 +171,7 @@ class SecondOperandReadState(
     /**
      * Calculates square root of input number and add action to history of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return SecondOperandReadState with result of square root calculation in main string field and
+     * @return InitialState with result of square root calculation in main string field and
      * action added to history string of calculator data
      */
     private fun calculateSquareRoot(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {

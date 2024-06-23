@@ -1,9 +1,14 @@
 package ru.profitsw2000.data.statemachine.data
 
+import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
+import ru.profitsw2000.data.entity.OperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
+import kotlin.math.sqrt
 
 class OperationResultState(
     override val generalCalculatorDataEntity: GeneralCalculatorDataEntity
@@ -13,7 +18,7 @@ class OperationResultState(
         return when(action) {
             CalculatorAction.Add -> InitialState(generalCalculatorDataEntity)
             CalculatorAction.AddToMemory -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.Backspace -> InitialState(generalCalculatorDataEntity)
+            CalculatorAction.Backspace -> this
             CalculatorAction.Clear -> InitialState(generalCalculatorDataEntity)
             CalculatorAction.ClearEntered -> InitialState(generalCalculatorDataEntity)
             CalculatorAction.ClearMemory -> InitialState(generalCalculatorDataEntity)
@@ -31,8 +36,6 @@ class OperationResultState(
             CalculatorAction.SubtractFromMemory -> InitialState(generalCalculatorDataEntity)
         }
     }
-
-
 
     /**
      * Clear internal memory of calculator
@@ -99,6 +102,128 @@ class OperationResultState(
         else OperationResultState(generalCalculatorDataEntity.copy(memoryNumber = -(operandNumber)))
     }
 
+    /**
+     * Clears all data, contained in fields mainString, historyString and operand fields of calculator data.
+     * OperationType set to NO_OPERATION state
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return Initial state with some fields of calculator data set to default state
+     */
+    private fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        return InitialState(generalCalculatorDataEntity.copy(
+            mainString = "0",
+            historyString = "",
+            operand = 0.0,
+            operationType = OperationType.NO_OPERATION
+        ))
+    }
+
+    /**
+     * Changes sign of the result number. It's contained in mainString field of calculator data. History string
+     * field of calculator data appended with action name string.
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return InitialState with new mainString and history fields of calculator data
+     */
+    private fun negateOperand(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        val negatedNumber = (0 - calculatorStringToDouble(generalCalculatorDataEntity.mainString))
+
+        return InitialState(
+            generalCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(negatedNumber),
+                historyString = "negate(${generalCalculatorDataEntity.mainString})"
+            )
+        )
+    }
+
+    /**
+     * Calculates square root of input number and add action to history of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return InitialState with result of square root calculation in main string field and
+     * action added to history string of calculator data.
+     * Or ErrorState if mainString contain negative number.
+     * */
+    private fun calculateSquareRoot(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
+        return if (calculatorStringToDouble(generalCalculatorDataEntity.mainString) < 0.0) {
+            ErrorState(
+                GeneralCalculatorDataEntity(
+                    historyString = "sqrt(${generalCalculatorDataEntity.mainString})",
+                    memoryNumber = generalCalculatorDataEntity.memoryNumber,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } else {
+            InitialState(
+                generalCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(sqrt(calculatorStringToDouble(generalCalculatorDataEntity.mainString))),
+                    historyString = "sqrt(${generalCalculatorDataEntity.mainString})"
+                )
+            )
+        }
+    }
+
+    /**
+     * Writes digit in string format to mainString field of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @param digitToInput - contains string with digit that has to be added to mainString of calculator data
+     * @return FirstOperandInputState with new mainString and historyString fields of calculator data
+     */
+    private fun inputDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToInput: String): GeneralCalculatorState {
+
+        return if (digitToInput == ",") FirstOperandInputState(
+            generalCalculatorDataEntity.copy(
+                mainString = "0,"
+            )
+        )
+        else FirstOperandInputState(
+            generalCalculatorDataEntity.copy(
+                mainString = digitToInput
+            )
+        )
+    }
+
+    /**
+     * Calculates input number in main string percent of the same number
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return InitialState with main string got from calculation of number, as result of number that equals percentage of [mainString]
+     * percent from number equals [mainString]. String of result number added to history string field of calculator data.
+     */
+    private fun percentageOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
+        val percentageResult = (calculatorStringToDouble(generalCalculatorDataEntity.mainString)/100)*calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+
+        return InitialState(
+            generalCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(percentageResult),
+                historyString = "${doubleToCalculatorString(percentageResult)}"
+            )
+        )
+    }
+
+    /**
+     * Calculates inversely proportioned number to that contained in main string field of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return InitialState if calculation completed successfully with result written in main string field and
+     * action written to history string. If math operation throws exception, then ErrorState returned by function with
+     * error code written to corresponded field and action written to history string of calculator data
+     */
+    private fun reciprocOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        return try {
+            InitialState(generalCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(1/(calculatorStringToDouble(generalCalculatorDataEntity.mainString))),
+                historyString = "reciproc(${generalCalculatorDataEntity.mainString})"
+            ))
+        } catch (arithmeticException: ArithmeticException) {
+            ErrorState(generalCalculatorDataEntity.copy(
+                historyString = "1/${generalCalculatorDataEntity.mainString}",
+                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+            ))
+        } catch (exception: Exception) {
+            ErrorState(generalCalculatorDataEntity.copy(
+                historyString = "1/${generalCalculatorDataEntity.mainString}",
+                errorCode = UNKNOWN_ERROR_CODE
+            ))
+        }
+    }
 
 
     /**

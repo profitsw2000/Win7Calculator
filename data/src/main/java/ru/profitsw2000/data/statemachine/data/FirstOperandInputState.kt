@@ -216,7 +216,9 @@ class FirstOperandInputState(
         operationType: OperationType,
         operationString: String
     ): GeneralCalculatorState {
-        val historyString = "${generalCalculatorDataEntity.historyString} ${generalCalculatorDataEntity.mainString} $operationString"
+
+        val historyString = "${generalCalculatorDataEntity.mainString} $operationString"
+
         return PrimitiveMathOperationState(
             generalCalculatorDataEntity.copy(
                 historyString = historyString,
