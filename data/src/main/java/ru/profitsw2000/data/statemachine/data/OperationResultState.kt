@@ -225,6 +225,31 @@ class OperationResultState(
         }
     }
 
+    /**
+     * Calculates result of math operation and save it in calculator data.
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return OperationResultState where mainString field contains result of math operation between number in
+     * operand field and mainString fields. Type of math operation is in operationType field of calculator
+     * data.
+     */
+    private fun calculateResult(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        val firstOperand = generalCalculatorDataEntity.operand
+        val secondOperand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+        val operationResult = when(generalCalculatorDataEntity.operationType) {
+            OperationType.PLUS -> firstOperand + secondOperand
+            OperationType.MINUS -> firstOperand - secondOperand
+            OperationType.MULTIPLY -> firstOperand * secondOperand
+            OperationType.DIVIDE -> firstOperand / secondOperand
+            OperationType.NO_OPERATION -> 0.0
+        }
+
+        return OperationResultState(
+            generalCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(operationResult),
+                historyString = ""
+            )
+        )
+    }
 
     /**
      * Converts string to double

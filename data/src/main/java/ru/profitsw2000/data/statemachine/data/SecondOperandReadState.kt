@@ -256,8 +256,7 @@ class SecondOperandReadState(
     }
 
     /**
-     * Calculates result of math operation and save it in calculator data. Also erase all calculator data
-     * except memoryNumber field.
+     * Calculates result of math operation and save it in calculator data.
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return OperationResultState where mainString field contains result of math operation between number in
      * operand field and mainString fields. Type of math operation is in operationType field of calculator
@@ -275,9 +274,10 @@ class SecondOperandReadState(
         }
 
         return OperationResultState(
-            GeneralCalculatorDataEntity(
+            generalCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(operationResult),
-                memoryNumber = generalCalculatorDataEntity.memoryNumber
+                historyString = "",
+                operand = secondOperand
             )
         )
     }
