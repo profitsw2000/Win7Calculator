@@ -142,6 +142,44 @@ class InitialState(
     }
 
     /**
+     * Changed current state if clicked button is not 0. Clicked digit stored in main string field of calculator data.
+     * @param1 generalCalculatorDataEntity - contains current calculator data
+     * @param2 digit - contain string with number of clicked button
+     * @return FirstOperandInputState if clicked digit is not 0 with digit stored in main string field, otherwise returns same state with same calculator data.
+     */
+    private fun digitClicked(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digit: String): GeneralCalculatorState {
+        return if (digit  == "0") this
+        else FirstOperandInputState(
+            generalCalculatorDataEntity.copy(
+                mainString = digit
+            )
+        )
+    }
+
+    /**
+     * Changes current state to PrimitiveMathOperationState, input number and operation sign writes to history string of calculator data,
+     * same as operation type.
+     * @param1 generalCalculatorDataEntity - contains current calculator data,
+     * @param2 operationType - type of primitive math operation
+     * @param3 operationString - operation sign, need to be added in history string
+     * @return PrimitiveMathOperationState with changed historyString and operationType fields of calculator data
+     */
+    private fun primitiveMathOperation(
+        generalCalculatorDataEntity: GeneralCalculatorDataEntity,
+        operationType: OperationType,
+        operationString: String
+    ): GeneralCalculatorState {
+        val historyString = "${generalCalculatorDataEntity.historyString} ${generalCalculatorDataEntity.mainString} $operationString"
+        return PrimitiveMathOperationState(
+            generalCalculatorDataEntity.copy(
+                historyString = historyString,
+                operationType = operationType,
+                operand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+            )
+        )
+    }
+
+    /**
      * Calculates input number in main string percent of the number in operand of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return OperationResultState with "0" in main and history string of calculator data
@@ -176,44 +214,6 @@ class InitialState(
                 errorCode = UNKNOWN_ERROR_CODE
             ))
         }
-    }
-
-    /**
-     * Changes current state to PrimitiveMathOperationState, input number and operation sign writes to history string of calculator data,
-     * same as operation type.
-     * @param1 generalCalculatorDataEntity - contains current calculator data,
-     * @param2 operationType - type of primitive math operation
-     * @param3 operationString - operation sign, need to be added in history string
-     * @return PrimitiveMathOperationState with changed historyString and operationType fields of calculator data
-     */
-    private fun primitiveMathOperation(
-        generalCalculatorDataEntity: GeneralCalculatorDataEntity,
-        operationType: OperationType,
-        operationString: String
-    ): GeneralCalculatorState {
-        val historyString = "${generalCalculatorDataEntity.historyString} ${generalCalculatorDataEntity.mainString} $operationString"
-        return PrimitiveMathOperationState(
-            generalCalculatorDataEntity.copy(
-                historyString = historyString,
-                operationType = operationType,
-                operand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
-            )
-        )
-    }
-
-    /**
-     * Changed current state if clicked button is not 0. Clicked digit stored in main string field of calculator data.
-     * @param1 generalCalculatorDataEntity - contains current calculator data
-     * @param2 digit - contain string with number of clicked button
-     * @return FirstOperandInputState if clicked digit is not 0 with digit stored in main string field, otherwise returns same state with same calculator data.
-     */
-    private fun digitClicked(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digit: String): GeneralCalculatorState {
-        return if (digit  == "0") this
-        else FirstOperandInputState(
-            generalCalculatorDataEntity.copy(
-                mainString = digit
-            )
-        )
     }
 
     /**
