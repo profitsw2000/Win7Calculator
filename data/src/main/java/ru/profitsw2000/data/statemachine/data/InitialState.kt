@@ -15,7 +15,7 @@ class InitialState(
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {
             CalculatorAction.Add -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.PLUS, "+")
-            CalculatorAction.AddToMemory -> addMemory(generalCalculatorDataEntity)
+            CalculatorAction.AddToMemory -> addNumberToMemory(generalCalculatorDataEntity)
             CalculatorAction.Clear -> clearAll(generalCalculatorDataEntity)
             CalculatorAction.ClearEntered -> clearAll(generalCalculatorDataEntity)
             CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataEntity)
@@ -28,7 +28,7 @@ class InitialState(
             CalculatorAction.Recipoc -> reciprocOperation(generalCalculatorDataEntity)
             CalculatorAction.SquareRoot -> calculateSquareRoot(generalCalculatorDataEntity)
             CalculatorAction.Subtract -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.MINUS, "-")
-            CalculatorAction.SubtractFromMemory -> subtractMemory(generalCalculatorDataEntity)
+            CalculatorAction.SubtractFromMemory -> subtractNumberFromMemory(generalCalculatorDataEntity)
             else -> this
         }
     }
@@ -45,13 +45,14 @@ class InitialState(
     /**
      * Reads internal memory and copy it to mainString of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return InitialState with new main string field of calculator data
+     * @return FirstOperandReadState with new main string field of calculator data if memoryNumber is not null
+     * or same state if it is.
      */
     private fun readMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return if (generalCalculatorDataEntity.memoryNumber == null) {
-            InitialState(generalCalculatorDataEntity.copy())
+            this
         } else {
-            InitialState(
+            FirstOperandReadState(
                 generalCalculatorDataEntity.copy(mainString = doubleToCalculatorString(generalCalculatorDataEntity.memoryNumber))
             )
         }
@@ -62,10 +63,13 @@ class InitialState(
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return Initial state with memory number field incremented on number, that contained in main string field
      */
-    private fun addMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    private fun addNumberToMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return if (generalCalculatorDataEntity.memoryNumber == null) {
-            InitialState(
-                generalCalculatorDataEntity.copy(memoryNumber = calculatorStringToDouble(generalCalculatorDataEntity.mainString))
+            if (generalCalculatorDataEntity.mainString == "0") this
+            else InitialState(
+                generalCalculatorDataEntity.copy(
+                    memoryNumber = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+                )
             )
         } else {
             InitialState(
@@ -79,10 +83,11 @@ class InitialState(
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return Initial state with memory number field decremented on number, that contained in main string field
      */
-    private fun subtractMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    private fun subtractNumberFromMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return if (generalCalculatorDataEntity.memoryNumber == null) {
-            InitialState(
-                generalCalculatorDataEntity.copy(memoryNumber = calculatorStringToDouble(generalCalculatorDataEntity.mainString))
+            if (generalCalculatorDataEntity.mainString == "0") this
+            else InitialState(
+                generalCalculatorDataEntity.copy(memoryNumber = 0 - calculatorStringToDouble(generalCalculatorDataEntity.mainString))
             )
         } else {
             InitialState(
@@ -98,12 +103,7 @@ class InitialState(
      * @return Initial state with some fields of calculator data set to default state
      */
     private fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return InitialState(generalCalculatorDataEntity.copy(
-            mainString = "0",
-            historyString = "",
-            operand = 0.0,
-            operationType = OperationType.NO_OPERATION
-        ))
+        return InitialState(GeneralCalculatorDataEntity(memoryNumber = generalCalculatorDataEntity.memoryNumber))
     }
 
     /**
@@ -112,14 +112,7 @@ class InitialState(
      * @return Initial state with changed main string and writes action to history string of calculator data
      */
     private fun negateInput(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return if (generalCalculatorDataEntity.mainString == "0") {
-            InitialState(generalCalculatorDataEntity.copy())
-        } else {
-            InitialState(generalCalculatorDataEntity.copy(
-                mainString = negateNumberString(generalCalculatorDataEntity.mainString),
-                historyString = negateHistoryString(generalCalculatorDataEntity.mainString, generalCalculatorDataEntity.historyString)
-            ))
-        }
+        return this
     }
 
     /**
@@ -132,7 +125,7 @@ class InitialState(
         val sqrtDouble = sqrt(calculatorStringToDouble(generalCalculatorDataEntity.mainString))
         val sqrtString = doubleToCalculatorString(sqrtDouble)
 
-        return OperationResultState(
+        return FirstOperandReadState(
             generalCalculatorDataEntity.copy(
                 mainString = sqrtString,
                 historyString = if (generalCalculatorDataEntity.historyString == "") "sqrt(${generalCalculatorDataEntity.mainString})"
@@ -149,11 +142,8 @@ class InitialState(
      */
     private fun digitClicked(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digit: String): GeneralCalculatorState {
         return if (digit  == "0") this
-        else FirstOperandInputState(
-            generalCalculatorDataEntity.copy(
-                mainString = digit
-            )
-        )
+        else if(digit == ",") FirstOperandInputState(generalCalculatorDataEntity.copy(mainString = "0,"))
+        else FirstOperandInputState(generalCalculatorDataEntity.copy(mainString = digit))
     }
 
     /**
@@ -169,7 +159,7 @@ class InitialState(
         operationType: OperationType,
         operationString: String
     ): GeneralCalculatorState {
-        val historyString = "${generalCalculatorDataEntity.historyString} ${generalCalculatorDataEntity.mainString} $operationString"
+        val historyString = "${generalCalculatorDataEntity.mainString} $operationString"
         return PrimitiveMathOperationState(
             generalCalculatorDataEntity.copy(
                 historyString = historyString,
@@ -185,9 +175,12 @@ class InitialState(
      * @return OperationResultState with "0" in main and history string of calculator data
      */
     private fun percentageOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return OperationResultState(generalCalculatorDataEntity.copy(
-            mainString = "0",
-            historyString = "0"))
+        return OperationResultState(
+            generalCalculatorDataEntity.copy(
+                mainString = "0",
+                historyString = "0"
+            )
+        )
     }
 
     /**
@@ -205,12 +198,12 @@ class InitialState(
             ))
         } catch (arithmeticException: ArithmeticException) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "1/${generalCalculatorDataEntity.mainString}",
+                historyString = "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = DIVIDE_ON_ZERO_ERROR_CODE
             ))
         } catch (exception: Exception) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "1/${generalCalculatorDataEntity.mainString}",
+                historyString = "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = UNKNOWN_ERROR_CODE
             ))
         }

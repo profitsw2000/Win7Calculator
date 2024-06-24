@@ -18,7 +18,7 @@ class SecondOperandInputState(
         return when(action) {
             CalculatorAction.Add -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.PLUS, "+")
             CalculatorAction.AddToMemory -> addNumberToMemory(generalCalculatorDataEntity)
-            CalculatorAction.Backspace -> deleteLastDigit(generalCalculatorDataEntity)
+            CalculatorAction.Backspace -> clearDigit(generalCalculatorDataEntity)
             CalculatorAction.Clear -> clearAllData(generalCalculatorDataEntity)
             CalculatorAction.ClearEntered -> clearMainString(generalCalculatorDataEntity)
             CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataEntity)
@@ -108,7 +108,7 @@ class SecondOperandInputState(
      * @return FirstOperandInputState with new mainString field of calculator data if string contains
      * more than 1 character, otherwise SecondOperandInputState with mainString field turns to "0"
      */
-    private fun deleteLastDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    private fun clearDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return if (generalCalculatorDataEntity.mainString.length > 2) {
             SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.mainString.dropLast(1)))
         } else if (generalCalculatorDataEntity.mainString.length == 2
@@ -182,82 +182,6 @@ class SecondOperandInputState(
     }
 
     /**
-     * Calculates inversely proportioned number to that contained in main string field of calculator data
-     * @param generalCalculatorDataEntity - contains current calculator data
-     * @return SecondOperandReadState if calculation completed successfully with result written in main string field and
-     * action added to history string. If math operation throws exception, then ErrorState returned by function with
-     * error code written to corresponded field and action added to history string of calculator data.
-     */
-    private fun reciprocOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-
-        return try {
-            SecondOperandReadState(
-                generalCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(1/(calculatorStringToDouble(generalCalculatorDataEntity.mainString))),
-                    historyString = "${generalCalculatorDataEntity.historyString} reciproc(${generalCalculatorDataEntity.mainString})"
-                )
-            )
-        } catch (arithmeticException: ArithmeticException) {
-            ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "${generalCalculatorDataEntity.historyString} " +
-                        "reciproc(${generalCalculatorDataEntity.mainString})",
-                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
-            ))
-        } catch (exception: Exception) {
-            ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "${generalCalculatorDataEntity.historyString} " +
-                        "reciproc(${generalCalculatorDataEntity.mainString})",
-                errorCode = UNKNOWN_ERROR_CODE
-            ))
-        }
-    }
-
-    /**
-     * Calculates input number in main string percent of the number in operand of calculator data
-     * @param generalCalculatorDataEntity - contains current calculator data
-     * @return SecondOperandReadState with main string got from calculation of number, as result of number that equals percentage of [operand]
-     * percent from number equals [operand]. String of result number added to history string field of calculator data.
-     */
-    private fun percentageOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-
-        val percentageResult = (generalCalculatorDataEntity.operand/100)*calculatorStringToDouble(generalCalculatorDataEntity.mainString)
-
-        return SecondOperandReadState(
-            generalCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(percentageResult),
-                historyString = " ${generalCalculatorDataEntity.historyString} ${doubleToCalculatorString(percentageResult)}"
-            )
-        )
-    }
-
-    /**
-     * Calculates result of math operation and save it in calculator data.
-     * @param generalCalculatorDataEntity - contains current calculator data
-     * @return OperationResultState where mainString field contains result of math operation between number in
-     * operand field and mainString fields. Type of math operation is in operationType field of calculator
-     * data.
-     */
-    private fun calculateResult(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        val firstOperand = generalCalculatorDataEntity.operand
-        val secondOperand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
-        val operationResult = when(generalCalculatorDataEntity.operationType) {
-            OperationType.PLUS -> firstOperand + secondOperand
-            OperationType.MINUS -> firstOperand - secondOperand
-            OperationType.MULTIPLY -> firstOperand * secondOperand
-            OperationType.DIVIDE -> firstOperand / secondOperand
-            OperationType.NO_OPERATION -> 0.0
-        }
-
-        return OperationResultState(
-            generalCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(operationResult),
-                historyString = "",
-                operand = secondOperand
-            )
-        )
-    }
-
-    /**
      * Writes digit in string format to mainString field of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
      * @param digitToAppend - contains string with digit that has to be added to mainString of calculator data
@@ -292,8 +216,8 @@ class SecondOperandInputState(
     ): GeneralCalculatorState {
 
         val historyString = "${generalCalculatorDataEntity.historyString} " +
-                    "${generalCalculatorDataEntity.mainString} " +
-                    "$operationString"
+                "${generalCalculatorDataEntity.mainString} " +
+                "$operationString"
         val firstOperand = generalCalculatorDataEntity.operand
         val secondOperand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
         val operationResult = when(generalCalculatorDataEntity.operationType) {
@@ -310,6 +234,82 @@ class SecondOperandInputState(
                 historyString = historyString,
                 operand = operationResult,
                 operationType = operationType
+            )
+        )
+    }
+
+    /**
+     * Calculates input number in main string percent of the number in operand of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return SecondOperandReadState with main string got from calculation of number, as result of number that equals percentage of [operand]
+     * percent from number equals [operand]. String of result number added to history string field of calculator data.
+     */
+    private fun percentageOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
+        val percentageResult = (generalCalculatorDataEntity.operand/100)*calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+
+        return SecondOperandReadState(
+            generalCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(percentageResult),
+                historyString = " ${generalCalculatorDataEntity.historyString} ${doubleToCalculatorString(percentageResult)}"
+            )
+        )
+    }
+
+    /**
+     * Calculates inversely proportioned number to that contained in main string field of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return SecondOperandReadState if calculation completed successfully with result written in main string field and
+     * action added to history string. If math operation throws exception, then ErrorState returned by function with
+     * error code written to corresponded field and action added to history string of calculator data.
+     */
+    private fun reciprocOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
+        return try {
+            SecondOperandReadState(
+                generalCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(1/(calculatorStringToDouble(generalCalculatorDataEntity.mainString))),
+                    historyString = "${generalCalculatorDataEntity.historyString} reciproc(${generalCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ErrorState(generalCalculatorDataEntity.copy(
+                historyString = "${generalCalculatorDataEntity.historyString} " +
+                        "reciproc(${generalCalculatorDataEntity.mainString})",
+                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+            ))
+        } catch (exception: Exception) {
+            ErrorState(generalCalculatorDataEntity.copy(
+                historyString = "${generalCalculatorDataEntity.historyString} " +
+                        "reciproc(${generalCalculatorDataEntity.mainString})",
+                errorCode = UNKNOWN_ERROR_CODE
+            ))
+        }
+    }
+
+    /**
+     * Calculates result of math operation and save it in calculator data.
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return OperationResultState where mainString field contains result of math operation between number in
+     * operand field and mainString fields. Type of math operation is in operationType field of calculator
+     * data.
+     */
+    private fun calculateResult(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        val firstOperand = generalCalculatorDataEntity.operand
+        val secondOperand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+        val operationResult = when(generalCalculatorDataEntity.operationType) {
+            OperationType.PLUS -> firstOperand + secondOperand
+            OperationType.MINUS -> firstOperand - secondOperand
+            OperationType.MULTIPLY -> firstOperand * secondOperand
+            OperationType.DIVIDE -> firstOperand / secondOperand
+            OperationType.NO_OPERATION -> 0.0
+        }
+
+        return OperationResultState(
+            generalCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(operationResult),
+                historyString = "",
+                operand = secondOperand
             )
         )
     }

@@ -93,6 +93,17 @@ class PrimitiveMathOperationState (
     }
 
     /**
+     * Clears mainString field of calculator data and set it to "0"
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return SecondOperandInputState where mainString field calculator data contain "0"
+     */
+    private fun clearMainString(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        return SecondOperandInputState(
+            generalCalculatorDataEntity.copy(mainString = "0")
+        )
+    }
+
+    /**
      * Clears all data, contained in fields mainString, historyString and operand fields of calculator data.
      * OperationType set to NO_OPERATION state
      * @param generalCalculatorDataEntity - contains current calculator data
@@ -108,13 +119,19 @@ class PrimitiveMathOperationState (
     }
 
     /**
-     * Clears mainString field of calculator data and set it to "0"
+     * Changes sign of the entered number. It's contained in mainString field of calculator data.
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return SecondOperandInputState where mainString field calculator data contain "0"
+     * @return SecondOperandReadState with new mainString and history fields of calculator data
      */
-    private fun clearMainString(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return SecondOperandInputState(
-            generalCalculatorDataEntity.copy(mainString = "0")
+    private fun negateOperand(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        val negatedNumber = (0 - calculatorStringToDouble(generalCalculatorDataEntity.mainString))
+
+        return SecondOperandReadState(
+            generalCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(negatedNumber),
+                historyString = "${generalCalculatorDataEntity.historyString} " +
+                        "negate(${generalCalculatorDataEntity.mainString})"
+            )
         )
     }
 
@@ -137,18 +154,57 @@ class PrimitiveMathOperationState (
     }
 
     /**
-     * Changes sign of the entered number. It's contained in mainString field of calculator data.
+     * Writes digit in string format to mainString field of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return SecondOperandReadState with new mainString and history fields of calculator data
+     * @param digitToAppend - contains string with digit that has to be added to end of mainString of calculator data
+     * @return SecondOperandInputState with new mainString field of calculator data
      */
-    private fun negateOperand(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        val negatedNumber = (0 - calculatorStringToDouble(generalCalculatorDataEntity.mainString))
+    private fun appendDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToAppend: String): GeneralCalculatorState {
+
+        return if (digitToAppend == ",") SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = "0,"))
+        else SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = digitToAppend))
+    }
+
+    /**
+     * Set operationType field of calculator data by removing actual operation type and
+     * setting new one.
+     * @param1 generalCalculatorDataEntity - contains current calculator data,
+     * @param2 operationType - type of primitive math operation
+     * @param3 operationString - operation sign, need to be added in history string
+     * @return PrimitiveMathOperationState with new operationType fields of calculator data
+     */
+    private fun primitiveMathOperation(
+        generalCalculatorDataEntity: GeneralCalculatorDataEntity,
+        operationType: OperationType,
+        operationString: String
+    ): GeneralCalculatorState {
+        val historyString = generalCalculatorDataEntity.historyString.apply {
+            dropLast(1)
+            plus(operationString)
+        }
+
+        return PrimitiveMathOperationState(
+            generalCalculatorDataEntity.copy(
+                historyString = historyString,
+                operationType = operationType
+            )
+        )
+    }
+
+    /**
+     * Calculates input number in main string percent of the number in operand of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return SecondOperandReadState with main string got from calculation of number, is result of number that equals percentage of [operand]
+     * percent from number equals [operand]. String of result number added to history string field of calculator data.
+     */
+    private fun percentageOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        val percentageResult = (generalCalculatorDataEntity.operand/100)*generalCalculatorDataEntity.operand
 
         return SecondOperandReadState(
             generalCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(negatedNumber),
+                mainString = doubleToCalculatorString(percentageResult),
                 historyString = "${generalCalculatorDataEntity.historyString} " +
-                        "negate(${generalCalculatorDataEntity.mainString})"
+                        "${doubleToCalculatorString(percentageResult)}"
             )
         )
     }
@@ -183,24 +239,6 @@ class PrimitiveMathOperationState (
     }
 
     /**
-     * Calculates input number in main string percent of the number in operand of calculator data
-     * @param generalCalculatorDataEntity - contains current calculator data
-     * @return SecondOperandReadState with main string got from calculation of number, is result of number that equals percentage of [operand]
-     * percent from number equals [operand]. String of result number added to history string field of calculator data.
-     */
-    private fun percentageOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        val percentageResult = (generalCalculatorDataEntity.operand/100)*generalCalculatorDataEntity.operand
-
-        return SecondOperandReadState(
-            generalCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(percentageResult),
-                historyString = "${generalCalculatorDataEntity.historyString} " +
-                        "${doubleToCalculatorString(percentageResult)}"
-            )
-        )
-    }
-
-    /**
      * Calculates result of math operation and save it in calculator data. Also erase all calculator data
      * except memoryNumber field.
      * @param generalCalculatorDataEntity - contains current calculator data
@@ -228,44 +266,6 @@ class PrimitiveMathOperationState (
     }
 
     /**
-     * Set operationType field of calculator data by removing actual operation type and
-     * setting new one.
-     * @param1 generalCalculatorDataEntity - contains current calculator data,
-     * @param2 operationType - type of primitive math operation
-     * @param3 operationString - operation sign, need to be added in history string
-     * @return PrimitiveMathOperationState with new operationType fields of calculator data
-     */
-    private fun primitiveMathOperation(
-        generalCalculatorDataEntity: GeneralCalculatorDataEntity,
-        operationType: OperationType,
-        operationString: String
-    ): GeneralCalculatorState {
-        val historyString = generalCalculatorDataEntity.historyString.apply {
-            dropLast(1)
-            plus(operationString)
-        }
-
-        return PrimitiveMathOperationState(
-            generalCalculatorDataEntity.copy(
-                historyString = historyString,
-                operationType = operationType
-            )
-        )
-    }
-
-    /**
-     * Writes digit in string format to mainString field of calculator data
-     * @param generalCalculatorDataEntity - contains current calculator data
-     * @param digitToAppend - contains string with digit that has to be added to end of mainString of calculator data
-     * @return SecondOperandInputState with new mainString field of calculator data
-     */
-    private fun appendDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToAppend: String): GeneralCalculatorState {
-
-        return if (digitToAppend == ",") SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = "0,"))
-        else SecondOperandInputState(generalCalculatorDataEntity.copy(mainString = digitToAppend))
-    }
-
-    /**
      * Converts string to double
      * @param calculatorString - string to convert
      * @return converted number
@@ -290,6 +290,4 @@ class PrimitiveMathOperationState (
             number.toString()
         }
     }
-
-
 }

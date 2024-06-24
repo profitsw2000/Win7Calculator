@@ -162,6 +162,26 @@ class OperationResultState(
     }
 
     /**
+     * Writes digit in string format to mainString field of calculator data
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @param digitToInput - contains string with digit that has to be added to mainString of calculator data
+     * @return FirstOperandInputState with new mainString and historyString fields of calculator data
+     */
+    private fun inputDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToInput: String): GeneralCalculatorState {
+
+        return if (digitToInput == ",") FirstOperandInputState(
+            generalCalculatorDataEntity.copy(
+                mainString = "0,"
+            )
+        )
+        else FirstOperandInputState(
+            generalCalculatorDataEntity.copy(
+                mainString = digitToInput
+            )
+        )
+    }
+
+    /**
      * Change type operation field of calculator data. Number from mainString field recorded to
      * operand field.
      * @param1 generalCalculatorDataEntity - contains current calculator data,
@@ -183,26 +203,6 @@ class OperationResultState(
                 historyString = historyString,
                 operand = calculatorStringToDouble(generalCalculatorDataEntity.mainString),
                 operationType = operationType
-            )
-        )
-    }
-
-    /**
-     * Writes digit in string format to mainString field of calculator data
-     * @param generalCalculatorDataEntity - contains current calculator data
-     * @param digitToInput - contains string with digit that has to be added to mainString of calculator data
-     * @return FirstOperandInputState with new mainString and historyString fields of calculator data
-     */
-    private fun inputDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToInput: String): GeneralCalculatorState {
-
-        return if (digitToInput == ",") FirstOperandInputState(
-            generalCalculatorDataEntity.copy(
-                mainString = "0,"
-            )
-        )
-        else FirstOperandInputState(
-            generalCalculatorDataEntity.copy(
-                mainString = digitToInput
             )
         )
     }
