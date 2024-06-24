@@ -16,24 +16,24 @@ class OperationResultState(
 
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {
-            CalculatorAction.Add -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.AddToMemory -> InitialState(generalCalculatorDataEntity)
+            CalculatorAction.Add -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.PLUS, "+")
+            CalculatorAction.AddToMemory -> addNumberToMemory(generalCalculatorDataEntity)
             CalculatorAction.Backspace -> this
-            CalculatorAction.Clear -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.ClearEntered -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.ClearMemory -> InitialState(generalCalculatorDataEntity)
-            is CalculatorAction.Digit -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.Divide -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.Equal -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.Multiply -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.Percentage -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.PlusMinus -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.ReadMemory -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.Recipoc -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.SaveToMemory -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.SquareRoot -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.Subtract -> InitialState(generalCalculatorDataEntity)
-            CalculatorAction.SubtractFromMemory -> InitialState(generalCalculatorDataEntity)
+            CalculatorAction.Clear -> clearAll(generalCalculatorDataEntity)
+            CalculatorAction.ClearEntered -> clearAll(generalCalculatorDataEntity)
+            CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataEntity)
+            is CalculatorAction.Digit -> inputDigit(generalCalculatorDataEntity, action.digit)
+            CalculatorAction.Divide -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.DIVIDE, "/")
+            CalculatorAction.Equal -> calculateResult(generalCalculatorDataEntity)
+            CalculatorAction.Multiply -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.MULTIPLY, "*")
+            CalculatorAction.Percentage -> percentageOperation(generalCalculatorDataEntity)
+            CalculatorAction.PlusMinus -> negateOperand(generalCalculatorDataEntity)
+            CalculatorAction.ReadMemory -> readMemory(generalCalculatorDataEntity)
+            CalculatorAction.Recipoc -> reciprocOperation(generalCalculatorDataEntity)
+            CalculatorAction.SaveToMemory -> saveToMemory(generalCalculatorDataEntity)
+            CalculatorAction.SquareRoot -> calculateSquareRoot(generalCalculatorDataEntity)
+            CalculatorAction.Subtract -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.MINUS, "-")
+            CalculatorAction.SubtractFromMemory -> subtractNumberFromMemory(generalCalculatorDataEntity)
         }
     }
 
@@ -159,6 +159,32 @@ class OperationResultState(
                 )
             )
         }
+    }
+
+    /**
+     * Change type operation field of calculator data. Number from mainString field recorded to
+     * operand field.
+     * @param1 generalCalculatorDataEntity - contains current calculator data,
+     * @param2 operationType - type of next primitive math operation
+     * @param3 operationString - operation sign, need to be added in history string
+     * @return PrimitiveMathOperationState with new operationType field and operand fields of calculator data.
+     */
+    private fun primitiveMathOperation(
+        generalCalculatorDataEntity: GeneralCalculatorDataEntity,
+        operationType: OperationType,
+        operationString: String
+    ): GeneralCalculatorState {
+
+        val historyString = "${generalCalculatorDataEntity.mainString} " +
+                "$operationString"
+
+        return PrimitiveMathOperationState(
+            generalCalculatorDataEntity.copy(
+                historyString = historyString,
+                operand = calculatorStringToDouble(generalCalculatorDataEntity.mainString),
+                operationType = operationType
+            )
+        )
     }
 
     /**
