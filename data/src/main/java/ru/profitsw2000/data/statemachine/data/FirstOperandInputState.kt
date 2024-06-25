@@ -1,6 +1,7 @@
 package ru.profitsw2000.data.statemachine.data
 
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.OperationType
@@ -16,11 +17,11 @@ class FirstOperandInputState(
         return when(action){
             CalculatorAction.Add -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.PLUS, "+")
             CalculatorAction.AddToMemory -> addNumberToMemory(generalCalculatorDataEntity)
-            CalculatorAction.Backspace -> deleteLastDigit(generalCalculatorDataEntity)
-            CalculatorAction.Clear -> clearAllData(generalCalculatorDataEntity)
-            CalculatorAction.ClearEntered -> clearAllData(generalCalculatorDataEntity)
+            CalculatorAction.Backspace -> clearDigit(generalCalculatorDataEntity)
+            CalculatorAction.Clear -> clearAll(generalCalculatorDataEntity)
+            CalculatorAction.ClearEntered -> clearAll(generalCalculatorDataEntity)
             CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataEntity)
-            is CalculatorAction.Digit -> appendDigit(generalCalculatorDataEntity, action.digit)
+            is CalculatorAction.Digit -> inputDigit(generalCalculatorDataEntity, action.digit)
             CalculatorAction.Divide -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.DIVIDE, "/")
             CalculatorAction.Equal -> InitialState(generalCalculatorDataEntity)
             CalculatorAction.Multiply -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.MULTIPLY, "*")
@@ -38,58 +39,62 @@ class FirstOperandInputState(
     /**
      * Function to clear calculator memory
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return InitialState with same calculator data but memoryNumber field set to null
+     * @return FirstOperandReadState with same calculator data but memoryNumber field set to null
      */
     private fun clearMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return InitialState(generalCalculatorDataEntity.copy(memoryNumber = null))
+        return FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = null))
     }
 
     /**
      * Reads memory from memoryNumber field of calculator data if it is not null, convert it to string and paste to mainString field
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return InitialState with same calculator data but number from memory field converted to string and copied to mainString - if memoryNumber field contains any number,
+     * @return FirstOperandReadState with same calculator data but number from memory field converted to string and copied to mainString - if memoryNumber field contains any number,
      * if not - set main string field to "0"
      */
     private fun readMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return if (generalCalculatorDataEntity.memoryNumber == null) {
-            InitialState(generalCalculatorDataEntity.copy(mainString = "0"))
+            FirstOperandReadState(generalCalculatorDataEntity.copy(mainString = "0"))
         }
         else {
-            InitialState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.memoryNumber.toString()))
+            FirstOperandReadState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.memoryNumber.toString()))
         }
     }
 
     /**
      * Save number from main string to memoryNumber field
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return InitialState with same calculator data but with new memoryNumber. mainString field converted to number and written to memoryNumber field.
+     * @return FirstOperandReadState with same calculator data but with new memoryNumber. mainString field converted to number and written to memoryNumber field.
      */
     private fun saveToMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return InitialState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.mainString.toDouble()))
+        return FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.mainString.toDouble()))
     }
 
     /**
      * Add number to number in memory of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return InitialState with same calculator data but with other memoryNumber. mainString field converted to number and added to memoryNumber field.
+     * @return FirstOperandReadState with same calculator data but with other memoryNumber. mainString field converted to number and added to memoryNumber field.
      */
     private fun addNumberToMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
         val firstOperandNumber: Double = generalCalculatorDataEntity.mainString.toDouble()
+
         return if (generalCalculatorDataEntity.memoryNumber != null)
-            InitialState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.plus(firstOperandNumber)))
-        else InitialState(generalCalculatorDataEntity.copy(memoryNumber = firstOperandNumber))
+            FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.plus(firstOperandNumber)))
+        else FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = firstOperandNumber))
     }
 
     /**
      * Subtract number from number in memory of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return InitialState with same calculator data but with other memoryNumber. mainString field converted to number and memoryNumber field subtracted by that number.
+     * @return FirstOperandReadState with same calculator data but with other memoryNumber. mainString field converted to number and memoryNumber field subtracted by that number.
      */
     private fun subtractNumberFromMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
         val firstOperandNumber: Double = generalCalculatorDataEntity.mainString.toDouble()
+
         return if (generalCalculatorDataEntity.memoryNumber != null)
-            InitialState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.minus(firstOperandNumber)))
-        else InitialState(generalCalculatorDataEntity.copy(memoryNumber = -(firstOperandNumber)))
+            FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.minus(firstOperandNumber)))
+        else FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = -(firstOperandNumber)))
     }
 
     /**
@@ -98,7 +103,7 @@ class FirstOperandInputState(
      * @return FirstOperandInputState with new mainString field of calculator data if string contains
      * more than 1 character, otherwise InitialState with mainString field turns to "0"
      */
-    private fun deleteLastDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    private fun clearDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return if (generalCalculatorDataEntity.mainString.length > 1) {
             FirstOperandInputState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.mainString.dropLast(1)))
         } else if (generalCalculatorDataEntity.mainString.length == 2
@@ -114,7 +119,7 @@ class FirstOperandInputState(
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return InitialState with initial calculator data except memoryNumber field. It contains old value.
      */
-    private fun clearAllData(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    private fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return InitialState(GeneralCalculatorDataEntity(memoryNumber = generalCalculatorDataEntity.memoryNumber))
     }
 
@@ -124,7 +129,9 @@ class FirstOperandInputState(
      * @return FirstOperandInputState with new mainString field of calculator data
      */
     private fun negateOperand(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
         val negatedNumber = (0 - calculatorStringToDouble(generalCalculatorDataEntity.mainString))
+
         return FirstOperandInputState(generalCalculatorDataEntity.copy(
             mainString = doubleToCalculatorString(negatedNumber)
         ))
@@ -137,16 +144,24 @@ class FirstOperandInputState(
      * action written to history string of calculator data
      */
     private fun calculateSquareRoot(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+
         val sqrtDouble = sqrt(calculatorStringToDouble(generalCalculatorDataEntity.mainString))
         val sqrtString = doubleToCalculatorString(sqrtDouble)
 
-        return OperationResultState(
-            generalCalculatorDataEntity.copy(
-                mainString = sqrtString,
-                historyString = if (generalCalculatorDataEntity.historyString == "") "sqrt(${generalCalculatorDataEntity.mainString})"
-                else "sqrt(${generalCalculatorDataEntity.historyString})"
+        return if (calculatorStringToDouble(generalCalculatorDataEntity.mainString) < 0.0)
+            ErrorState(
+                generalCalculatorDataEntity.copy(
+                    historyString = "sqrt(${generalCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
             )
-        )
+        else FirstOperandReadState(
+                generalCalculatorDataEntity.copy(
+                    mainString = sqrtString,
+                    historyString = if (generalCalculatorDataEntity.historyString == "") "sqrt(${generalCalculatorDataEntity.mainString})"
+                    else "sqrt(${generalCalculatorDataEntity.historyString})"
+                )
+            )
     }
 
     /**
@@ -155,7 +170,7 @@ class FirstOperandInputState(
      * @param digitToAppend - contains string with digit that has to be added to end of mainString of calculator data
      * @return FirstOperandInputState with new mainString field of calculator data
      */
-    private fun appendDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToAppend: String): GeneralCalculatorState {
+    private fun inputDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToAppend: String): GeneralCalculatorState {
         return if (generalCalculatorDataEntity.mainString == "0" && digitToAppend == "0") this
         else if (generalCalculatorDataEntity.mainString.contains(",") && digitToAppend == ",") this
         else if (generalCalculatorDataEntity.mainString.length >= 16) this
@@ -194,10 +209,10 @@ class FirstOperandInputState(
     /**
      * Calculates input number in main string percent of the number in operand of calculator data
      * @param generalCalculatorDataEntity - contains current calculator data
-     * @return OperationResultState with "0" in main and history string of calculator data
+     * @return FirstOperandReadState with "0" in main and history string of calculator data
      */
     private fun percentageOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return OperationResultState(generalCalculatorDataEntity.copy(
+        return FirstOperandReadState(generalCalculatorDataEntity.copy(
             mainString = "0",
             historyString = "0"))
     }
@@ -211,18 +226,18 @@ class FirstOperandInputState(
      */
     private fun reciprocOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return try {
-            OperationResultState(generalCalculatorDataEntity.copy(
+            FirstOperandReadState(generalCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(1/(calculatorStringToDouble(generalCalculatorDataEntity.mainString))),
                 historyString = "reciproc(${generalCalculatorDataEntity.mainString})"
             ))
         } catch (arithmeticException: ArithmeticException) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "1/${generalCalculatorDataEntity.mainString}",
+                historyString = "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = DIVIDE_ON_ZERO_ERROR_CODE
             ))
         } catch (exception: Exception) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "1/${generalCalculatorDataEntity.mainString}",
+                historyString = "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = UNKNOWN_ERROR_CODE
             ))
         }
