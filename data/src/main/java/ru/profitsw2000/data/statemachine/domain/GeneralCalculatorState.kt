@@ -3,7 +3,10 @@ package ru.profitsw2000.data.statemachine.domain
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 
 interface GeneralCalculatorState : CalculatorState {
+
     val generalCalculatorDataEntity: GeneralCalculatorDataEntity
+
+    fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState
 
     /**
      * Converts string to double

@@ -135,7 +135,7 @@ class SecondOperandReadState(
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return Initial state with some fields of calculator data set to default state
      */
-    private fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    override fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return InitialState(generalCalculatorDataEntity.copy(
             mainString = "0",
             historyString = "",

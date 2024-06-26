@@ -19,7 +19,7 @@ class SecondOperandInputState(
             CalculatorAction.Add -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.PLUS, "+")
             CalculatorAction.AddToMemory -> addNumberToMemory(generalCalculatorDataEntity)
             CalculatorAction.Backspace -> clearDigit(generalCalculatorDataEntity)
-            CalculatorAction.Clear -> clearAllData(generalCalculatorDataEntity)
+            CalculatorAction.Clear -> clearAll(generalCalculatorDataEntity)
             CalculatorAction.ClearEntered -> clearMainString(generalCalculatorDataEntity)
             CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataEntity)
             is CalculatorAction.Digit -> inputDigit(generalCalculatorDataEntity, action.digit)
@@ -137,7 +137,7 @@ class SecondOperandInputState(
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return InitialState with initial calculator data except memoryNumber field. It contains old value.
      */
-    private fun clearAllData(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    override fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return InitialState(GeneralCalculatorDataEntity(memoryNumber = generalCalculatorDataEntity.memoryNumber))
     }
 

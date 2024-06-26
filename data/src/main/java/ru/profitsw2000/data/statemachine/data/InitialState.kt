@@ -29,6 +29,7 @@ class InitialState(
             CalculatorAction.SquareRoot -> calculateSquareRoot(generalCalculatorDataEntity)
             CalculatorAction.Subtract -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.MINUS, "-")
             CalculatorAction.SubtractFromMemory -> subtractNumberFromMemory(generalCalculatorDataEntity)
+            CalculatorAction.SaveToMemory -> saveToMemory(generalCalculatorDataEntity)
             else -> this
         }
     }
@@ -56,6 +57,20 @@ class InitialState(
                 generalCalculatorDataEntity.copy(mainString = doubleToCalculatorString(generalCalculatorDataEntity.memoryNumber))
             )
         }
+    }
+
+    /**
+     * Save number from main string to memoryNumber field
+     * @param generalCalculatorDataEntity - contains current calculator data
+     * @return InitialState with same calculator data but with new memoryNumber. mainString field converted to number and written to memoryNumber field.
+     */
+    private fun saveToMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+        return InitialState(
+            generalCalculatorDataEntity.copy(
+                memoryNumber = if (generalCalculatorDataEntity.mainString == "0") null
+                else calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+            )
+        )
     }
 
     /**
@@ -102,7 +117,7 @@ class InitialState(
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return Initial state with some fields of calculator data set to default state
      */
-    private fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    override fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return InitialState(GeneralCalculatorDataEntity(memoryNumber = generalCalculatorDataEntity.memoryNumber))
     }
 

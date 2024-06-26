@@ -23,7 +23,7 @@ class FirstOperandInputState(
             CalculatorAction.ClearMemory -> clearMemory(generalCalculatorDataEntity)
             is CalculatorAction.Digit -> inputDigit(generalCalculatorDataEntity, action.digit)
             CalculatorAction.Divide -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.DIVIDE, "/")
-            CalculatorAction.Equal -> InitialState(generalCalculatorDataEntity)
+            CalculatorAction.Equal -> calculateResult(generalCalculatorDataEntity)
             CalculatorAction.Multiply -> primitiveMathOperation(generalCalculatorDataEntity, OperationType.MULTIPLY, "*")
             CalculatorAction.Percentage -> percentageOperation(generalCalculatorDataEntity)
             CalculatorAction.PlusMinus -> negateOperand(generalCalculatorDataEntity)
@@ -66,7 +66,11 @@ class FirstOperandInputState(
      * @return FirstOperandReadState with same calculator data but with new memoryNumber. mainString field converted to number and written to memoryNumber field.
      */
     private fun saveToMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.mainString.toDouble()))
+        return FirstOperandReadState(
+            generalCalculatorDataEntity.copy(
+                memoryNumber = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
+            )
+        )
     }
 
     /**
@@ -76,7 +80,7 @@ class FirstOperandInputState(
      */
     private fun addNumberToMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
 
-        val firstOperandNumber: Double = generalCalculatorDataEntity.mainString.toDouble()
+        val firstOperandNumber: Double = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
 
         return if (generalCalculatorDataEntity.memoryNumber != null)
             FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.plus(firstOperandNumber)))
@@ -90,7 +94,7 @@ class FirstOperandInputState(
      */
     private fun subtractNumberFromMemory(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
 
-        val firstOperandNumber: Double = generalCalculatorDataEntity.mainString.toDouble()
+        val firstOperandNumber: Double = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
 
         return if (generalCalculatorDataEntity.memoryNumber != null)
             FirstOperandReadState(generalCalculatorDataEntity.copy(memoryNumber = generalCalculatorDataEntity.memoryNumber.minus(firstOperandNumber)))
@@ -119,7 +123,7 @@ class FirstOperandInputState(
      * @param generalCalculatorDataEntity - contains current calculator data
      * @return InitialState with initial calculator data except memoryNumber field. It contains old value.
      */
-    private fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
+    override fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         return InitialState(GeneralCalculatorDataEntity(memoryNumber = generalCalculatorDataEntity.memoryNumber))
     }
 
