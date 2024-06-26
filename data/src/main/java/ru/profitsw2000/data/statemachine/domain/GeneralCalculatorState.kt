@@ -1,6 +1,7 @@
 package ru.profitsw2000.data.statemachine.domain
 
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
+import java.text.DecimalFormat
 
 interface GeneralCalculatorState : CalculatorState {
 
@@ -27,7 +28,7 @@ interface GeneralCalculatorState : CalculatorState {
      * @return string, formatted specifically for calculator display
      */
     fun doubleToCalculatorString(number: Double): String {
-        val decimalFormat = "###.################"
+        val decimalFormat = DecimalFormat("###.################")//("###.################")
         return decimalFormat.format(number).replace('.', ',')
     }
 }

@@ -56,7 +56,7 @@ class PrimitiveMathOperationState (
             this
         }
         else {
-            SecondOperandReadState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.memoryNumber.toString()))
+            SecondOperandReadState(generalCalculatorDataEntity.copy(mainString = doubleToCalculatorString(generalCalculatorDataEntity.memoryNumber)))
         }
     }
 

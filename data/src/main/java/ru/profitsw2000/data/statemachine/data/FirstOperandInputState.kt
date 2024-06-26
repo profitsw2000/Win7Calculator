@@ -57,7 +57,7 @@ class FirstOperandInputState(
             FirstOperandReadState(generalCalculatorDataEntity.copy(mainString = "0"))
         }
         else {
-            FirstOperandReadState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.memoryNumber.toString()))
+            FirstOperandReadState(generalCalculatorDataEntity.copy(mainString = doubleToCalculatorString(generalCalculatorDataEntity.memoryNumber)))
         }
     }
 

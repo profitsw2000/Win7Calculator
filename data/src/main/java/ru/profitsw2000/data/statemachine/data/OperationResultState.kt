@@ -60,7 +60,7 @@ class OperationResultState(
             InitialState(generalCalculatorDataEntity.copy(mainString = "0"))
         }
         else {
-            InitialState(generalCalculatorDataEntity.copy(mainString = generalCalculatorDataEntity.memoryNumber.toString()))
+            InitialState(generalCalculatorDataEntity.copy(mainString = doubleToCalculatorString(generalCalculatorDataEntity.memoryNumber)))
         }
     }
 

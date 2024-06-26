@@ -65,7 +65,7 @@ class FirstOperandReadState(
         else {
             FirstOperandReadState(
                 generalCalculatorDataEntity.copy(
-                    mainString = generalCalculatorDataEntity.memoryNumber.toString(),
+                    mainString = doubleToCalculatorString(generalCalculatorDataEntity.memoryNumber),
                     historyString = ""
                 )
             )
@@ -186,7 +186,7 @@ class FirstOperandReadState(
         operationString: String
     ): GeneralCalculatorState {
 
-        val historyString = "${generalCalculatorDataEntity.historyString} $operationString"
+        val historyString = "${generalCalculatorDataEntity.mainString} $operationString"
 
         return PrimitiveMathOperationState(
             generalCalculatorDataEntity.copy(
