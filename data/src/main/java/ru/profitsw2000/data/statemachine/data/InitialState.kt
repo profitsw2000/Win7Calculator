@@ -208,43 +208,4 @@ class InitialState(
             ))
         }
     }
-
-    /**
-     * Converts string to double
-     * @param calculatorString - string to convert
-     * @return converted number
-     */
-    private fun calculatorStringToDouble(calculatorString: String): Double {
-        return try {
-            calculatorString.replace(",", ".").toDouble()
-        } catch (numberFormatException: NumberFormatException) {
-            0.0
-        }
-    }
-
-    /**
-     * Converts double number to string for calculator display
-     * @param number - double type number to convert to string
-     * @return string, formatted specifically for calculator display
-     */
-    private fun doubleToCalculatorString(number: Double): String {
-        return if(number.rem(1).equals(0.0)) {
-            String.format("%,0f", number)
-        } else {
-            number.toString()
-        }
-    }
-
-    private fun negateNumberString(stringNumber: String): String {
-        return stringNumber.apply {
-            doubleToCalculatorString(0 - calculatorStringToDouble(this))
-        }
-    }
-
-    private fun negateHistoryString(stringNumber: String, historyString: String): String {
-        return historyString.apply {
-            if (historyString == "") "negate($stringNumber)"
-            else "negate($historyString)"
-        }
-    }
 }

@@ -349,32 +349,6 @@ class SecondOperandReadState(
     }
 
     /**
-     * Converts string to double
-     * @param calculatorString - string to convert
-     * @return converted number
-     */
-    private fun calculatorStringToDouble(calculatorString: String): Double {
-        return try {
-            calculatorString.replace(",", ".").toDouble()
-        } catch (numberFormatException: NumberFormatException) {
-            0.0
-        }
-    }
-
-    /**
-     * Converts double number to string for calculator display
-     * @param number - double type number to convert to string
-     * @return string, formatted specifically for calculator display
-     */
-    private fun doubleToCalculatorString(number: Double): String {
-        return if(number.rem(1).equals(0.0)) {
-            String.format("%,0f", number)
-        } else {
-            number.toString()
-        }
-    }
-
-    /**
      * Define, whether the last character of the string is math operation sign or not
      * @param historyString - string to define last char
      * @return true if last char is math operation sign, false if not
