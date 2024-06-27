@@ -77,6 +77,14 @@ class GeneralCalculatorRepositoryImpl(
     }
 
     private fun renderGeneralCalculatorState(newState: GeneralCalculatorState, oldState: GeneralCalculatorState) {
-        generalCalculatorMutableDataSource.value = generalCalculatorMapper.map(newState.generalCalculatorDataEntity)
+        val historyStringLength = newState.generalCalculatorDataEntity.historyString.length
+
+        generalCalculatorMutableDataSource.value = generalCalculatorMapper.map(
+            newState.generalCalculatorDataEntity.copy(
+                historyString = if (historyStringLength > 23)
+                "<<${newState.generalCalculatorDataEntity.historyString.drop(historyStringLength - 23)}"
+                else newState.generalCalculatorDataEntity.historyString
+            )
+        )
     }
 }

@@ -1,5 +1,6 @@
 package ru.profitsw2000.data.statemachine.data
 
+import android.util.Log
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
@@ -190,14 +191,21 @@ class SecondOperandInputState(
      */
     override fun inputDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToAppend: String): GeneralCalculatorState {
 
-        return if (generalCalculatorDataEntity.mainString == "0" && digitToAppend == "0") this
-        else if (generalCalculatorDataEntity.mainString.contains(",") && digitToAppend == ",") this
-        else if (generalCalculatorDataEntity.mainString.length >= 16) this
-        else SecondOperandInputState(
-            generalCalculatorDataEntity.copy(
-                mainString = "${generalCalculatorDataEntity.mainString}${digitToAppend}"
+        return when {
+            generalCalculatorDataEntity.mainString == "0" && digitToAppend == "0" -> this
+            generalCalculatorDataEntity.mainString.contains(",") && digitToAppend == "," -> this
+            generalCalculatorDataEntity.mainString.length >= 16 -> this
+            generalCalculatorDataEntity.mainString == "0" && generalCalculatorDataEntity.mainString.length < 2 -> SecondOperandInputState(
+                generalCalculatorDataEntity.copy(
+                    mainString = digitToAppend
+                )
             )
-        )
+            else -> SecondOperandInputState(
+                generalCalculatorDataEntity.copy(
+                    mainString = "${generalCalculatorDataEntity.mainString}${digitToAppend}"
+                )
+            )
+        }
     }
 
     /**
@@ -228,6 +236,7 @@ class SecondOperandInputState(
             OperationType.DIVIDE -> firstOperand / secondOperand
             OperationType.NO_OPERATION -> 0.0
         }
+        Log.d("VVV", "primitiveMathOperation: $operationResult")
 
         return PrimitiveMathOperationState(
             generalCalculatorDataEntity.copy(
