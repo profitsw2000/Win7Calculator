@@ -190,7 +190,7 @@ class FirstOperandInputState(
                     mainString = digitToAppend
                 )
             )
-            else -> SecondOperandInputState(
+            else -> FirstOperandInputState(
                 generalCalculatorDataEntity.copy(
                     mainString = "$mainString${digitToAppend}"
                 )

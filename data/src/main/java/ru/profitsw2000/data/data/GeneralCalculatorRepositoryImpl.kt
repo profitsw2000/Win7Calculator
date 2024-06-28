@@ -21,6 +21,7 @@ import ru.profitsw2000.data.constants.BUTTON_SQUARE_ROOT_CODE
 import ru.profitsw2000.data.constants.BUTTON_SUBTRACT_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.HISTORY_STRING_OVERFLOW_SIGN
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.domain.GeneralCalculatorRepository
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.mappers.GeneralCalculatorMapper
@@ -79,7 +80,8 @@ class GeneralCalculatorRepositoryImpl(
     }
 
     private fun renderGeneralCalculatorState(newState: GeneralCalculatorState, oldState: GeneralCalculatorState) {
-        val historyStringLength = newState.generalCalculatorDataEntity.historyString.length
+        val historyStringLength = newState.generalCalculatorDataEntity.historyString.replace(
+            HISTORY_STRING_SPACE_LETTER, " ").length
         val historyString = if (historyStringLength > HISTORY_STRING_MAX_DIGIT_NUMBER)
             "$HISTORY_STRING_OVERFLOW_SIGN" +
                     "${newState.generalCalculatorDataEntity.historyString.drop(historyStringLength - HISTORY_STRING_MAX_DIGIT_NUMBER)}"
