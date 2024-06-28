@@ -1,6 +1,7 @@
 package ru.profitsw2000.data.statemachine.data
 
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
@@ -196,7 +197,8 @@ class OperationResultState(
         operationString: String
     ): GeneralCalculatorState {
 
-        val historyString = "${generalCalculatorDataEntity.mainString} " +
+        val historyString = "${generalCalculatorDataEntity.mainString}" +
+                "$HISTORY_STRING_SPACE_LETTER" +
                 "$operationString"
 
         return PrimitiveMathOperationState(

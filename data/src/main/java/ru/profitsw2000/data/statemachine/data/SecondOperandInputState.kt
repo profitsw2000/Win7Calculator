@@ -2,6 +2,7 @@ package ru.profitsw2000.data.statemachine.data
 
 import android.util.Log
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
@@ -168,7 +169,9 @@ class SecondOperandInputState(
         return if (calculatorStringToDouble(generalCalculatorDataEntity.mainString) < 0.0) {
             ErrorState(
                 GeneralCalculatorDataEntity(
-                    historyString = "${generalCalculatorDataEntity.historyString} sqrt(${generalCalculatorDataEntity.mainString})",
+                    historyString = "${generalCalculatorDataEntity.historyString}" +
+                            "${HISTORY_STRING_SPACE_LETTER}" +
+                            "sqrt(${generalCalculatorDataEntity.mainString})",
                     memoryNumber = generalCalculatorDataEntity.memoryNumber,
                     errorCode = INVALID_INPUT_ERROR_CODE
                 )
@@ -177,7 +180,9 @@ class SecondOperandInputState(
             SecondOperandReadState(
                 generalCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(sqrt(calculatorStringToDouble(generalCalculatorDataEntity.mainString))),
-                    historyString = "${generalCalculatorDataEntity.historyString} sqrt(${generalCalculatorDataEntity.mainString})"
+                    historyString = "${generalCalculatorDataEntity.historyString}" +
+                            "${HISTORY_STRING_SPACE_LETTER}" +
+                            "sqrt(${generalCalculatorDataEntity.mainString})"
                 )
             )
         }
@@ -224,8 +229,10 @@ class SecondOperandInputState(
         operationString: String
     ): GeneralCalculatorState {
 
-        val historyString = "${generalCalculatorDataEntity.historyString} " +
-                "${generalCalculatorDataEntity.mainString} " +
+        val historyString = "${generalCalculatorDataEntity.historyString}" +
+                "$HISTORY_STRING_SPACE_LETTER" +
+                "${generalCalculatorDataEntity.mainString}" +
+                "$HISTORY_STRING_SPACE_LETTER" +
                 "$operationString"
         val firstOperand = generalCalculatorDataEntity.operand
         val secondOperand = calculatorStringToDouble(generalCalculatorDataEntity.mainString)
@@ -261,7 +268,9 @@ class SecondOperandInputState(
         return SecondOperandReadState(
             generalCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(percentageResult),
-                historyString = " ${generalCalculatorDataEntity.historyString} ${doubleToCalculatorString(percentageResult)}"
+                historyString = " ${generalCalculatorDataEntity.historyString}" +
+                        "$HISTORY_STRING_SPACE_LETTER" +
+                        "${doubleToCalculatorString(percentageResult)}"
             )
         )
     }
@@ -279,18 +288,22 @@ class SecondOperandInputState(
             SecondOperandReadState(
                 generalCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(1/(calculatorStringToDouble(generalCalculatorDataEntity.mainString))),
-                    historyString = "${generalCalculatorDataEntity.historyString} reciproc(${generalCalculatorDataEntity.mainString})"
+                    historyString = "${generalCalculatorDataEntity.historyString}" +
+                            "${HISTORY_STRING_SPACE_LETTER}" +
+                            "reciproc(${generalCalculatorDataEntity.mainString})"
                 )
             )
         } catch (arithmeticException: ArithmeticException) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
+                        "${HISTORY_STRING_SPACE_LETTER}" +
                         "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = DIVIDE_ON_ZERO_ERROR_CODE
             ))
         } catch (exception: Exception) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
+                        "${HISTORY_STRING_SPACE_LETTER}" +
                         "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = UNKNOWN_ERROR_CODE
             ))

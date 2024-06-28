@@ -1,6 +1,7 @@
 package ru.profitsw2000.data.statemachine.data
 
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.OperationType
@@ -130,7 +131,8 @@ class PrimitiveMathOperationState (
         return SecondOperandReadState(
             generalCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(negatedNumber),
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
+                        "$HISTORY_STRING_SPACE_LETTER" +
                         "negate(${generalCalculatorDataEntity.mainString})"
             )
         )
@@ -149,7 +151,9 @@ class PrimitiveMathOperationState (
         return SecondOperandReadState(
             generalCalculatorDataEntity.copy(
                 mainString = sqrtString,
-                historyString = "${generalCalculatorDataEntity.historyString} sqrt(${generalCalculatorDataEntity.mainString})"
+                historyString = "${generalCalculatorDataEntity.historyString}" +
+                        "${HISTORY_STRING_SPACE_LETTER}" +
+                        "sqrt(${generalCalculatorDataEntity.mainString})"
             )
         )
     }
@@ -203,7 +207,8 @@ class PrimitiveMathOperationState (
         return SecondOperandReadState(
             generalCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(percentageResult),
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
+                        "$HISTORY_STRING_SPACE_LETTER" +
                         "${doubleToCalculatorString(percentageResult)}"
             )
         )
@@ -220,18 +225,21 @@ class PrimitiveMathOperationState (
         return try {
             SecondOperandReadState(generalCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(1/(calculatorStringToDouble(generalCalculatorDataEntity.mainString))),
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
+                        "$HISTORY_STRING_SPACE_LETTER" +
                         "reciproc(${generalCalculatorDataEntity.mainString})"
             ))
         } catch (arithmeticException: ArithmeticException) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
+                        "$HISTORY_STRING_SPACE_LETTER" +
                         "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = DIVIDE_ON_ZERO_ERROR_CODE
             ))
         } catch (exception: Exception) {
             ErrorState(generalCalculatorDataEntity.copy(
-                historyString = "${generalCalculatorDataEntity.historyString} " +
+                historyString = "${generalCalculatorDataEntity.historyString}" +
+                        "$HISTORY_STRING_SPACE_LETTER" +
                         "reciproc(${generalCalculatorDataEntity.mainString})",
                 errorCode = UNKNOWN_ERROR_CODE
             ))

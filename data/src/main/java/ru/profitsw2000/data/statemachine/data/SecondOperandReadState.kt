@@ -1,6 +1,7 @@
 package ru.profitsw2000.data.statemachine.data
 
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.OperationType
@@ -58,7 +59,9 @@ class SecondOperandReadState(
             SecondOperandReadState(
                 generalCalculatorDataEntity.copy(
                     mainString = "0",
-                    historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+                    historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(
+                        HISTORY_STRING_SPACE_LETTER, ""
+                    )
                 )
             )
         }
@@ -66,7 +69,9 @@ class SecondOperandReadState(
             SecondOperandReadState(
                 generalCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(generalCalculatorDataEntity.memoryNumber),
-                    historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+                    historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(
+                        HISTORY_STRING_SPACE_LETTER, ""
+                    )
                 )
             )
         }
@@ -120,7 +125,7 @@ class SecondOperandReadState(
     private fun clearMainString(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
 
         val historyString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) generalCalculatorDataEntity.historyString
-        else generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+        else generalCalculatorDataEntity.historyString.replaceAfterLast(HISTORY_STRING_SPACE_LETTER, "")
 
         return SecondOperandInputState(
             generalCalculatorDataEntity.copy(
@@ -153,7 +158,9 @@ class SecondOperandReadState(
      */
     override fun negateOperand(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
         val negatedNumber = (0 - calculatorStringToDouble(generalCalculatorDataEntity.mainString))
-        val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+        val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(
+            HISTORY_STRING_SPACE_LETTER, ""
+        )
         val lastActionString = "negate(${generalCalculatorDataEntity.historyString.takeLastWhile { it != ' ' }})"
         val appendedHistoryString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
             "${generalCalculatorDataEntity.historyString}negate(${generalCalculatorDataEntity.mainString})"
@@ -178,7 +185,9 @@ class SecondOperandReadState(
     override fun calculateSquareRoot(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
 
         val sqrtString = doubleToCalculatorString(sqrt(calculatorStringToDouble(generalCalculatorDataEntity.mainString)))
-        val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+        val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(
+            HISTORY_STRING_SPACE_LETTER, ""
+        )
         val lastActionString = "sqrt(${generalCalculatorDataEntity.historyString.takeLastWhile { it != ' ' }})"
         val appendedHistoryString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
             "${generalCalculatorDataEntity.historyString}sqrt(${generalCalculatorDataEntity.mainString})"
@@ -205,13 +214,15 @@ class SecondOperandReadState(
         return if (digitToInput == ",") SecondOperandInputState(
             generalCalculatorDataEntity.copy(
                 mainString = "0,",
-                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "").dropLast(1)
+                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(
+                    HISTORY_STRING_SPACE_LETTER, "").dropLast(1)
             )
         )
         else SecondOperandInputState(
             generalCalculatorDataEntity.copy(
                 mainString = digitToInput,
-                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "").dropLast(1)
+                historyString = generalCalculatorDataEntity.historyString.replaceAfterLast(
+                    HISTORY_STRING_SPACE_LETTER, "").dropLast(1)
             )
         )
     }
@@ -233,11 +244,13 @@ class SecondOperandReadState(
     ): GeneralCalculatorState {
 
         val historyString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
-            "${generalCalculatorDataEntity.historyString} " +
+            "${generalCalculatorDataEntity.historyString}" +
+                    "$HISTORY_STRING_SPACE_LETTER" +
                     "${generalCalculatorDataEntity.mainString} " +
                     "$operationString"
         } else {
-            "${generalCalculatorDataEntity.historyString} " +
+            "${generalCalculatorDataEntity.historyString}" +
+                    "$HISTORY_STRING_SPACE_LETTER" +
                     "$operationString"
         }
         val firstOperand = generalCalculatorDataEntity.operand
@@ -272,7 +285,9 @@ class SecondOperandReadState(
         val appendedHistoryString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
             "${generalCalculatorDataEntity.historyString}${doubleToCalculatorString(percentageResult)}"
         } else {
-            "${generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")}${doubleToCalculatorString(percentageResult)}"
+            "${generalCalculatorDataEntity.historyString.replaceAfterLast(
+                HISTORY_STRING_SPACE_LETTER, "")}" +
+                    "${doubleToCalculatorString(percentageResult)}"
         }
 
         return SecondOperandReadState(
@@ -292,7 +307,9 @@ class SecondOperandReadState(
      */
     override fun reciprocOperation(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
 
-        val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(" ", "")
+        val baseString = generalCalculatorDataEntity.historyString.replaceAfterLast(
+            HISTORY_STRING_SPACE_LETTER, ""
+        )
         val lastActionString = "reciproc(${generalCalculatorDataEntity.historyString.takeLastWhile { it != ' ' }})"
         val appendedHistoryString = if (isLastOperationChar(generalCalculatorDataEntity.historyString)) {
             "${generalCalculatorDataEntity.historyString}reciproc(${generalCalculatorDataEntity.mainString})"

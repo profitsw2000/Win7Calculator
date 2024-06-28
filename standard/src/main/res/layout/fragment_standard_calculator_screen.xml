@@ -104,13 +104,13 @@
                 android:gravity="end|bottom"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                tools:text="1234567890123456  +  1234  +"
+                tools:text="11232   +   34   +   44   +   5   -   6   +"
                 android:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toTopOf="@+id/input_and_result_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_weight="5" />
+                app:layout_constraintVertical_weight="4" />
 
             <TextView
                 android:id="@+id/input_and_result_text_view"
@@ -129,7 +129,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/percent_15_guideline"
                 app:layout_constraintTop_toBottomOf="@+id/operation_history_text_view"
-                app:layout_constraintVertical_weight="8" />
+                app:layout_constraintVertical_weight="9" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/percent_7_guideline"
