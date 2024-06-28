@@ -3,6 +3,7 @@ package ru.profitsw2000.data.statemachine.data
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.OperationType
@@ -177,14 +178,24 @@ class FirstOperandInputState(
      * @return FirstOperandInputState with new mainString field of calculator data
      */
     override fun inputDigit(generalCalculatorDataEntity: GeneralCalculatorDataEntity, digitToAppend: String): GeneralCalculatorState {
-        return if (generalCalculatorDataEntity.mainString == "0" && digitToAppend == "0") this
-        else if (generalCalculatorDataEntity.mainString.contains(",") && digitToAppend == ",") this
-        else if (generalCalculatorDataEntity.mainString.length >= 16) this
-        else FirstOperandInputState(
-            generalCalculatorDataEntity.copy(
-                mainString = "${generalCalculatorDataEntity.mainString}${digitToAppend}"
+
+        val mainString = generalCalculatorDataEntity.mainString
+
+        return when {
+            mainString.contains(",") && digitToAppend == "," -> this
+            mainString.length >= MAIN_STRING_MAX_DIGIT_NUMBER && !(mainString.contains(",")) -> this
+            mainString.length >= (MAIN_STRING_MAX_DIGIT_NUMBER + 1) -> this
+            mainString == "0" && mainString.length < 2 -> SecondOperandInputState(
+                generalCalculatorDataEntity.copy(
+                    mainString = digitToAppend
+                )
             )
-        )
+            else -> SecondOperandInputState(
+                generalCalculatorDataEntity.copy(
+                    mainString = "$mainString${digitToAppend}"
+                )
+            )
+        }
     }
 
     /**

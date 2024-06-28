@@ -34,6 +34,7 @@
     <string name="plus_button_text">+</string>
 
     <string name="divide_on_zero_error_text">Деление на ноль невозможно</string>
+    <string name="invalid_input_error_text">Недопустимый ввод</string>
     <string name="unknown_error_text">Неизвестная ошибка</string>
 
 </resources>

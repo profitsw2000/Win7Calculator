@@ -24,6 +24,8 @@ import ru.profitsw2000.data.constants.BUTTON_RECIPROC_CODE
 import ru.profitsw2000.data.constants.BUTTON_SQUARE_ROOT_CODE
 import ru.profitsw2000.data.constants.BUTTON_SUBTRACT_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.NO_ERROR_CODE
 import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 import ru.profitsw2000.standard.R
@@ -176,6 +178,7 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
         inputAndResultTextView.text = when(generalCalculatorDataModel.errorCode) {
             NO_ERROR_CODE -> generalCalculatorDataModel.mainString
             DIVIDE_ON_ZERO_ERROR_CODE -> resources.getString(ru.profitsw2000.core.R.string.divide_on_zero_error_text)
+            INVALID_INPUT_ERROR_CODE -> resources.getString(ru.profitsw2000.core.R.string.invalid_input_error_text)
             else -> resources.getString(ru.profitsw2000.core.R.string.unknown_error_text)
         }
     }
