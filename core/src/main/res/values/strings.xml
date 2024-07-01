@@ -36,6 +36,7 @@
     <string name="divide_on_zero_error_text">Деление на ноль невозможно</string>
     <string name="invalid_input_error_text">Недопустимый ввод</string>
     <string name="unknown_error_text">Неизвестная ошибка</string>
+
     <string name="menu_item_general_calculator_text">Обычный</string>
     <string name="menu_item_scientific_calculator_text">Инженерный</string>
     <string name="menu_item_programmer_calculator_text">Программист</string>
@@ -50,5 +51,7 @@
     <string name="menu_item_fuel_economy_litres_text">Экономия топлива (л/100 км)</string>
     <string name="menu_item_copy_text">Копировать</string>
     <string name="menu_item_paste_text">Вставить</string>
+    <string name="menu_item_read_help_text">Посмотреть справку</string>
+    <string name="menu_item_about_app_text">О программе</string>
 
 </resources>
