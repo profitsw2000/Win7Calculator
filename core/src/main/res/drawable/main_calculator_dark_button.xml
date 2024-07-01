@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape
+            android:shape="rectangle">
+            <solid android:color="#FF8797AA"/>
+            <corners android:radius="@dimen/main_calculator_button_corner_radius"/>
+        </shape>
+    </item>
+
+    <item
+        android:bottom="@dimen/main_calculator_buttons_stroke_half_size"
+        android:left="@dimen/main_calculator_buttons_stroke_half_size"
+        android:right="@dimen/main_calculator_buttons_stroke_half_size"
+        android:top="@dimen/main_calculator_buttons_stroke_half_size">
+        <shape
+            android:shape="rectangle">
+            <solid android:color="@color/white"/>
+            <corners android:radius="@dimen/main_calculator_button_corner_radius"/>
+        </shape>
+    </item>
+
+    <item
+        android:bottom="@dimen/main_calculator_buttons_stroke_size"
+        android:left="@dimen/main_calculator_buttons_stroke_size"
+        android:right="@dimen/main_calculator_buttons_stroke_size"
+        android:top="@dimen/main_calculator_buttons_stroke_size"
+        android:drawable="@drawable/dark_button_background">
+    </item>
+
+</layer-list>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="calculator_display_memory_sign">M</string>
+    <string name="mc_button_text">MC</string>
+    <string name="mr_button_text">MR</string>
+    <string name="ms_button_text">MS</string>
+    <string name="m_plus_button_text">M+</string>
+    <string name="m_minus_button_text">M-</string>
+    <string name="ce_button_text">CE</string>
+    <string name="c_button_text">C</string>
+    <string name="plus_minus_button_text">+-</string>
+    <string name="sqrt__button_text">v</string>
+    <string name="seven_button_text">7</string>
+    <string name="eight_button_text">8</string>
+    <string name="nine_button_text">9</string>
+    <string name="divide_button_text">/</string>
+    <string name="percent_button_text">%</string>
+    <string name="four_button_text">4</string>
+    <string name="five_button_text">5</string>
+    <string name="six_button_text">6</string>
+    <string name="multiply_button_text">*</string>
+    <string name="inverse_ratio_button_text">1/x</string>
+    <string name="one_button_text">1</string>
+    <string name="two_button_text">2</string>
+    <string name="three_button_text">3</string>
+    <string name="minus_button_text">-</string>
+    <string name="equal_button_text">=</string>
+    <string name="zero_button_text">0</string>
+    <string name="comma_button_text">,</string>
+    <string name="plus_button_text">+</string>
+</resources>
