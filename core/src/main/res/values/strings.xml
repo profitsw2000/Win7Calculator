@@ -48,5 +48,7 @@
     <string name="menu_item_autoleasing_text">Автолизинг</string>
     <string name="menu_item_fuel_economy_gallons_text">Экономия топлива (миль на галлон)</string>
     <string name="menu_item_fuel_economy_litres_text">Экономия топлива (л/100 км)</string>
+    <string name="menu_item_copy_text">Копировать</string>
+    <string name="menu_item_paste_text">Вставить</string>
 
 </resources>
