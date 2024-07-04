@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="calculator_menu_stroke">#FFB6BCCC</color>
+    <color name="calculator_menu_background">#FFF0F0F0</color>
     <color name="calculator_buttons_stroke">#FF8797AA</color>
     <color name="shadowed_buttons_background">#FFD5E0ED</color>
 </resources>

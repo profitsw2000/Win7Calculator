@@ -4,6 +4,8 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:windowBackground">@drawable/calc_background_img</item>
+        <item name="popupMenuStyle">@style/calculatorTopMenuStyle</item>
+        <item name="textAppearanceLargePopupMenu">@style/popUpMenuTextAppearanceLarge</item>
     </style>
 
     <style name="Theme.Win7Calculator" parent="Base.Theme.Win7Calculator" />

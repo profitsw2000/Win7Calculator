@@ -1,10 +1,17 @@
 package ru.profitsw2000.standard.presentation.view
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.MenuCompat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.profitsw2000.data.constants.BUTTON_ADD_CODE
 import ru.profitsw2000.data.constants.BUTTON_BACKSPACE_CODE
@@ -62,8 +69,8 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
         initMenuTextViews()
     }
 
-    private fun initMenuTextViews() {
-
+    private fun initMenuTextViews() = with(binding) {
+        menuViewItemTextView.setOnClickListener { showViewPopupMenu(it) }
     }
 
     private fun initButtons() {
@@ -189,6 +196,64 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
 
     private fun populateMemorySign(generalCalculatorDataModel: GeneralCalculatorDataModel) = with(binding) {
         memorySignTextView.text = generalCalculatorDataModel.memorySign
+    }
+
+    private fun showViewPopupMenu(view: View) {
+        val viewPopupMenu = PopupMenu(requireActivity(), view)
+        var isSecondLevelMenu = false
+        viewPopupMenu.inflate(ru.profitsw2000.core.R.menu.view_popup_menu)
+
+        setMenuItemIcon(viewPopupMenu)
+
+        viewPopupMenu
+            .setOnMenuItemClickListener {
+                when(it.itemId) {
+                    ru.profitsw2000.core.R.id.general_calculator -> true
+                    ru.profitsw2000.core.R.id.scientific_calculator -> true
+                    ru.profitsw2000.core.R.id.programmer_calculator -> true
+                    ru.profitsw2000.core.R.id.statistic_calculator -> true
+
+                    ru.profitsw2000.core.R.id.digit_grouping -> true
+
+                    ru.profitsw2000.core.R.id.unit_conversion -> true
+                    ru.profitsw2000.core.R.id.date_calculation -> true
+                    
+                    ru.profitsw2000.core.R.id.calculation_sheets -> {
+                        isSecondLevelMenu = true
+                        true
+                    }
+
+                    ru.profitsw2000.core.R.id.mortgage_calculation -> true
+                    ru.profitsw2000.core.R.id.autoleasing_calculation -> true
+                    ru.profitsw2000.core.R.id.fuel_economy_miles_on_gallon -> true
+                    ru.profitsw2000.core.R.id.fuel_economy_litres_on_km -> true
+
+                    else -> true
+                }
+            }
+
+        viewPopupMenu.setOnDismissListener {
+            if (isSecondLevelMenu) {
+                isSecondLevelMenu = false
+            }
+            else Toast.makeText(requireActivity(), "Dismissed", Toast.LENGTH_SHORT).show()
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            viewPopupMenu.menu.setGroupDividerEnabled(true)
+        }
+        viewPopupMenu.show()
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun setMenuItemIcon(popupMenu: PopupMenu) {
+        if (popupMenu.menu is MenuBuilder) {
+            val menuBuilder = popupMenu.menu as MenuBuilder
+            menuBuilder.setOptionalIconsVisible(true)
+        }
+        popupMenu
+            .menu
+            .findItem(ru.profitsw2000.core.R.id.general_calculator)
+            .setIcon(ru.profitsw2000.core.R.drawable.picked_menu_item_icon)
     }
 
     companion object {

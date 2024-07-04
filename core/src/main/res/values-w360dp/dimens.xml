@@ -6,6 +6,7 @@
     <dimen name="main_calculator_buttons_stroke_half_size">1dp</dimen>
     <dimen name="main_calculator_button_corner_radius">2dp</dimen>
     <dimen name="calculator_menu_item_text_size">18sp</dimen>
+    <dimen name="calculator_menu_picked_item_icon_size">36dp</dimen>
     <dimen name="calculator_menu_space_between_items_text">24dp</dimen>
     <dimen name="calculator_menu_stroke_size">2dp</dimen>
     <dimen name="calculator_menu_items_vertical_margin">4dp</dimen>

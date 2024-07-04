@@ -6,18 +6,22 @@
 
         <item
             android:id="@+id/general_calculator"
+            android:icon="@drawable/blank_icon"
             android:title="@string/menu_item_general_calculator_text"/>
 
         <item
             android:id="@+id/scientific_calculator"
+            android:icon="@drawable/blank_icon"
             android:title="@string/menu_item_scientific_calculator_text"/>
 
         <item
             android:id="@+id/programmer_calculator"
+            android:icon="@drawable/blank_icon"
             android:title="@string/menu_item_programmer_calculator_text"/>
 
         <item
             android:id="@+id/statistic_calculator"
+            android:icon="@drawable/blank_icon"
             android:title="@string/menu_item_statistic_calculator_text"/>
 
     </group>
@@ -26,6 +30,7 @@
 
         <item
             android:id="@+id/digit_grouping"
+            android:icon="@drawable/blank_icon"
             android:title="@string/menu_item_digit_grouping_text"/>
 
     </group>
@@ -34,32 +39,39 @@
 
         <item
             android:id="@+id/unit_conversion"
+            android:icon="@drawable/blank_icon"
             android:title="@string/menu_item_unit_conversion_text"/>
 
         <item
             android:id="@+id/date_calculation"
+            android:icon="@drawable/blank_icon"
             android:title="@string/menu_item_date_calculation_text"/>
 
         <item
             android:id="@+id/calculation_sheets"
+            android:icon="@drawable/blank_icon"
             android:title="@string/menu_item_sheets_text">
 
             <menu>
 
                 <item
                     android:id="@+id/mortgage_calculation"
+                    android:icon="@drawable/blank_icon"
                     android:title="@string/menu_item_mortgage_calculation_text"/>
 
                 <item
                     android:id="@+id/autoleasing_calculation"
+                    android:icon="@drawable/blank_icon"
                     android:title="@string/menu_item_autoleasing_text"/>
 
                 <item
                     android:id="@+id/fuel_economy_miles_on_gallon"
+                    android:icon="@drawable/blank_icon"
                     android:title="@string/menu_item_fuel_economy_gallons_text"/>
 
                 <item
                     android:id="@+id/fuel_economy_litres_on_km"
+                    android:icon="@drawable/blank_icon"
                     android:title="@string/menu_item_fuel_economy_litres_text"/>
 
             </menu>
