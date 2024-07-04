@@ -37,4 +37,21 @@
     <string name="invalid_input_error_text">Недопустимый ввод</string>
     <string name="unknown_error_text">Неизвестная ошибка</string>
 
+    <string name="menu_item_general_calculator_text">Обычный</string>
+    <string name="menu_item_scientific_calculator_text">Инженерный</string>
+    <string name="menu_item_programmer_calculator_text">Программист</string>
+    <string name="menu_item_statistic_calculator_text">Статистика</string>
+    <string name="menu_item_digit_grouping_text">Группировка цифр</string>
+    <string name="menu_item_unit_conversion_text">Преобразование единиц</string>
+    <string name="menu_item_date_calculation_text">Вычисление даты</string>
+    <string name="menu_item_sheets_text">Листы</string>
+    <string name="menu_item_mortgage_calculation_text">Ипотека</string>
+    <string name="menu_item_autoleasing_text">Автолизинг</string>
+    <string name="menu_item_fuel_economy_gallons_text">Экон. топлива(миль/гал)</string>
+    <string name="menu_item_fuel_economy_litres_text">Экон. топлива(л/100 км)</string>
+    <string name="menu_item_copy_text">Копировать</string>
+    <string name="menu_item_paste_text">Вставить</string>
+    <string name="menu_item_read_help_text">Посмотреть справку</string>
+    <string name="menu_item_about_app_text">О программе</string>
+
 </resources>
