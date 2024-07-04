@@ -70,7 +70,15 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
     }
 
     private fun initMenuTextViews() = with(binding) {
-        menuViewItemTextView.setOnClickListener { showViewPopupMenu(it) }
+        menuViewItemTextView.setOnClickListener {
+            showViewPopupMenu(it)
+        }
+        menuEditItemTextView.setOnClickListener {
+            showEditPopupMenu(it)
+        }
+        menuHelpItemTextView.setOnClickListener {
+            showHelpPopupMenu(it)
+        }
     }
 
     private fun initButtons() {
@@ -201,6 +209,7 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
     private fun showViewPopupMenu(view: View) {
         val viewPopupMenu = PopupMenu(requireActivity(), view)
         var isSecondLevelMenu = false
+        view.background = resources.getDrawable(ru.profitsw2000.core.R.drawable.main_menu_clicked_item_background)
         viewPopupMenu.inflate(ru.profitsw2000.core.R.menu.view_popup_menu)
 
         setMenuItemIcon(viewPopupMenu)
@@ -236,12 +245,69 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
             if (isSecondLevelMenu) {
                 isSecondLevelMenu = false
             }
-            else Toast.makeText(requireActivity(), "Dismissed", Toast.LENGTH_SHORT).show()
+            else
+                view.background = resources.getDrawable(ru.profitsw2000.core.R.color.transparent)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             viewPopupMenu.menu.setGroupDividerEnabled(true)
         }
         viewPopupMenu.show()
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showEditPopupMenu(view: View) {
+        val editPopupMenu = PopupMenu(requireActivity(), view)
+        view.background = resources.getDrawable(ru.profitsw2000.core.R.drawable.main_menu_clicked_item_background)
+        editPopupMenu.inflate(ru.profitsw2000.core.R.menu.edit_popup_menu)
+
+        if (editPopupMenu.menu is MenuBuilder) {
+            val menuBuilder = editPopupMenu.menu as MenuBuilder
+            menuBuilder.setOptionalIconsVisible(true)
+        }
+
+        editPopupMenu
+            .setOnMenuItemClickListener {
+                when(it.itemId) {
+                    ru.profitsw2000.core.R.id.copy_menu_item -> true
+                    ru.profitsw2000.core.R.id.paste_menu_item -> true
+
+                    else -> true
+                }
+            }
+
+        editPopupMenu.setOnDismissListener {
+            view.background = resources.getDrawable(ru.profitsw2000.core.R.color.transparent)
+        }
+
+        editPopupMenu.show()
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showHelpPopupMenu(view: View) {
+        val helpPopupMenu = PopupMenu(requireActivity(), view)
+        view.background = resources.getDrawable(ru.profitsw2000.core.R.drawable.main_menu_clicked_item_background)
+        helpPopupMenu.inflate(ru.profitsw2000.core.R.menu.help_popup_menu)
+
+        if (helpPopupMenu.menu is MenuBuilder) {
+            val menuBuilder = helpPopupMenu.menu as MenuBuilder
+            menuBuilder.setOptionalIconsVisible(true)
+        }
+
+        helpPopupMenu
+            .setOnMenuItemClickListener {
+                when(it.itemId) {
+                    ru.profitsw2000.core.R.id.read_help_menu_item -> true
+                    ru.profitsw2000.core.R.id.about_menu_item -> true
+
+                    else -> true
+                }
+            }
+
+        helpPopupMenu.setOnDismissListener {
+            view.background = resources.getDrawable(ru.profitsw2000.core.R.color.transparent)
+        }
+
+        helpPopupMenu.show()
     }
 
     @SuppressLint("RestrictedApi")
