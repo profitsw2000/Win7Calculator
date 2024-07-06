@@ -1,23 +1,25 @@
 package ru.profitsw2000.navig
 
+import android.content.SharedPreferences
+
 interface Controller {
 
-    fun startStandardCalculatorFragment()
+    fun startStandardCalculatorFragment(sharedPreferences: SharedPreferences)
 
-    fun startScientificCalculatorFragment()
+    fun startScientificCalculatorFragment(sharedPreferences: SharedPreferences)
 
-    fun startProgrammerCalculatorFragment()
+    fun startProgrammerCalculatorFragment(sharedPreferences: SharedPreferences)
 
-    fun startStatisticCalculatorFragment()
+    fun startStatisticCalculatorFragment(sharedPreferences: SharedPreferences)
 
-    fun startUnitConversionSheet()
+    fun startUnitConversionSheet(sharedPreferences: SharedPreferences)
 
-    fun startDateCalculationSheet()
+    fun startDateCalculationSheet(sharedPreferences: SharedPreferences)
 
-    fun startMortgageSheet()
+    fun startMortgageSheet(sharedPreferences: SharedPreferences)
 
-    fun startAutoLeasingSheet()
+    fun startAutoLeasingSheet(sharedPreferences: SharedPreferences)
 
-    fun startFuelEconomySheet()
+    fun startFuelEconomySheet(sharedPreferences: SharedPreferences)
 
 }
