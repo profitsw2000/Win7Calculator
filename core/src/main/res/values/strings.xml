@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">Win7Calculator</string>
+    <string name="calculator_menu_view_item_text">Вид</string>
+    <string name="calculator_menu_edit_item_text">Правка</string>
+    <string name="calculator_menu_help_item_text">Справка</string>
+
+    <string name="calculator_display_memory_sign">M</string>
+    <string name="mc_button_text">MC</string>
+    <string name="mr_button_text">MR</string>
+    <string name="ms_button_text">MS</string>
+    <string name="m_plus_button_text">M+</string>
+    <string name="m_minus_button_text">M-</string>
+    <string name="ce_button_text">CE</string>
+    <string name="c_button_text">C</string>
+    <string name="plus_minus_button_text">+-</string>
+    <string name="sqrt__button_text">v</string>
+    <string name="seven_button_text">7</string>
+    <string name="eight_button_text">8</string>
+    <string name="nine_button_text">9</string>
+    <string name="divide_button_text">/</string>
+    <string name="percent_button_text">%</string>
+    <string name="four_button_text">4</string>
+    <string name="five_button_text">5</string>
+    <string name="six_button_text">6</string>
+    <string name="multiply_button_text">*</string>
+    <string name="inverse_ratio_button_text">1/x</string>
+    <string name="one_button_text">1</string>
+    <string name="two_button_text">2</string>
+    <string name="three_button_text">3</string>
+    <string name="minus_button_text">-</string>
+    <string name="equal_button_text">=</string>
+    <string name="zero_button_text">0</string>
+    <string name="comma_button_text">,</string>
+    <string name="plus_button_text">+</string>
+
+    <string name="divide_on_zero_error_text">Деление на ноль невозможно</string>
+    <string name="invalid_input_error_text">Недопустимый ввод</string>
+    <string name="unknown_error_text">Неизвестная ошибка</string>
+
+    <string name="menu_item_general_calculator_text">Обычный</string>
+    <string name="menu_item_scientific_calculator_text">Инженерный</string>
+    <string name="menu_item_programmer_calculator_text">Программист</string>
+    <string name="menu_item_statistic_calculator_text">Статистика</string>
+    <string name="menu_item_digit_grouping_text">Группировка цифр</string>
+    <string name="menu_item_unit_conversion_text">Преобразование единиц</string>
+    <string name="menu_item_date_calculation_text">Вычисление даты</string>
+    <string name="menu_item_sheets_text">Листы</string>
+    <string name="menu_item_mortgage_calculation_text">Ипотека</string>
+    <string name="menu_item_autoleasing_text">Автолизинг</string>
+    <string name="menu_item_fuel_economy_gallons_text">Экон. топлива(миль/гал)</string>
+    <string name="menu_item_fuel_economy_litres_text">Экон. топлива(л/100 км)</string>
+    <string name="menu_item_copy_text">Копировать</string>
+    <string name="menu_item_paste_text">Вставить</string>
+    <string name="menu_item_read_help_text">Посмотреть справку</string>
+    <string name="menu_item_about_app_text">О программе</string>
+
+    <string name="activity_not_implement_controller_interface_exception_text">Activity должна реализовывать интерфейс Controller</string>
+</resources>
