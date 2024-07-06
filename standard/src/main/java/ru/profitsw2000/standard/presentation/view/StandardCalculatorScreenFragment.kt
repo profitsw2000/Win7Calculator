@@ -1,6 +1,7 @@
 package ru.profitsw2000.standard.presentation.view
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -35,18 +36,27 @@ import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.NO_ERROR_CODE
 import ru.profitsw2000.data.model.GeneralCalculatorDataModel
+import ru.profitsw2000.navig.Controller
 import ru.profitsw2000.standard.R
 import ru.profitsw2000.standard.databinding.FragmentStandardCalculatorScreenBinding
 import ru.profitsw2000.standard.presentation.viewmodel.StandardCalculatorViewModel
+import java.lang.IllegalStateException
 
 class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_calculator_screen) {
 
     private var _binding: FragmentStandardCalculatorScreenBinding? = null
     private val binding get() = _binding!!
+    private val controller by lazy {
+        activity as Controller
+    }
     private val standardCalculatorViewModel: StandardCalculatorViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (activity !is Controller)
+            throw IllegalStateException(
+                resources.getString(ru.profitsw2000.core.R.string.activity_not_implement_controller_interface_exception_text)
+            )
     }
 
     override fun onCreateView(
