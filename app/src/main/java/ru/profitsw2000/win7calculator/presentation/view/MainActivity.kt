@@ -27,7 +27,9 @@ import ru.profitsw2000.win7calculator.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), Controller {
 
     private lateinit var binding: ActivityMainBinding
-    private val sharedPreferences = this.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences by lazy {
+        this.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,58 +41,58 @@ class MainActivity : AppCompatActivity(), Controller {
             insets
         }
 
-        startLastOpenedFragment(sharedPreferences)
+        startLastOpenedFragment()
     }
 
-    override fun startStandardCalculatorFragment(sharedPreferences: SharedPreferences) {
+    override fun startStandardCalculatorFragment() {
 
         startAndSaveFragment(sharedPreferences, StandardCalculatorScreenFragment.newInstance())
     }
 
-    override fun startScientificCalculatorFragment(sharedPreferences: SharedPreferences) {
+    override fun startScientificCalculatorFragment() {
         TODO("Not yet implemented")
     }
 
-    override fun startProgrammerCalculatorFragment(sharedPreferences: SharedPreferences) {
+    override fun startProgrammerCalculatorFragment() {
         TODO("Not yet implemented")
     }
 
-    override fun startStatisticCalculatorFragment(sharedPreferences: SharedPreferences) {
+    override fun startStatisticCalculatorFragment() {
         TODO("Not yet implemented")
     }
 
-    override fun startUnitConversionSheet(sharedPreferences: SharedPreferences) {
+    override fun startUnitConversionSheet() {
         TODO("Not yet implemented")
     }
 
-    override fun startDateCalculationSheet(sharedPreferences: SharedPreferences) {
+    override fun startDateCalculationSheet() {
         TODO("Not yet implemented")
     }
 
-    override fun startMortgageSheet(sharedPreferences: SharedPreferences) {
+    override fun startMortgageSheet() {
         TODO("Not yet implemented")
     }
 
-    override fun startAutoLeasingSheet(sharedPreferences: SharedPreferences) {
+    override fun startAutoLeasingSheet() {
         TODO("Not yet implemented")
     }
 
-    override fun startFuelEconomySheet(sharedPreferences: SharedPreferences) {
+    override fun startFuelEconomySheet() {
         TODO("Not yet implemented")
     }
 
-    private fun startLastOpenedFragment(sharedPreferences: SharedPreferences) {
+    private fun startLastOpenedFragment() {
         when(sharedPreferences.getInt(LAST_FRAGMENT_KEY, IS_GENERAL_CALCULATOR)) {
-            IS_GENERAL_CALCULATOR -> startStandardCalculatorFragment(sharedPreferences)
-            IS_SCIENTIFIC_CALCULATOR -> startScientificCalculatorFragment(sharedPreferences)
-            IS_PROGRAMMER_CALCULATOR -> startProgrammerCalculatorFragment(sharedPreferences)
-            IS_STATISTIC_CALCULATOR -> startStatisticCalculatorFragment(sharedPreferences)
-            IS_UNIT_CONVERSION_SHEET -> startUnitConversionSheet(sharedPreferences)
-            IS_DATE_CALCULATION_SHEET -> startDateCalculationSheet(sharedPreferences)
-            IS_MORTGAGE_SHEET -> startMortgageSheet(sharedPreferences)
-            IS_AUTO_LEASING_SHEET -> startAutoLeasingSheet(sharedPreferences)
-            IS_FUEL_ECONOMY_SHEET -> startFuelEconomySheet(sharedPreferences)
-            else -> startStandardCalculatorFragment(sharedPreferences)
+            IS_GENERAL_CALCULATOR -> startStandardCalculatorFragment()
+            IS_SCIENTIFIC_CALCULATOR -> startScientificCalculatorFragment()
+            IS_PROGRAMMER_CALCULATOR -> startProgrammerCalculatorFragment()
+            IS_STATISTIC_CALCULATOR -> startStatisticCalculatorFragment()
+            IS_UNIT_CONVERSION_SHEET -> startUnitConversionSheet()
+            IS_DATE_CALCULATION_SHEET -> startDateCalculationSheet()
+            IS_MORTGAGE_SHEET -> startMortgageSheet()
+            IS_AUTO_LEASING_SHEET -> startAutoLeasingSheet()
+            IS_FUEL_ECONOMY_SHEET -> startFuelEconomySheet()
+            else -> startStandardCalculatorFragment()
         }
     }
 

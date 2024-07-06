@@ -54,4 +54,5 @@
     <string name="menu_item_read_help_text">Посмотреть справку</string>
     <string name="menu_item_about_app_text">О программе</string>
 
+    <string name="activity_not_implement_controller_interface_exception_text">Activity должна реализовывать интерфейс Controller</string>
 </resources>

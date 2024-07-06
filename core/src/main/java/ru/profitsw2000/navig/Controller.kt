@@ -4,22 +4,22 @@ import android.content.SharedPreferences
 
 interface Controller {
 
-    fun startStandardCalculatorFragment(sharedPreferences: SharedPreferences)
+    fun startStandardCalculatorFragment()
 
-    fun startScientificCalculatorFragment(sharedPreferences: SharedPreferences)
+    fun startScientificCalculatorFragment()
 
-    fun startProgrammerCalculatorFragment(sharedPreferences: SharedPreferences)
+    fun startProgrammerCalculatorFragment()
 
-    fun startStatisticCalculatorFragment(sharedPreferences: SharedPreferences)
+    fun startStatisticCalculatorFragment()
 
-    fun startUnitConversionSheet(sharedPreferences: SharedPreferences)
+    fun startUnitConversionSheet()
 
-    fun startDateCalculationSheet(sharedPreferences: SharedPreferences)
+    fun startDateCalculationSheet()
 
-    fun startMortgageSheet(sharedPreferences: SharedPreferences)
+    fun startMortgageSheet()
 
-    fun startAutoLeasingSheet(sharedPreferences: SharedPreferences)
+    fun startAutoLeasingSheet()
 
-    fun startFuelEconomySheet(sharedPreferences: SharedPreferences)
+    fun startFuelEconomySheet()
 
 }
