@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- Buttons styles-->
+    <style name="main_calculator_dark_button" parent="Widget.AppCompat.Button">
+        <item name="shapeAppearance">@style/main_calculator_button_shape</item>
+        <item name="android:backgroundTint">@null</item>
+    </style>
+
+    <style name="main_calculator_light_button" parent="Widget.Material3.Button.OutlinedButton">
+
+    </style>
+
+    <style name="main_calculator_transparent_button" parent="Widget.Material3.Button.OutlinedButton">
+
+    </style>
+
+    <style name="main_calculator_unactive_button" parent="Widget.Material3.Button.OutlinedButton">
+
+    </style>
+
+    <!-- Shape styles -->
+    <style name="main_calculator_button_shape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerRadius">122dp</item>
+    </style>
+
+    <!-- Menu style -->
+    <style name="calculatorTopMenuStyle" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@color/calculator_menu_background</item>
+    </style>
+
+    <style name="popUpMenuTextAppearanceLarge" parent="@android:style/TextAppearance.DeviceDefault.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/calculator_menu_item_text_size</item>
+    </style>
+
+</resources>
