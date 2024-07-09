@@ -1,14 +1,549 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.view.ScientificCalculatorScreenFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menu_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/calculator_menu_background">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/menu_view_item_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/menu_item_text_vertical_margin"
+            android:layout_marginStart="@dimen/main_calculator_horizontal_margin"
+            android:paddingHorizontal="@dimen/calculator_menu_text_view_horizontal_padding_size"
+            android:text="@string/calculator_menu_view_item_text"
+            android:textSize="@dimen/calculator_menu_item_text_size"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/menu_edit_item_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/calculator_menu_space_between_items_text"
+            android:paddingHorizontal="@dimen/calculator_menu_text_view_horizontal_padding_size"
+            android:text="@string/calculator_menu_edit_item_text"
+            android:textSize="@dimen/calculator_menu_item_text_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/menu_view_item_text_view"
+            app:layout_constraintStart_toEndOf="@+id/menu_view_item_text_view"
+            app:layout_constraintTop_toTopOf="@+id/menu_view_item_text_view" />
+
+        <TextView
+            android:id="@+id/menu_help_item_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/calculator_menu_space_between_items_text"
+            android:paddingHorizontal="@dimen/calculator_menu_text_view_horizontal_padding_size"
+            android:text="@string/calculator_menu_help_item_text"
+            android:textSize="@dimen/calculator_menu_item_text_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/menu_edit_item_text_view"
+            app:layout_constraintStart_toEndOf="@+id/menu_edit_item_text_view"
+            app:layout_constraintTop_toTopOf="@+id/menu_edit_item_text_view" />
+
+        <View
+            android:id="@+id/menu_bottom_line_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/calculator_menu_stroke_size"
+            android:layout_marginVertical="@dimen/calculator_menu_items_vertical_margin"
+            android:background="@color/calculator_menu_stroke"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/menu_view_item_text_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_calculator_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="371dp"
+        tools:layout_editor_absoluteY="40dp">
+
+        <Button
+            android:id="@+id/button28"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="+-"
+            tools:layout_editor_absoluteX="760dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button29"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="/"
+            tools:layout_editor_absoluteX="760dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button30"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="*"
+            tools:layout_editor_absoluteX="760dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button31"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="-"
+            tools:layout_editor_absoluteX="760dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button32"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="+"
+            tools:layout_editor_absoluteX="760dp"
+            tools:layout_editor_absoluteY="309dp" />
+
+        <Button
+            android:id="@+id/button37"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="V"
+            tools:layout_editor_absoluteX="837dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button38"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="%"
+            tools:layout_editor_absoluteX="837dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button39"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="1/x"
+            tools:layout_editor_absoluteX="837dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button40"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="124dp"
+            android:text="="
+            tools:layout_editor_absoluteX="837dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button36"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="M-"
+            tools:layout_editor_absoluteX="837dp" />
+
+        <Button
+            android:id="@+id/button50"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="MR"
+            tools:layout_editor_absoluteX="387dp" />
+
+        <Button
+            android:id="@+id/button41"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="MS"
+            tools:layout_editor_absoluteX="465dp" />
+
+        <Button
+            android:id="@+id/button27"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="M+"
+            tools:layout_editor_absoluteX="760dp" />
+
+        <Button
+            android:id="@+id/button49"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text=","
+            tools:layout_editor_absoluteX="464dp"
+            tools:layout_editor_absoluteY="309dp" />
+
+        <Button
+            android:id="@+id/button48"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="3"
+            tools:layout_editor_absoluteX="464dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button47"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="6"
+            tools:layout_editor_absoluteX="464dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button45"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="9"
+            tools:layout_editor_absoluteX="464dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button44"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="C"
+            tools:layout_editor_absoluteX="464dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button51"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="CE"
+            tools:layout_editor_absoluteX="387dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button52"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="8"
+            tools:layout_editor_absoluteX="387dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button54"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="5"
+            tools:layout_editor_absoluteX="387dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button55"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="2"
+            tools:layout_editor_absoluteX="387dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button56"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="154dp"
+            android:layout_height="62dp"
+            android:text="0"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="309dp" />
+
+        <Button
+            android:id="@+id/button57"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="MC"
+            tools:layout_editor_absoluteX="309dp" />
+
+        <Button
+            android:id="@+id/button58"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="<--"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button59"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="7"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button60"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="4"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button61"
+            style="@style/scientific_calculator_light_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="1"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/angle_selection_constraint_layout"
+            android:layout_width="309dp"
+            android:layout_height="62dp"
+            android:background="@drawable/main_calculator_shadowed_button">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/button62"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text=")"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button63"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="n!"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button64"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="vx"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button65"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="vx"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button66"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="10x"
+            tools:layout_editor_absoluteX="309dp"
+            tools:layout_editor_absoluteY="309dp" />
+
+        <Button
+            android:id="@+id/button67"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="("
+            tools:layout_editor_absoluteX="232dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button68"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="x2"
+            tools:layout_editor_absoluteX="232dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button69"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="xy"
+            tools:layout_editor_absoluteX="232dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button70"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="x3"
+            tools:layout_editor_absoluteX="232dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button71"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="log"
+            tools:layout_editor_absoluteX="232dp"
+            tools:layout_editor_absoluteY="309dp" />
+
+        <Button
+            android:id="@+id/button72"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="ln"
+            tools:layout_editor_absoluteX="155dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button73"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="sin"
+            tools:layout_editor_absoluteX="155dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button74"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="cos"
+            tools:layout_editor_absoluteX="155dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button75"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="tan"
+            tools:layout_editor_absoluteX="155dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button76"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="Mod"
+            tools:layout_editor_absoluteX="155dp"
+            tools:layout_editor_absoluteY="309dp" />
+
+        <Button
+            android:id="@+id/button77"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="Inv"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button78"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="sinh"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button79"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="cosh"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button80"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="tanh"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button81"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="Exp"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="309dp" />
+
+        <Button
+            android:id="@+id/button85"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text=" "
+            tools:layout_editor_absoluteY="62dp" />
+
+        <Button
+            android:id="@+id/button86"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="Int"
+            tools:layout_editor_absoluteY="124dp" />
+
+        <Button
+            android:id="@+id/button87"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="dms"
+            tools:layout_editor_absoluteY="186dp" />
+
+        <Button
+            android:id="@+id/button88"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="Pi"
+            tools:layout_editor_absoluteY="247dp" />
+
+        <Button
+            android:id="@+id/button89"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_width="77dp"
+            android:layout_height="62dp"
+            android:text="F-E"
+            tools:layout_editor_absoluteY="309dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
