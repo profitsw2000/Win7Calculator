@@ -68,20 +68,36 @@
         <item name="autoSizeMinTextSize">@dimen/main_calculator_button_minimum_text_size</item>
         <item name="android:autoSizeStepGranularity" tools:targetApi="o">@dimen/main_calculator_buttons_text_auto_size_step_granularity</item>
         <item name="android:autoSizeTextType" tools:targetApi="o">uniform</item>
-        <item name="android:paddingVertical" tools:targetApi="o">@dimen/main_calculator_operation_buttons_padding</item>
-        <item name="layout_constraintDimensionRatio">w,10:8</item>
     </style>
 
     <style name="scientific_calculator_shadowed_button_style" parent="scientific_calculator_base_button_style">
         <item name="android:background">@drawable/main_calculator_shadowed_button</item>
+        <item name="android:paddingVertical" tools:targetApi="o">@dimen/main_calculator_operation_buttons_padding</item>
+        <item name="layout_constraintDimensionRatio">w,10:8</item>
     </style>
 
     <style name="scientific_calculator_dark_button_style" parent="scientific_calculator_base_button_style">
         <item name="android:background">@drawable/main_calculator_dark_button</item>
+        <item name="android:paddingVertical" tools:targetApi="o">@dimen/main_calculator_operation_buttons_padding</item>
+        <item name="layout_constraintDimensionRatio">w,10:8</item>
+    </style>
+
+    <style name="scientific_calculator_dark_button_horizontal_margin_style" parent="scientific_calculator_dark_button_style">
+        <item name="android:layout_marginHorizontal" tools:targetApi="o">@dimen/calculator_space_between_buttons_half_size</item>
+    </style>
+
+    <style name="scientific_calculator_dark_button_vertical_margin_style" parent="scientific_calculator_dark_button_style">
+        <item name="android:layout_marginVertical" tools:targetApi="o">@dimen/calculator_space_between_buttons_half_size</item>
     </style>
 
     <style name="scientific_calculator_light_button_style" parent="scientific_calculator_base_button_style">
         <item name="android:background">@drawable/main_calculator_light_button</item>
+        <item name="android:paddingVertical" tools:targetApi="o">@dimen/main_calculator_digit_buttons_padding</item>
+        <item name="layout_constraintDimensionRatio">w,10:8</item>
+    </style>
+
+    <style name="scientific_calculator_light_button_horizontal_margin_style" parent="scientific_calculator_light_button_style">
+        <item name="android:layout_marginHorizontal" tools:targetApi="o">@dimen/calculator_space_between_buttons_half_size</item>
     </style>
 
     <!-- Shape styles -->

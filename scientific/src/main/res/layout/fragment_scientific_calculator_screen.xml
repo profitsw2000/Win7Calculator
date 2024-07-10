@@ -10,7 +10,10 @@
         android:id="@+id/menu_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/calculator_menu_background">
+        android:background="@drawable/calculator_menu_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/menu_view_item_text_view"
@@ -66,483 +69,564 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_calculator_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="371dp"
-        tools:layout_editor_absoluteY="40dp">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menu_constraint_layout">
 
-        <Button
-            android:id="@+id/button28"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="+-"
-            tools:layout_editor_absoluteX="760dp"
-            tools:layout_editor_absoluteY="62dp" />
-
-        <Button
-            android:id="@+id/button29"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="/"
-            tools:layout_editor_absoluteX="760dp"
-            tools:layout_editor_absoluteY="124dp" />
-
-        <Button
-            android:id="@+id/button30"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="*"
-            tools:layout_editor_absoluteX="760dp"
-            tools:layout_editor_absoluteY="186dp" />
-
-        <Button
-            android:id="@+id/button31"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="-"
-            tools:layout_editor_absoluteX="760dp"
-            tools:layout_editor_absoluteY="247dp" />
-
-        <Button
-            android:id="@+id/button32"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="+"
-            tools:layout_editor_absoluteX="760dp"
-            tools:layout_editor_absoluteY="309dp" />
-
-        <Button
-            android:id="@+id/button37"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="V"
-            tools:layout_editor_absoluteX="837dp"
-            tools:layout_editor_absoluteY="62dp" />
-
-        <Button
-            android:id="@+id/button38"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="%"
-            tools:layout_editor_absoluteX="837dp"
-            tools:layout_editor_absoluteY="124dp" />
-
-        <Button
-            android:id="@+id/button39"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="1/x"
-            tools:layout_editor_absoluteX="837dp"
-            tools:layout_editor_absoluteY="186dp" />
-
-        <Button
-            android:id="@+id/button40"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="124dp"
-            android:text="="
-            tools:layout_editor_absoluteX="837dp"
-            tools:layout_editor_absoluteY="247dp" />
-
-        <Button
-            android:id="@+id/button36"
-            style="@style/scientific_calculator_shadowed_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="M-"
-            tools:layout_editor_absoluteX="837dp" />
-
-        <Button
-            android:id="@+id/button50"
-            style="@style/scientific_calculator_shadowed_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="MR"
-            tools:layout_editor_absoluteX="387dp" />
-
-        <Button
-            android:id="@+id/button41"
-            style="@style/scientific_calculator_shadowed_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="MS"
-            tools:layout_editor_absoluteX="465dp" />
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button27"
             style="@style/scientific_calculator_shadowed_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
+            android:layout_marginVertical="@dimen/calculator_space_between_buttons_half_size"
             android:text="M+"
-            tools:layout_editor_absoluteX="760dp" />
+            app:layout_constraintBottom_toTopOf="@+id/button28"
+            app:layout_constraintEnd_toEndOf="@+id/button28"
+            app:layout_constraintStart_toStartOf="@+id/button28"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-        <Button
-            android:id="@+id/button49"
-            style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text=","
-            tools:layout_editor_absoluteX="464dp"
-            tools:layout_editor_absoluteY="309dp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button28"
+            style="@style/scientific_calculator_dark_button_vertical_margin_style"
+            android:text="+-"
+            app:layout_constraintBottom_toTopOf="@+id/button29"
+            app:layout_constraintEnd_toEndOf="@+id/button29"
+            app:layout_constraintStart_toStartOf="@+id/button29"
+            app:layout_constraintTop_toBottomOf="@+id/button27"
+            app:layout_constraintVertical_bias="0.5" />
 
-        <Button
-            android:id="@+id/button48"
-            style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="3"
-            tools:layout_editor_absoluteX="464dp"
-            tools:layout_editor_absoluteY="247dp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button29"
+            style="@style/scientific_calculator_dark_button_vertical_margin_style"
+            android:text="/"
+            app:layout_constraintBottom_toTopOf="@+id/button30"
+            app:layout_constraintEnd_toEndOf="@+id/button30"
+            app:layout_constraintStart_toStartOf="@+id/button30"
+            app:layout_constraintTop_toBottomOf="@+id/button28"
+            app:layout_constraintVertical_bias="0.5" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button30"
+            style="@style/scientific_calculator_dark_button_style"
+            android:layout_margin="@dimen/calculator_space_between_buttons_half_size"
+            android:text="*"
+            app:layout_constraintBottom_toTopOf="@+id/button31"
+            app:layout_constraintEnd_toStartOf="@+id/button39"
+            app:layout_constraintStart_toEndOf="@+id/button47"
+            app:layout_constraintTop_toBottomOf="@+id/button29"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button87"
+            style="@style/scientific_calculator_dark_button_horizontal_margin_style"
+            android:text="dms"
+            app:layout_constraintBottom_toBottomOf="@+id/button79"
+            app:layout_constraintEnd_toStartOf="@+id/button79"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button79" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button79"
+            style="@style/scientific_calculator_dark_button_horizontal_margin_style"
+            android:text="cosh"
+            app:layout_constraintBottom_toBottomOf="@+id/button74"
+            app:layout_constraintEnd_toStartOf="@+id/button74"
+            app:layout_constraintStart_toEndOf="@+id/button87"
+            app:layout_constraintTop_toTopOf="@+id/button74" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button74"
+            style="@style/scientific_calculator_dark_button_horizontal_margin_style"
+            android:text="cos"
+            app:layout_constraintBottom_toBottomOf="@+id/button69"
+            app:layout_constraintEnd_toStartOf="@+id/button69"
+            app:layout_constraintStart_toEndOf="@+id/button79"
+            app:layout_constraintTop_toTopOf="@+id/button69" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button69"
+            style="@style/scientific_calculator_dark_button_horizontal_margin_style"
+            android:text="xy"
+            app:layout_constraintBottom_toBottomOf="@+id/button64"
+            app:layout_constraintEnd_toStartOf="@+id/button64"
+            app:layout_constraintStart_toEndOf="@+id/button74"
+            app:layout_constraintTop_toTopOf="@+id/button64" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button64"
+            style="@style/scientific_calculator_dark_button_horizontal_margin_style"
+            android:text="vx"
+            app:layout_constraintBottom_toBottomOf="@+id/button60"
+            app:layout_constraintEnd_toStartOf="@+id/button60"
+            app:layout_constraintStart_toEndOf="@+id/button69"
+            app:layout_constraintTop_toTopOf="@+id/button60" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button60"
+            style="@style/scientific_calculator_light_button_horizontal_margin_style"
+            android:text="4"
+            app:layout_constraintBottom_toBottomOf="@+id/button54"
+            app:layout_constraintEnd_toStartOf="@+id/button54"
+            app:layout_constraintStart_toEndOf="@+id/button64"
+            app:layout_constraintTop_toTopOf="@+id/button54" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button54"
+            style="@style/scientific_calculator_light_button_horizontal_margin_style"
+            android:text="5"
+            app:layout_constraintBottom_toBottomOf="@+id/button47"
+            app:layout_constraintEnd_toStartOf="@+id/button47"
+            app:layout_constraintStart_toEndOf="@+id/button60"
+            app:layout_constraintTop_toTopOf="@+id/button47" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button47"
-            style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
+            style="@style/scientific_calculator_light_button_horizontal_margin_style"
             android:text="6"
-            tools:layout_editor_absoluteX="464dp"
-            tools:layout_editor_absoluteY="186dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button30"
+            app:layout_constraintEnd_toStartOf="@+id/button30"
+            app:layout_constraintStart_toEndOf="@+id/button54"
+            app:layout_constraintTop_toTopOf="@+id/button30" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button39"
+            style="@style/scientific_calculator_dark_button_horizontal_margin_style"
+            android:text="1/x"
+            app:layout_constraintBottom_toBottomOf="@+id/button30"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button30"
+            app:layout_constraintTop_toTopOf="@+id/button30" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button37"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="V"
+            app:layout_constraintBottom_toBottomOf="@+id/button28"
+            app:layout_constraintEnd_toEndOf="@+id/button38"
+            app:layout_constraintStart_toStartOf="@+id/button38"
+            app:layout_constraintTop_toTopOf="@+id/button28" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button36"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:text="M-"
+            app:layout_constraintBottom_toBottomOf="@+id/button27"
+            app:layout_constraintEnd_toEndOf="@+id/button37"
+            app:layout_constraintStart_toStartOf="@+id/button37"
+            app:layout_constraintTop_toTopOf="@+id/button27" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button38"
+            style="@style/scientific_calculator_dark_button_style"
+            android:background="@drawable/main_calculator_unactive_button"
+            android:clickable="false"
+            android:text="%"
+            app:layout_constraintBottom_toBottomOf="@+id/button29"
+            app:layout_constraintEnd_toEndOf="@+id/button39"
+            app:layout_constraintStart_toStartOf="@+id/button39"
+            app:layout_constraintTop_toTopOf="@+id/button29" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button50"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:text="MR"
+            app:layout_constraintBottom_toBottomOf="@+id/button41"
+            app:layout_constraintEnd_toEndOf="@+id/button51"
+            app:layout_constraintStart_toStartOf="@+id/button51"
+            app:layout_constraintTop_toTopOf="@+id/button41" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button41"
+            style="@style/scientific_calculator_shadowed_button_style"
+            android:text="MS"
+            app:layout_constraintBottom_toBottomOf="@+id/button27"
+            app:layout_constraintEnd_toEndOf="@+id/button44"
+            app:layout_constraintStart_toStartOf="@+id/button44"
+            app:layout_constraintTop_toTopOf="@+id/button27" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button45"
             style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="9"
-            tools:layout_editor_absoluteX="464dp"
-            tools:layout_editor_absoluteY="124dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button29"
+            app:layout_constraintEnd_toEndOf="@+id/button47"
+            app:layout_constraintStart_toStartOf="@+id/button47"
+            app:layout_constraintTop_toTopOf="@+id/button29" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button44"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="C"
-            tools:layout_editor_absoluteX="464dp"
-            tools:layout_editor_absoluteY="62dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button28"
+            app:layout_constraintEnd_toEndOf="@+id/button45"
+            app:layout_constraintStart_toStartOf="@+id/button45"
+            app:layout_constraintTop_toTopOf="@+id/button28" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button51"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="CE"
-            tools:layout_editor_absoluteX="387dp"
-            tools:layout_editor_absoluteY="62dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button44"
+            app:layout_constraintEnd_toEndOf="@+id/button52"
+            app:layout_constraintStart_toStartOf="@+id/button52"
+            app:layout_constraintTop_toTopOf="@+id/button44" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button52"
             style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="8"
-            tools:layout_editor_absoluteX="387dp"
-            tools:layout_editor_absoluteY="124dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button45"
+            app:layout_constraintEnd_toEndOf="@+id/button54"
+            app:layout_constraintStart_toStartOf="@+id/button54"
+            app:layout_constraintTop_toTopOf="@+id/button45" />
 
-        <Button
-            android:id="@+id/button54"
-            style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="5"
-            tools:layout_editor_absoluteX="387dp"
-            tools:layout_editor_absoluteY="186dp" />
-
-        <Button
-            android:id="@+id/button55"
-            style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="2"
-            tools:layout_editor_absoluteX="387dp"
-            tools:layout_editor_absoluteY="247dp" />
-
-        <Button
-            android:id="@+id/button56"
-            style="@style/scientific_calculator_light_button_style"
-            android:layout_width="154dp"
-            android:layout_height="62dp"
-            android:text="0"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="309dp" />
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button57"
             style="@style/scientific_calculator_shadowed_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="MC"
-            tools:layout_editor_absoluteX="309dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button50"
+            app:layout_constraintEnd_toEndOf="@+id/button58"
+            app:layout_constraintStart_toStartOf="@+id/button58"
+            app:layout_constraintTop_toTopOf="@+id/button50" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button58"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="<--"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="62dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button51"
+            app:layout_constraintEnd_toEndOf="@+id/button59"
+            app:layout_constraintStart_toStartOf="@+id/button59"
+            app:layout_constraintTop_toTopOf="@+id/button51" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button59"
             style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="7"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="124dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button52"
+            app:layout_constraintEnd_toEndOf="@+id/button60"
+            app:layout_constraintStart_toStartOf="@+id/button60"
+            app:layout_constraintTop_toTopOf="@+id/button52" />
 
-        <Button
-            android:id="@+id/button60"
-            style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="4"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="186dp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button40"
+            style="@style/scientific_calculator_base_button_style"
+            android:background="@drawable/main_calculator_dark_button"
+            android:paddingVertical="@dimen/main_calculator_operation_buttons_padding"
+            android:text="="
+            app:layout_constraintBottom_toBottomOf="@+id/button32"
+            app:layout_constraintEnd_toEndOf="@+id/button39"
+            app:layout_constraintStart_toStartOf="@+id/button39"
+            app:layout_constraintTop_toTopOf="@+id/button31" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button61"
             style="@style/scientific_calculator_light_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="1"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="247dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button55"
+            app:layout_constraintEnd_toEndOf="@+id/button60"
+            app:layout_constraintStart_toStartOf="@+id/button60"
+            app:layout_constraintTop_toTopOf="@+id/button55" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button31"
+            style="@style/scientific_calculator_dark_button_vertical_margin_style"
+            android:text="-"
+            app:layout_constraintBottom_toTopOf="@+id/button32"
+            app:layout_constraintEnd_toEndOf="@+id/button30"
+            app:layout_constraintStart_toStartOf="@+id/button30"
+            app:layout_constraintTop_toBottomOf="@+id/button30"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button32"
+            style="@style/scientific_calculator_dark_button_vertical_margin_style"
+            android:text="+"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/button31"
+            app:layout_constraintStart_toStartOf="@+id/button31"
+            app:layout_constraintTop_toBottomOf="@+id/button31"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button48"
+            style="@style/scientific_calculator_light_button_style"
+            android:text="3"
+            app:layout_constraintBottom_toBottomOf="@+id/button31"
+            app:layout_constraintEnd_toEndOf="@+id/button47"
+            app:layout_constraintStart_toStartOf="@+id/button47"
+            app:layout_constraintTop_toTopOf="@+id/button31" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button55"
+            style="@style/scientific_calculator_light_button_style"
+            android:text="2"
+            app:layout_constraintBottom_toBottomOf="@+id/button48"
+            app:layout_constraintEnd_toEndOf="@+id/button54"
+            app:layout_constraintStart_toStartOf="@+id/button54"
+            app:layout_constraintTop_toTopOf="@+id/button48" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button56"
+            style="@style/scientific_calculator_base_button_style"
+            android:text="0"
+            android:background="@drawable/main_calculator_light_button"
+            android:paddingVertical="@dimen/main_calculator_digit_buttons_padding"
+            app:layout_constraintBottom_toBottomOf="@+id/button49"
+            app:layout_constraintEnd_toEndOf="@+id/button55"
+            app:layout_constraintStart_toStartOf="@+id/button61"
+            app:layout_constraintTop_toTopOf="@+id/button49" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button65"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="vx"
+            app:layout_constraintBottom_toBottomOf="@+id/button61"
+            app:layout_constraintEnd_toEndOf="@+id/button64"
+            app:layout_constraintStart_toStartOf="@+id/button64"
+            app:layout_constraintTop_toTopOf="@+id/button61" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button66"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="10x"
+            app:layout_constraintBottom_toBottomOf="@+id/button56"
+            app:layout_constraintEnd_toEndOf="@+id/button65"
+            app:layout_constraintStart_toStartOf="@+id/button65"
+            app:layout_constraintTop_toTopOf="@+id/button56" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button70"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="x3"
+            app:layout_constraintBottom_toBottomOf="@+id/button65"
+            app:layout_constraintEnd_toEndOf="@+id/button69"
+            app:layout_constraintStart_toStartOf="@+id/button69"
+            app:layout_constraintTop_toTopOf="@+id/button65" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button71"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="log"
+            app:layout_constraintBottom_toBottomOf="@+id/button66"
+            app:layout_constraintEnd_toEndOf="@+id/button70"
+            app:layout_constraintStart_toStartOf="@+id/button70"
+            app:layout_constraintTop_toTopOf="@+id/button66" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button75"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="tan"
+            app:layout_constraintBottom_toBottomOf="@+id/button70"
+            app:layout_constraintEnd_toEndOf="@+id/button74"
+            app:layout_constraintStart_toStartOf="@+id/button74"
+            app:layout_constraintTop_toTopOf="@+id/button70" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button76"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="Mod"
+            app:layout_constraintBottom_toBottomOf="@+id/button71"
+            app:layout_constraintEnd_toEndOf="@+id/button75"
+            app:layout_constraintStart_toStartOf="@+id/button75"
+            app:layout_constraintTop_toTopOf="@+id/button71" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button80"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="tanh"
+            app:layout_constraintBottom_toBottomOf="@+id/button75"
+            app:layout_constraintEnd_toEndOf="@+id/button79"
+            app:layout_constraintStart_toStartOf="@+id/button79"
+            app:layout_constraintTop_toTopOf="@+id/button75" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button81"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="Exp"
+            app:layout_constraintBottom_toBottomOf="@+id/button76"
+            app:layout_constraintEnd_toEndOf="@+id/button80"
+            app:layout_constraintStart_toStartOf="@+id/button80"
+            app:layout_constraintTop_toTopOf="@+id/button76" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button88"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="Pi"
+            app:layout_constraintBottom_toBottomOf="@+id/button80"
+            app:layout_constraintEnd_toEndOf="@+id/button87"
+            app:layout_constraintStart_toStartOf="@+id/button87"
+            app:layout_constraintTop_toTopOf="@+id/button80" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button89"
+            style="@style/scientific_calculator_dark_button_style"
+            android:text="F-E"
+            app:layout_constraintBottom_toBottomOf="@+id/button81"
+            app:layout_constraintEnd_toEndOf="@+id/button88"
+            app:layout_constraintStart_toStartOf="@+id/button88"
+            app:layout_constraintTop_toTopOf="@+id/button81" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button49"
+            style="@style/scientific_calculator_light_button_style"
+            android:text=","
+            app:layout_constraintBottom_toBottomOf="@+id/button32"
+            app:layout_constraintEnd_toEndOf="@+id/button48"
+            app:layout_constraintStart_toStartOf="@+id/button48"
+            app:layout_constraintTop_toTopOf="@+id/button32" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/angle_selection_constraint_layout"
-            android:layout_width="309dp"
-            android:layout_height="62dp"
-            android:background="@drawable/main_calculator_shadowed_button">
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/main_calculator_blank_button"
+            app:layout_constraintBottom_toBottomOf="@+id/button57"
+            app:layout_constraintEnd_toEndOf="@+id/button62"
+            app:layout_constraintStart_toStartOf="@+id/button85"
+            app:layout_constraintTop_toTopOf="@+id/button57">
 
+            <RadioGroup
+                android:id="@+id/angle_unit_selection_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RadioButton
+                    android:id="@+id/degrees_radio_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:autoSizeMaxTextSize="@dimen/main_calculator_button_maximum_text_size"
+                    android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
+                    android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
+                    android:autoSizeTextType="uniform"
+                    android:checked="true"
+                    android:text="Градусы" />
+
+                <RadioButton
+                    android:id="@+id/radians_radio_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:autoSizeMaxTextSize="@dimen/main_calculator_button_maximum_text_size"
+                    android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
+                    android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
+                    android:autoSizeTextType="uniform"
+                    android:text="Радианы" />
+
+                <RadioButton
+                    android:id="@+id/grads_radio_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="@dimen/main_calculator_button_maximum_text_size"
+                    android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
+                    android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
+                    android:autoSizeTextType="uniform"
+                    android:text="Грады" />
+
+
+            </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button62"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text=")"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="62dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button58"
+            app:layout_constraintEnd_toEndOf="@+id/button63"
+            app:layout_constraintStart_toStartOf="@+id/button63"
+            app:layout_constraintTop_toTopOf="@+id/button58" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button63"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="n!"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="124dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button59"
+            app:layout_constraintEnd_toEndOf="@+id/button64"
+            app:layout_constraintStart_toStartOf="@+id/button64"
+            app:layout_constraintTop_toTopOf="@+id/button59" />
 
-        <Button
-            android:id="@+id/button64"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="vx"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="186dp" />
-
-        <Button
-            android:id="@+id/button65"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="vx"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="247dp" />
-
-        <Button
-            android:id="@+id/button66"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="10x"
-            tools:layout_editor_absoluteX="309dp"
-            tools:layout_editor_absoluteY="309dp" />
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button67"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="("
-            tools:layout_editor_absoluteX="232dp"
-            tools:layout_editor_absoluteY="62dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button62"
+            app:layout_constraintEnd_toEndOf="@+id/button68"
+            app:layout_constraintStart_toStartOf="@+id/button68"
+            app:layout_constraintTop_toTopOf="@+id/button62" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button68"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="x2"
-            tools:layout_editor_absoluteX="232dp"
-            tools:layout_editor_absoluteY="124dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button63"
+            app:layout_constraintEnd_toEndOf="@+id/button69"
+            app:layout_constraintStart_toStartOf="@+id/button69"
+            app:layout_constraintTop_toTopOf="@+id/button63" />
 
-        <Button
-            android:id="@+id/button69"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="xy"
-            tools:layout_editor_absoluteX="232dp"
-            tools:layout_editor_absoluteY="186dp" />
-
-        <Button
-            android:id="@+id/button70"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="x3"
-            tools:layout_editor_absoluteX="232dp"
-            tools:layout_editor_absoluteY="247dp" />
-
-        <Button
-            android:id="@+id/button71"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="log"
-            tools:layout_editor_absoluteX="232dp"
-            tools:layout_editor_absoluteY="309dp" />
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button72"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="ln"
-            tools:layout_editor_absoluteX="155dp"
-            tools:layout_editor_absoluteY="62dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button67"
+            app:layout_constraintEnd_toEndOf="@+id/button73"
+            app:layout_constraintStart_toStartOf="@+id/button73"
+            app:layout_constraintTop_toTopOf="@+id/button67" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button73"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="sin"
-            tools:layout_editor_absoluteX="155dp"
-            tools:layout_editor_absoluteY="124dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button68"
+            app:layout_constraintEnd_toEndOf="@+id/button74"
+            app:layout_constraintStart_toStartOf="@+id/button74"
+            app:layout_constraintTop_toTopOf="@+id/button68" />
 
-        <Button
-            android:id="@+id/button74"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="cos"
-            tools:layout_editor_absoluteX="155dp"
-            tools:layout_editor_absoluteY="186dp" />
-
-        <Button
-            android:id="@+id/button75"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="tan"
-            tools:layout_editor_absoluteX="155dp"
-            tools:layout_editor_absoluteY="247dp" />
-
-        <Button
-            android:id="@+id/button76"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="Mod"
-            tools:layout_editor_absoluteX="155dp"
-            tools:layout_editor_absoluteY="309dp" />
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button77"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="Inv"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="62dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button72"
+            app:layout_constraintEnd_toEndOf="@+id/button78"
+            app:layout_constraintStart_toStartOf="@+id/button78"
+            app:layout_constraintTop_toTopOf="@+id/button72" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button78"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="sinh"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="124dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button73"
+            app:layout_constraintEnd_toEndOf="@+id/button79"
+            app:layout_constraintStart_toStartOf="@+id/button79"
+            app:layout_constraintTop_toTopOf="@+id/button73" />
 
-        <Button
-            android:id="@+id/button79"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="cosh"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="186dp" />
-
-        <Button
-            android:id="@+id/button80"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="tanh"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="247dp" />
-
-        <Button
-            android:id="@+id/button81"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="Exp"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="309dp" />
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button85"
             style="@style/scientific_calculator_shadowed_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
+            android:background="@drawable/main_calculator_blank_button"
             android:text=" "
-            tools:layout_editor_absoluteY="62dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button77"
+            app:layout_constraintEnd_toEndOf="@+id/button86"
+            app:layout_constraintStart_toStartOf="@+id/button86"
+            app:layout_constraintTop_toTopOf="@+id/button77" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button86"
             style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
             android:text="Int"
-            tools:layout_editor_absoluteY="124dp" />
-
-        <Button
-            android:id="@+id/button87"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="dms"
-            tools:layout_editor_absoluteY="186dp" />
-
-        <Button
-            android:id="@+id/button88"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="Pi"
-            tools:layout_editor_absoluteY="247dp" />
-
-        <Button
-            android:id="@+id/button89"
-            style="@style/scientific_calculator_dark_button_style"
-            android:layout_width="77dp"
-            android:layout_height="62dp"
-            android:text="F-E"
-            tools:layout_editor_absoluteY="309dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/button78"
+            app:layout_constraintEnd_toEndOf="@+id/button87"
+            app:layout_constraintStart_toStartOf="@+id/button87"
+            app:layout_constraintTop_toTopOf="@+id/button78" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
