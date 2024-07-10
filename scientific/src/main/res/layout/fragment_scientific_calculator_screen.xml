@@ -75,6 +75,81 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/menu_constraint_layout">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/display_screen_constraint_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/main_calculator_display"
+            app:layout_constraintDimensionRatio="w,1:8"
+            app:layout_constraintEnd_toEndOf="@+id/button36"
+            app:layout_constraintStart_toStartOf="@+id/angle_selection_constraint_layout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/memory_sign_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/calculator_display_margin"
+                android:layout_marginStart="@dimen/calculator_display_margin"
+                android:text="@string/calculator_display_memory_sign"
+                android:textSize="@dimen/calculator_display_memory_sign_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/percent_7_guideline"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/operation_history_text_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/calculator_display_margin"
+                android:layout_marginEnd="@dimen/calculator_display_margin"
+                android:gravity="end|bottom"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                tools:text="11232   +   34   +   44   +   5   -   6   +"
+                android:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toTopOf="@+id/input_and_result_text_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_weight="4" />
+
+            <TextView
+                android:id="@+id/input_and_result_text_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="@dimen/calculator_display_margin"
+                android:layout_marginBottom="@dimen/calculator_display_margin"
+                android:gravity="end|bottom"
+                android:includeFontPadding="false"
+                android:maxLength="17"
+                android:maxLines="1"
+                tools:text="123456789012"
+                android:autoSizeTextType="uniform"
+                android:autoSizeStepGranularity="@dimen/input_and_result_text_auto_size_step_granularity"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/percent_15_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/operation_history_text_view"
+                app:layout_constraintVertical_weight="9" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/percent_7_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/percent_15_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button27"
             style="@style/scientific_calculator_shadowed_button_style"
@@ -83,7 +158,7 @@
             app:layout_constraintBottom_toTopOf="@+id/button28"
             app:layout_constraintEnd_toEndOf="@+id/button28"
             app:layout_constraintStart_toStartOf="@+id/button28"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/display_screen_constraint_layout"
             app:layout_constraintVertical_bias="0.5"
             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -493,7 +568,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingStart="12dp"
+                android:paddingHorizontal="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
