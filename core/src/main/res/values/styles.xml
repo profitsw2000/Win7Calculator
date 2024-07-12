@@ -116,4 +116,10 @@
         <item name="android:textSize">@dimen/calculator_menu_item_text_size</item>
     </style>
 
+    <!-- Radio buttons -->
+    <style name="calculatorRadioButtonStyle" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/radio_button_color</item>
+        <item name="android:textColor">@color/calculator_buttons_text_color</item>
+    </style>
+
 </resources>

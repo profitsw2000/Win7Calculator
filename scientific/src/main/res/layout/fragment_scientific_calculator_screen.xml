@@ -566,7 +566,7 @@
             <RadioGroup
                 android:id="@+id/angle_unit_selection_radio_group"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:paddingHorizontal="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -577,35 +577,38 @@
                 <RadioButton
                     android:id="@+id/degrees_radio_button"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.9"
                     android:autoSizeMaxTextSize="@dimen/main_calculator_button_maximum_text_size"
                     android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
                     android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
                     android:autoSizeTextType="uniform"
                     android:checked="true"
+                    app:useMaterialThemeColors="false"
                     android:text="Градусы" />
 
                 <RadioButton
                     android:id="@+id/radians_radio_button"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.9"
                     android:autoSizeMaxTextSize="@dimen/main_calculator_button_maximum_text_size"
                     android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
                     android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
                     android:autoSizeTextType="uniform"
+                    app:useMaterialThemeColors="false"
                     android:text="Радианы" />
 
                 <RadioButton
                     android:id="@+id/grads_radio_button"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:autoSizeMaxTextSize="@dimen/main_calculator_button_maximum_text_size"
                     android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
                     android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
                     android:autoSizeTextType="uniform"
+                    app:useMaterialThemeColors="false"
                     android:text="Грады" />
 
 

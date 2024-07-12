@@ -6,6 +6,7 @@
         <item name="android:windowBackground">@drawable/calc_background_img</item>
         <item name="popupMenuStyle">@style/calculatorTopMenuStyle</item>
         <item name="textAppearanceLargePopupMenu">@style/popUpMenuTextAppearanceLarge</item>
+        <item name="radioButtonStyle">@style/calculatorRadioButtonStyle</item>
     </style>
 
     <style name="Theme.Win7Calculator" parent="Base.Theme.Win7Calculator" />
