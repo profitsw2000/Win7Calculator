@@ -2,6 +2,7 @@ package ru.profitsw2000.standard.presentation.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -57,6 +58,11 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
             throw IllegalStateException(
                 resources.getString(ru.profitsw2000.core.R.string.activity_not_implement_controller_interface_exception_text)
             )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     override fun onCreateView(
@@ -228,7 +234,10 @@ class StandardCalculatorScreenFragment : Fragment(R.layout.fragment_standard_cal
             .setOnMenuItemClickListener {
                 when(it.itemId) {
                     ru.profitsw2000.core.R.id.general_calculator -> true
-                    ru.profitsw2000.core.R.id.scientific_calculator -> true
+                    ru.profitsw2000.core.R.id.scientific_calculator -> {
+                        controller.startScientificCalculatorFragment()
+                        true
+                    }
                     ru.profitsw2000.core.R.id.programmer_calculator -> true
                     ru.profitsw2000.core.R.id.statistic_calculator -> true
 

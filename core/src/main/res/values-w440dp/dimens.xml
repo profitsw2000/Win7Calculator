@@ -17,7 +17,7 @@
     <dimen name="main_calculator_operation_buttons_padding">12dp</dimen>
     <dimen name="main_calculator_digit_buttons_padding">8dp</dimen>
     <dimen name="main_calculator_button_maximum_text_size">100sp</dimen>
-    <dimen name="main_calculator_button_minimum_text_size">8sp</dimen>
+    <dimen name="main_calculator_button_minimum_text_size">5sp</dimen>
     <dimen name="main_calculator_buttons_text_auto_size_step_granularity">2sp</dimen>
     <dimen name="calculator_display_memory_sign_size">26sp</dimen>
     <dimen name="calculator_display_margin">12dp</dimen>

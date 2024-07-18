@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import ru.profitsw2000.navig.Controller
+import ru.profitsw2000.scientific.presentation.view.ScientificCalculatorScreenFragment
 import ru.profitsw2000.standard.presentation.view.StandardCalculatorScreenFragment
 import ru.profitsw2000.utils.IS_AUTO_LEASING_SHEET
 import ru.profitsw2000.utils.IS_DATE_CALCULATION_SHEET
@@ -45,12 +46,11 @@ class MainActivity : AppCompatActivity(), Controller {
     }
 
     override fun startStandardCalculatorFragment() {
-
-        startAndSaveFragment(sharedPreferences, StandardCalculatorScreenFragment.newInstance())
+        startAndSaveFragment(sharedPreferences, StandardCalculatorScreenFragment.newInstance(), IS_GENERAL_CALCULATOR)
     }
 
     override fun startScientificCalculatorFragment() {
-        TODO("Not yet implemented")
+        startAndSaveFragment(sharedPreferences, ScientificCalculatorScreenFragment.newInstance(), IS_SCIENTIFIC_CALCULATOR)
     }
 
     override fun startProgrammerCalculatorFragment() {
@@ -98,11 +98,12 @@ class MainActivity : AppCompatActivity(), Controller {
 
     private fun startAndSaveFragment(
         sharedPreferences: SharedPreferences,
-        fragment: Fragment
+        fragment: Fragment,
+        fragmentKey: Int
     ) {
         sharedPreferences
             .edit()
-            .putInt(LAST_FRAGMENT_KEY, IS_GENERAL_CALCULATOR)
+            .putInt(LAST_FRAGMENT_KEY, fragmentKey)
             .apply()
 
         supportFragmentManager.apply {

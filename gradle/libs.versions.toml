@@ -47,3 +47,4 @@ android-library = { id = "com.android.library", version.ref = "alp"}
 kotlin-kapt = {id = "org.jetbrains.kotlin.kapt", version.ref = "kapt"}
 win7calc-main-app-gradle-plugin = { id = "win7calc.main.app.gradle.plugin", version = "unspecified"}
 win7calc-main-lib-gradle-plugin = { id = "win7calc.main.lib.gradle.plugin", version = "unspecified"}
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}

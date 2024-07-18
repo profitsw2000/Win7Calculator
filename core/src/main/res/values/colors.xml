@@ -6,6 +6,11 @@
     <color name="calculator_menu_stroke">#FFB6BCCC</color>
     <color name="calculator_menu_background">#FFF0F0F0</color>
     <color name="calculator_buttons_stroke">#FF8797AA</color>
+    <color name="calculator_unactive_buttons_stroke">#FFB4C2D1</color>
+    <color name="calculator_buttons_text_color">#FF1E395B</color>
+    <color name="calculator_background_start_color">#FFD9E4F1</color>
+    <color name="radio_button_checked_color">#FF0E84C6</color>
+    <color name="radio_button_unchecked_color">#FF909192</color>
     <color name="calculator_menu_clicked_item_background_color">#B0C8CAD0</color>
     <color name="calculator_menu_clicked_item_stroke_color">#FF404247</color>
     <color name="shadowed_buttons_background">#FFD5E0ED</color>

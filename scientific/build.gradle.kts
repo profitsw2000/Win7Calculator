@@ -1,23 +1,22 @@
 plugins {
-    alias(libs.plugins.win7calc.main.app.gradle.plugin)
+    alias(libs.plugins.win7calc.main.lib.gradle.plugin)
+    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
-    namespace = "ru.profitsw2000.win7calculator"
+    namespace = "ru.profitsw2000.scientific"
 }
 
 dependencies {
-
     implementation(project(":core"))
     implementation(project(":data"))
-    implementation(project(":standard"))
-    implementation(project(":scientific"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
+    //ViewModel
+    implementation(libs.androidx.livedata)
+    implementation(libs.androidx.viewmodel)
     //Koin
     implementation(libs.koin)
     testImplementation(libs.junit)
