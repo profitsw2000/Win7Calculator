@@ -72,8 +72,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu_constraint_layout">
+        app:layout_constraintTop_toBottomOf="@+id/menu_constraint_layout"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/display_screen_constraint_layout"
@@ -82,7 +84,7 @@
             android:layout_marginTop="@dimen/ls_calculator_space_between_buttons_size"
             android:background="@drawable/main_calculator_display"
             app:layout_constraintDimensionRatio="w,1:8"
-            app:layout_constraintEnd_toEndOf="@+id/button36"
+            app:layout_constraintEnd_toEndOf="@+id/mminus_button"
             app:layout_constraintStart_toStartOf="@+id/angle_selection_constraint_layout"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -90,8 +92,8 @@
                 android:id="@+id/memory_sign_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/ls_calculator_display_margin"
                 android:layout_marginStart="@dimen/ls_calculator_display_margin"
+                android:layout_marginBottom="@dimen/ls_calculator_display_margin"
                 android:text="@string/calculator_display_memory_sign"
                 android:textSize="@dimen/ls_calculator_display_memory_sign_size"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -104,16 +106,16 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/ls_calculator_display_margin"
                 android:layout_marginEnd="@dimen/ls_calculator_display_margin"
+                android:autoSizeTextType="uniform"
                 android:gravity="end|bottom"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                tools:text="11232   +   34   +   44   +   5   -   6   +"
-                android:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toTopOf="@+id/input_and_result_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_weight="4" />
+                app:layout_constraintVertical_weight="4"
+                tools:text="11232   +   34   +   44   +   5   -   6   +" />
 
             <TextView
                 android:id="@+id/input_and_result_text_view"
@@ -121,18 +123,18 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="@dimen/ls_calculator_display_margin"
                 android:layout_marginBottom="@dimen/ls_calculator_display_margin"
+                android:autoSizeStepGranularity="@dimen/input_and_result_text_auto_size_step_granularity"
+                android:autoSizeTextType="uniform"
                 android:gravity="end|bottom"
                 android:includeFontPadding="false"
                 android:maxLength="17"
                 android:maxLines="1"
-                tools:text="123456789012"
-                android:autoSizeTextType="uniform"
-                android:autoSizeStepGranularity="@dimen/input_and_result_text_auto_size_step_granularity"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/percent_15_guideline"
                 app:layout_constraintTop_toBottomOf="@+id/operation_history_text_view"
-                app:layout_constraintVertical_weight="9" />
+                app:layout_constraintVertical_weight="9"
+                tools:text="123456789012" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/percent_7_guideline"
@@ -151,417 +153,415 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button27"
+            android:id="@+id/mplus_button"
             style="@style/scientific_calculator_shadowed_button_style"
             android:layout_marginVertical="@dimen/ls_calculator_space_between_buttons_half_size"
-            android:text="M+"
-            app:layout_constraintBottom_toTopOf="@+id/button28"
-            app:layout_constraintEnd_toEndOf="@+id/button28"
-            app:layout_constraintStart_toStartOf="@+id/button28"
+            android:text="@string/m_plus_button_text"
+            app:layout_constraintBottom_toTopOf="@+id/plus_minus_button"
+            app:layout_constraintEnd_toEndOf="@+id/plus_minus_button"
+            app:layout_constraintStart_toStartOf="@+id/plus_minus_button"
             app:layout_constraintTop_toBottomOf="@+id/display_screen_constraint_layout"
-            app:layout_constraintVertical_bias="0.5"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button28"
+            android:id="@+id/plus_minus_button"
             style="@style/scientific_calculator_dark_button_vertical_margin_style"
-            android:text="+-"
-            app:layout_constraintBottom_toTopOf="@+id/button29"
-            app:layout_constraintEnd_toEndOf="@+id/button29"
-            app:layout_constraintStart_toStartOf="@+id/button29"
-            app:layout_constraintTop_toBottomOf="@+id/button27"
-            app:layout_constraintVertical_bias="0.5" />
+            android:text="@string/plus_minus_button_text"
+            app:layout_constraintBottom_toTopOf="@+id/divide_button"
+            app:layout_constraintEnd_toEndOf="@+id/divide_button"
+            app:layout_constraintStart_toStartOf="@+id/divide_button"
+            app:layout_constraintTop_toBottomOf="@+id/mplus_button"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button29"
+            android:id="@+id/divide_button"
             style="@style/scientific_calculator_dark_button_vertical_margin_style"
-            android:text="/"
-            app:layout_constraintBottom_toTopOf="@+id/button30"
-            app:layout_constraintEnd_toEndOf="@+id/button30"
-            app:layout_constraintStart_toStartOf="@+id/button30"
-            app:layout_constraintTop_toBottomOf="@+id/button28"
-            app:layout_constraintVertical_bias="0.5" />
+            android:text="@string/divide_button_text"
+            app:layout_constraintBottom_toTopOf="@+id/multiply_button"
+            app:layout_constraintEnd_toEndOf="@+id/multiply_button"
+            app:layout_constraintStart_toStartOf="@+id/multiply_button"
+            app:layout_constraintTop_toBottomOf="@+id/plus_minus_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button30"
+            android:id="@+id/multiply_button"
             style="@style/scientific_calculator_dark_button_style"
             android:layout_margin="@dimen/ls_calculator_space_between_buttons_half_size"
-            android:text="*"
-            app:layout_constraintBottom_toTopOf="@+id/button31"
-            app:layout_constraintEnd_toStartOf="@+id/button39"
-            app:layout_constraintStart_toEndOf="@+id/button47"
-            app:layout_constraintTop_toBottomOf="@+id/button29"
-            app:layout_constraintVertical_bias="0.5" />
+            android:text="@string/multiply_button_text"
+            app:layout_constraintBottom_toTopOf="@+id/minus_button"
+            app:layout_constraintEnd_toStartOf="@+id/reciproc_button"
+            app:layout_constraintStart_toEndOf="@+id/six_button"
+            app:layout_constraintTop_toBottomOf="@+id/divide_button"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button87"
+            android:id="@+id/dms_button"
             style="@style/scientific_calculator_dark_button_horizontal_margin_style"
-            android:text="dms"
-            app:layout_constraintBottom_toBottomOf="@+id/button79"
-            app:layout_constraintEnd_toStartOf="@+id/button79"
+            android:text="@string/dms_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/cosh_button"
+            app:layout_constraintEnd_toStartOf="@+id/cosh_button"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button79" />
+            app:layout_constraintTop_toTopOf="@+id/cosh_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button79"
+            android:id="@+id/cosh_button"
             style="@style/scientific_calculator_dark_button_horizontal_margin_style"
-            android:text="cosh"
-            app:layout_constraintBottom_toBottomOf="@+id/button74"
-            app:layout_constraintEnd_toStartOf="@+id/button74"
-            app:layout_constraintStart_toEndOf="@+id/button87"
-            app:layout_constraintTop_toTopOf="@+id/button74" />
+            android:text="@string/cosh_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/cos_button"
+            app:layout_constraintEnd_toStartOf="@+id/cos_button"
+            app:layout_constraintStart_toEndOf="@+id/dms_button"
+            app:layout_constraintTop_toTopOf="@+id/cos_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button74"
+            android:id="@+id/cos_button"
             style="@style/scientific_calculator_dark_button_horizontal_margin_style"
-            android:text="cos"
-            app:layout_constraintBottom_toBottomOf="@+id/button69"
-            app:layout_constraintEnd_toStartOf="@+id/button69"
-            app:layout_constraintStart_toEndOf="@+id/button79"
-            app:layout_constraintTop_toTopOf="@+id/button69" />
+            android:text="@string/cos_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/x_to_power_y_button"
+            app:layout_constraintEnd_toStartOf="@+id/x_to_power_y_button"
+            app:layout_constraintStart_toEndOf="@+id/cosh_button"
+            app:layout_constraintTop_toTopOf="@+id/x_to_power_y_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button69"
+            android:id="@+id/x_to_power_y_button"
             style="@style/scientific_calculator_dark_button_horizontal_margin_style"
-            android:text="xy"
-            app:layout_constraintBottom_toBottomOf="@+id/button64"
-            app:layout_constraintEnd_toStartOf="@+id/button64"
-            app:layout_constraintStart_toEndOf="@+id/button74"
-            app:layout_constraintTop_toTopOf="@+id/button64" />
+            android:text="@string/x_to_power_y_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/y_root_of_x_button"
+            app:layout_constraintEnd_toStartOf="@+id/y_root_of_x_button"
+            app:layout_constraintStart_toEndOf="@+id/cos_button"
+            app:layout_constraintTop_toTopOf="@+id/y_root_of_x_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button64"
+            android:id="@+id/y_root_of_x_button"
             style="@style/scientific_calculator_dark_button_horizontal_margin_style"
-            android:text="vx"
-            app:layout_constraintBottom_toBottomOf="@+id/button60"
-            app:layout_constraintEnd_toStartOf="@+id/button60"
-            app:layout_constraintStart_toEndOf="@+id/button69"
-            app:layout_constraintTop_toTopOf="@+id/button60" />
+            android:text="@string/y_root_of_x_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/four_button"
+            app:layout_constraintEnd_toStartOf="@+id/four_button"
+            app:layout_constraintStart_toEndOf="@+id/x_to_power_y_button"
+            app:layout_constraintTop_toTopOf="@+id/four_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button60"
+            android:id="@+id/four_button"
             style="@style/scientific_calculator_light_button_horizontal_margin_style"
-            android:text="4"
-            app:layout_constraintBottom_toBottomOf="@+id/button54"
-            app:layout_constraintEnd_toStartOf="@+id/button54"
-            app:layout_constraintStart_toEndOf="@+id/button64"
-            app:layout_constraintTop_toTopOf="@+id/button54" />
+            android:text="@string/four_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/five_button"
+            app:layout_constraintEnd_toStartOf="@+id/five_button"
+            app:layout_constraintStart_toEndOf="@+id/y_root_of_x_button"
+            app:layout_constraintTop_toTopOf="@+id/five_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button54"
+            android:id="@+id/five_button"
             style="@style/scientific_calculator_light_button_horizontal_margin_style"
-            android:text="5"
-            app:layout_constraintBottom_toBottomOf="@+id/button47"
-            app:layout_constraintEnd_toStartOf="@+id/button47"
-            app:layout_constraintStart_toEndOf="@+id/button60"
-            app:layout_constraintTop_toTopOf="@+id/button47" />
+            android:text="@string/five_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/six_button"
+            app:layout_constraintEnd_toStartOf="@+id/six_button"
+            app:layout_constraintStart_toEndOf="@+id/four_button"
+            app:layout_constraintTop_toTopOf="@+id/six_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button47"
+            android:id="@+id/six_button"
             style="@style/scientific_calculator_light_button_horizontal_margin_style"
-            android:text="6"
-            app:layout_constraintBottom_toBottomOf="@+id/button30"
-            app:layout_constraintEnd_toStartOf="@+id/button30"
-            app:layout_constraintStart_toEndOf="@+id/button54"
-            app:layout_constraintTop_toTopOf="@+id/button30" />
+            android:text="@string/six_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/multiply_button"
+            app:layout_constraintEnd_toStartOf="@+id/multiply_button"
+            app:layout_constraintStart_toEndOf="@+id/five_button"
+            app:layout_constraintTop_toTopOf="@+id/multiply_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button39"
+            android:id="@+id/reciproc_button"
             style="@style/scientific_calculator_dark_button_horizontal_margin_style"
-            android:text="1/x"
-            app:layout_constraintBottom_toBottomOf="@+id/button30"
+            android:text="@string/inverse_ratio_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/multiply_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button30"
-            app:layout_constraintTop_toTopOf="@+id/button30" />
+            app:layout_constraintStart_toEndOf="@+id/multiply_button"
+            app:layout_constraintTop_toTopOf="@+id/multiply_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button37"
+            android:id="@+id/sqrt_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="V"
-            app:layout_constraintBottom_toBottomOf="@+id/button28"
-            app:layout_constraintEnd_toEndOf="@+id/button38"
-            app:layout_constraintStart_toStartOf="@+id/button38"
-            app:layout_constraintTop_toTopOf="@+id/button28" />
+            android:text="@string/sqrt__button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/plus_minus_button"
+            app:layout_constraintEnd_toEndOf="@+id/percent_button"
+            app:layout_constraintStart_toStartOf="@+id/percent_button"
+            app:layout_constraintTop_toTopOf="@+id/plus_minus_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button36"
+            android:id="@+id/mminus_button"
             style="@style/scientific_calculator_shadowed_button_style"
-            android:text="M-"
-            app:layout_constraintBottom_toBottomOf="@+id/button27"
-            app:layout_constraintEnd_toEndOf="@+id/button37"
-            app:layout_constraintStart_toStartOf="@+id/button37"
-            app:layout_constraintTop_toTopOf="@+id/button27" />
+            android:text="@string/m_minus_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/mplus_button"
+            app:layout_constraintEnd_toEndOf="@+id/sqrt_button"
+            app:layout_constraintStart_toStartOf="@+id/sqrt_button"
+            app:layout_constraintTop_toTopOf="@+id/mplus_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button38"
+            android:id="@+id/percent_button"
             style="@style/scientific_calculator_dark_button_style"
             android:background="@drawable/main_calculator_unactive_button"
             android:clickable="false"
-            android:text="%"
-            app:layout_constraintBottom_toBottomOf="@+id/button29"
-            app:layout_constraintEnd_toEndOf="@+id/button39"
-            app:layout_constraintStart_toStartOf="@+id/button39"
-            app:layout_constraintTop_toTopOf="@+id/button29" />
+            android:text="@string/percent_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/divide_button"
+            app:layout_constraintEnd_toEndOf="@+id/reciproc_button"
+            app:layout_constraintStart_toStartOf="@+id/reciproc_button"
+            app:layout_constraintTop_toTopOf="@+id/divide_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button50"
+            android:id="@+id/mr_button"
             style="@style/scientific_calculator_shadowed_button_style"
-            android:text="MR"
-            app:layout_constraintBottom_toBottomOf="@+id/button41"
-            app:layout_constraintEnd_toEndOf="@+id/button51"
-            app:layout_constraintStart_toStartOf="@+id/button51"
-            app:layout_constraintTop_toTopOf="@+id/button41" />
+            android:text="@string/mr_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/ms_button"
+            app:layout_constraintEnd_toEndOf="@+id/ce_button"
+            app:layout_constraintStart_toStartOf="@+id/ce_button"
+            app:layout_constraintTop_toTopOf="@+id/ms_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button41"
+            android:id="@+id/ms_button"
             style="@style/scientific_calculator_shadowed_button_style"
-            android:text="MS"
-            app:layout_constraintBottom_toBottomOf="@+id/button27"
-            app:layout_constraintEnd_toEndOf="@+id/button44"
-            app:layout_constraintStart_toStartOf="@+id/button44"
-            app:layout_constraintTop_toTopOf="@+id/button27" />
+            android:text="@string/ms_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/mplus_button"
+            app:layout_constraintEnd_toEndOf="@+id/c_button"
+            app:layout_constraintStart_toStartOf="@+id/c_button"
+            app:layout_constraintTop_toTopOf="@+id/mplus_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button45"
+            android:id="@+id/nine_button"
             style="@style/scientific_calculator_light_button_style"
-            android:text="9"
-            app:layout_constraintBottom_toBottomOf="@+id/button29"
-            app:layout_constraintEnd_toEndOf="@+id/button47"
-            app:layout_constraintStart_toStartOf="@+id/button47"
-            app:layout_constraintTop_toTopOf="@+id/button29" />
+            android:text="@string/nine_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/divide_button"
+            app:layout_constraintEnd_toEndOf="@+id/six_button"
+            app:layout_constraintStart_toStartOf="@+id/six_button"
+            app:layout_constraintTop_toTopOf="@+id/divide_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button44"
+            android:id="@+id/c_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="C"
-            app:layout_constraintBottom_toBottomOf="@+id/button28"
-            app:layout_constraintEnd_toEndOf="@+id/button45"
-            app:layout_constraintStart_toStartOf="@+id/button45"
-            app:layout_constraintTop_toTopOf="@+id/button28" />
+            android:text="@string/c_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/plus_minus_button"
+            app:layout_constraintEnd_toEndOf="@+id/nine_button"
+            app:layout_constraintStart_toStartOf="@+id/nine_button"
+            app:layout_constraintTop_toTopOf="@+id/plus_minus_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button51"
+            android:id="@+id/ce_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="CE"
-            app:layout_constraintBottom_toBottomOf="@+id/button44"
-            app:layout_constraintEnd_toEndOf="@+id/button52"
-            app:layout_constraintStart_toStartOf="@+id/button52"
-            app:layout_constraintTop_toTopOf="@+id/button44" />
+            android:text="@string/ce_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/c_button"
+            app:layout_constraintEnd_toEndOf="@+id/eight_button"
+            app:layout_constraintStart_toStartOf="@+id/eight_button"
+            app:layout_constraintTop_toTopOf="@+id/c_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button52"
+            android:id="@+id/eight_button"
             style="@style/scientific_calculator_light_button_style"
-            android:text="8"
-            app:layout_constraintBottom_toBottomOf="@+id/button45"
-            app:layout_constraintEnd_toEndOf="@+id/button54"
-            app:layout_constraintStart_toStartOf="@+id/button54"
-            app:layout_constraintTop_toTopOf="@+id/button45" />
+            android:text="@string/eight_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/nine_button"
+            app:layout_constraintEnd_toEndOf="@+id/five_button"
+            app:layout_constraintStart_toStartOf="@+id/five_button"
+            app:layout_constraintTop_toTopOf="@+id/nine_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button57"
+            android:id="@+id/mc_button"
             style="@style/scientific_calculator_shadowed_button_style"
-            android:text="MC"
-            app:layout_constraintBottom_toBottomOf="@+id/button50"
-            app:layout_constraintEnd_toEndOf="@+id/button58"
-            app:layout_constraintStart_toStartOf="@+id/button58"
-            app:layout_constraintTop_toTopOf="@+id/button50" />
+            android:text="@string/mc_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/mr_button"
+            app:layout_constraintEnd_toEndOf="@+id/backspace_button"
+            app:layout_constraintStart_toStartOf="@+id/backspace_button"
+            app:layout_constraintTop_toTopOf="@+id/mr_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button58"
+            android:id="@+id/backspace_button"
             style="@style/scientific_calculator_dark_button_style"
             android:text="<--"
-            app:layout_constraintBottom_toBottomOf="@+id/button51"
-            app:layout_constraintEnd_toEndOf="@+id/button59"
-            app:layout_constraintStart_toStartOf="@+id/button59"
-            app:layout_constraintTop_toTopOf="@+id/button51" />
+            app:layout_constraintBottom_toBottomOf="@+id/ce_button"
+            app:layout_constraintEnd_toEndOf="@+id/seven_button"
+            app:layout_constraintStart_toStartOf="@+id/seven_button"
+            app:layout_constraintTop_toTopOf="@+id/ce_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button59"
+            android:id="@+id/seven_button"
             style="@style/scientific_calculator_light_button_style"
-            android:text="7"
-            app:layout_constraintBottom_toBottomOf="@+id/button52"
-            app:layout_constraintEnd_toEndOf="@+id/button60"
-            app:layout_constraintStart_toStartOf="@+id/button60"
-            app:layout_constraintTop_toTopOf="@+id/button52" />
+            android:text="@string/seven_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/eight_button"
+            app:layout_constraintEnd_toEndOf="@+id/four_button"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/four_button"
+            app:layout_constraintTop_toTopOf="@+id/eight_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button40"
+            android:id="@+id/equal_button"
             style="@style/scientific_calculator_base_button_style"
             android:background="@drawable/main_calculator_dark_button"
             android:paddingVertical="@dimen/ls_main_calculator_operation_buttons_padding"
-            android:text="="
-            app:layout_constraintBottom_toBottomOf="@+id/button32"
-            app:layout_constraintEnd_toEndOf="@+id/button39"
-            app:layout_constraintStart_toStartOf="@+id/button39"
-            app:layout_constraintTop_toTopOf="@+id/button31" />
+            android:text="@string/equal_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/add_button"
+            app:layout_constraintEnd_toEndOf="@+id/reciproc_button"
+            app:layout_constraintStart_toStartOf="@+id/reciproc_button"
+            app:layout_constraintTop_toTopOf="@+id/minus_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button61"
+            android:id="@+id/one_button"
             style="@style/scientific_calculator_light_button_style"
-            android:text="1"
-            app:layout_constraintBottom_toBottomOf="@+id/button55"
-            app:layout_constraintEnd_toEndOf="@+id/button60"
-            app:layout_constraintStart_toStartOf="@+id/button60"
-            app:layout_constraintTop_toTopOf="@+id/button55" />
+            android:text="@string/one_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/two_button"
+            app:layout_constraintEnd_toEndOf="@+id/four_button"
+            app:layout_constraintStart_toStartOf="@+id/four_button"
+            app:layout_constraintTop_toTopOf="@+id/two_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button31"
+            android:id="@+id/minus_button"
             style="@style/scientific_calculator_dark_button_vertical_margin_style"
-            android:text="-"
-            app:layout_constraintBottom_toTopOf="@+id/button32"
-            app:layout_constraintEnd_toEndOf="@+id/button30"
-            app:layout_constraintStart_toStartOf="@+id/button30"
-            app:layout_constraintTop_toBottomOf="@+id/button30"
+            android:text="@string/minus_button_text"
+            app:layout_constraintBottom_toTopOf="@+id/add_button"
+            app:layout_constraintEnd_toEndOf="@+id/multiply_button"
+            app:layout_constraintStart_toStartOf="@+id/multiply_button"
+            app:layout_constraintTop_toBottomOf="@+id/multiply_button"
             app:layout_constraintVertical_bias="0.5" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button32"
+            android:id="@+id/add_button"
             style="@style/scientific_calculator_dark_button_vertical_margin_style"
-            android:text="+"
+            android:text="@string/plus_button_text"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/button31"
-            app:layout_constraintStart_toStartOf="@+id/button31"
-            app:layout_constraintTop_toBottomOf="@+id/button31"
+            app:layout_constraintEnd_toEndOf="@+id/minus_button"
+            app:layout_constraintStart_toStartOf="@+id/minus_button"
+            app:layout_constraintTop_toBottomOf="@+id/minus_button"
             app:layout_constraintVertical_bias="0.5" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button48"
+            android:id="@+id/three_button"
             style="@style/scientific_calculator_light_button_style"
-            android:text="3"
-            app:layout_constraintBottom_toBottomOf="@+id/button31"
-            app:layout_constraintEnd_toEndOf="@+id/button47"
-            app:layout_constraintStart_toStartOf="@+id/button47"
-            app:layout_constraintTop_toTopOf="@+id/button31" />
+            android:text="@string/three_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/minus_button"
+            app:layout_constraintEnd_toEndOf="@+id/six_button"
+            app:layout_constraintStart_toStartOf="@+id/six_button"
+            app:layout_constraintTop_toTopOf="@+id/minus_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button55"
+            android:id="@+id/two_button"
             style="@style/scientific_calculator_light_button_style"
-            android:text="2"
-            app:layout_constraintBottom_toBottomOf="@+id/button48"
-            app:layout_constraintEnd_toEndOf="@+id/button54"
-            app:layout_constraintStart_toStartOf="@+id/button54"
-            app:layout_constraintTop_toTopOf="@+id/button48" />
+            android:text="@string/two_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/three_button"
+            app:layout_constraintEnd_toEndOf="@+id/five_button"
+            app:layout_constraintStart_toStartOf="@+id/five_button"
+            app:layout_constraintTop_toTopOf="@+id/three_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button56"
+            android:id="@+id/zero_button"
             style="@style/scientific_calculator_base_button_style"
-            android:text="0"
             android:background="@drawable/main_calculator_light_button"
-            android:paddingVertical="@dimen/main_calculator_digit_buttons_padding"
-            app:layout_constraintBottom_toBottomOf="@+id/button49"
-            app:layout_constraintEnd_toEndOf="@+id/button55"
-            app:layout_constraintStart_toStartOf="@+id/button61"
-            app:layout_constraintTop_toTopOf="@+id/button49" />
+            android:paddingVertical="@dimen/ls_main_calculator_digit_buttons_padding"
+            android:text="@string/zero_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/point_button"
+            app:layout_constraintEnd_toEndOf="@+id/two_button"
+            app:layout_constraintStart_toStartOf="@+id/one_button"
+            app:layout_constraintTop_toTopOf="@+id/point_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button65"
+            android:id="@+id/third_root_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="vx"
-            app:layout_constraintBottom_toBottomOf="@+id/button61"
-            app:layout_constraintEnd_toEndOf="@+id/button64"
-            app:layout_constraintStart_toStartOf="@+id/button64"
-            app:layout_constraintTop_toTopOf="@+id/button61" />
+            android:text="@string/third_root_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/one_button"
+            app:layout_constraintEnd_toEndOf="@+id/y_root_of_x_button"
+            app:layout_constraintStart_toStartOf="@+id/y_root_of_x_button"
+            app:layout_constraintTop_toTopOf="@+id/one_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button66"
+            android:id="@+id/ten_to_the_power_of_x_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="10x"
-            app:layout_constraintBottom_toBottomOf="@+id/button56"
-            app:layout_constraintEnd_toEndOf="@+id/button65"
-            app:layout_constraintStart_toStartOf="@+id/button65"
-            app:layout_constraintTop_toTopOf="@+id/button56" />
+            android:text="@string/ten_to_the_power_of_x_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/zero_button"
+            app:layout_constraintEnd_toEndOf="@+id/third_root_button"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/third_root_button"
+            app:layout_constraintTop_toTopOf="@+id/zero_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button70"
+            android:id="@+id/x_to_power_three_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="x3"
-            app:layout_constraintBottom_toBottomOf="@+id/button65"
-            app:layout_constraintEnd_toEndOf="@+id/button69"
-            app:layout_constraintStart_toStartOf="@+id/button69"
-            app:layout_constraintTop_toTopOf="@+id/button65" />
+            android:text="@string/x_to_power_three_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/third_root_button"
+            app:layout_constraintEnd_toEndOf="@+id/x_to_power_y_button"
+            app:layout_constraintStart_toStartOf="@+id/x_to_power_y_button"
+            app:layout_constraintTop_toTopOf="@+id/third_root_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button71"
+            android:id="@+id/log_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="log"
-            app:layout_constraintBottom_toBottomOf="@+id/button66"
-            app:layout_constraintEnd_toEndOf="@+id/button70"
-            app:layout_constraintStart_toStartOf="@+id/button70"
-            app:layout_constraintTop_toTopOf="@+id/button66" />
+            android:text="@string/log_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/ten_to_the_power_of_x_button"
+            app:layout_constraintEnd_toEndOf="@+id/x_to_power_three_button"
+            app:layout_constraintStart_toStartOf="@+id/x_to_power_three_button"
+            app:layout_constraintTop_toTopOf="@+id/ten_to_the_power_of_x_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button75"
+            android:id="@+id/tan_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="tan"
-            app:layout_constraintBottom_toBottomOf="@+id/button70"
-            app:layout_constraintEnd_toEndOf="@+id/button74"
-            app:layout_constraintStart_toStartOf="@+id/button74"
-            app:layout_constraintTop_toTopOf="@+id/button70" />
+            android:text="@string/tan_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/x_to_power_three_button"
+            app:layout_constraintEnd_toEndOf="@+id/cos_button"
+            app:layout_constraintStart_toStartOf="@+id/cos_button"
+            app:layout_constraintTop_toTopOf="@+id/x_to_power_three_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button76"
+            android:id="@+id/modulus_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="Mod"
-            app:layout_constraintBottom_toBottomOf="@+id/button71"
-            app:layout_constraintEnd_toEndOf="@+id/button75"
-            app:layout_constraintStart_toStartOf="@+id/button75"
-            app:layout_constraintTop_toTopOf="@+id/button71" />
+            android:text="@string/modulus_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/log_button"
+            app:layout_constraintEnd_toEndOf="@+id/tan_button"
+            app:layout_constraintStart_toStartOf="@+id/tan_button"
+            app:layout_constraintTop_toTopOf="@+id/log_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button80"
+            android:id="@+id/tanh_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="tanh"
-            app:layout_constraintBottom_toBottomOf="@+id/button75"
-            app:layout_constraintEnd_toEndOf="@+id/button79"
-            app:layout_constraintStart_toStartOf="@+id/button79"
-            app:layout_constraintTop_toTopOf="@+id/button75" />
+            android:text="@string/tanh_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/tan_button"
+            app:layout_constraintEnd_toEndOf="@+id/cosh_button"
+            app:layout_constraintStart_toStartOf="@+id/cosh_button"
+            app:layout_constraintTop_toTopOf="@+id/tan_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button81"
+            android:id="@+id/exponent_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="Exp"
-            app:layout_constraintBottom_toBottomOf="@+id/button76"
-            app:layout_constraintEnd_toEndOf="@+id/button80"
-            app:layout_constraintStart_toStartOf="@+id/button80"
-            app:layout_constraintTop_toTopOf="@+id/button76" />
+            android:text="@string/exponent_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/modulus_button"
+            app:layout_constraintEnd_toEndOf="@+id/tanh_button"
+            app:layout_constraintStart_toStartOf="@+id/tanh_button"
+            app:layout_constraintTop_toTopOf="@+id/modulus_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button88"
+            android:id="@+id/pi_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="Pi"
-            app:layout_constraintBottom_toBottomOf="@+id/button80"
-            app:layout_constraintEnd_toEndOf="@+id/button87"
-            app:layout_constraintStart_toStartOf="@+id/button87"
-            app:layout_constraintTop_toTopOf="@+id/button80" />
+            android:text="@string/pi_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/tanh_button"
+            app:layout_constraintEnd_toEndOf="@+id/dms_button"
+            app:layout_constraintStart_toStartOf="@+id/dms_button"
+            app:layout_constraintTop_toTopOf="@+id/tanh_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button89"
+            android:id="@+id/fixed_to_exponent_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="F-E"
-            app:layout_constraintBottom_toBottomOf="@+id/button81"
-            app:layout_constraintEnd_toEndOf="@+id/button88"
-            app:layout_constraintStart_toStartOf="@+id/button88"
-            app:layout_constraintTop_toTopOf="@+id/button81" />
+            android:text="@string/fixed_to_exponent_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/exponent_button"
+            app:layout_constraintEnd_toEndOf="@+id/pi_button"
+            app:layout_constraintStart_toStartOf="@+id/pi_button"
+            app:layout_constraintTop_toTopOf="@+id/exponent_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button49"
+            android:id="@+id/point_button"
             style="@style/scientific_calculator_light_button_style"
-            android:text=","
-            app:layout_constraintBottom_toBottomOf="@+id/button32"
-            app:layout_constraintEnd_toEndOf="@+id/button48"
-            app:layout_constraintStart_toStartOf="@+id/button48"
-            app:layout_constraintTop_toTopOf="@+id/button32" />
+            android:text="@string/comma_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/add_button"
+            app:layout_constraintEnd_toEndOf="@+id/three_button"
+            app:layout_constraintStart_toStartOf="@+id/three_button"
+            app:layout_constraintTop_toTopOf="@+id/add_button" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/angle_selection_constraint_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/main_calculator_blank_button"
-            app:layout_constraintBottom_toBottomOf="@+id/button57"
-            app:layout_constraintEnd_toEndOf="@+id/button62"
-            app:layout_constraintStart_toStartOf="@+id/button85"
-            app:layout_constraintTop_toTopOf="@+id/button57">
+            app:layout_constraintBottom_toBottomOf="@+id/mc_button"
+            app:layout_constraintEnd_toEndOf="@+id/right_bracket_button"
+            app:layout_constraintStart_toStartOf="@+id/blank_button"
+            app:layout_constraintTop_toTopOf="@+id/mc_button">
 
             <RadioGroup
                 android:id="@+id/angle_unit_selection_radio_group"
@@ -583,9 +583,10 @@
                     android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
                     android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
                     android:autoSizeTextType="uniform"
+                    android:maxLines="1"
                     android:checked="true"
-                    app:useMaterialThemeColors="false"
-                    android:text="Градусы" />
+                    android:text="Градусы"
+                    app:useMaterialThemeColors="false" />
 
                 <RadioButton
                     android:id="@+id/radians_radio_button"
@@ -596,8 +597,9 @@
                     android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
                     android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
                     android:autoSizeTextType="uniform"
-                    app:useMaterialThemeColors="false"
-                    android:text="Радианы" />
+                    android:maxLines="1"
+                    android:text="Радианы"
+                    app:useMaterialThemeColors="false" />
 
                 <RadioButton
                     android:id="@+id/grads_radio_button"
@@ -608,103 +610,104 @@
                     android:autoSizeMinTextSize="@dimen/main_calculator_button_minimum_text_size"
                     android:autoSizeStepGranularity="@dimen/main_calculator_buttons_text_auto_size_step_granularity"
                     android:autoSizeTextType="uniform"
-                    app:useMaterialThemeColors="false"
-                    android:text="Грады" />
+                    android:maxLines="1"
+                    android:text="Грады"
+                    app:useMaterialThemeColors="false" />
 
             </RadioGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button62"
+            android:id="@+id/right_bracket_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text=")"
-            app:layout_constraintBottom_toBottomOf="@+id/button58"
-            app:layout_constraintEnd_toEndOf="@+id/button63"
-            app:layout_constraintStart_toStartOf="@+id/button63"
-            app:layout_constraintTop_toTopOf="@+id/button58" />
+            android:text="@string/right_bracket_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/backspace_button"
+            app:layout_constraintEnd_toEndOf="@+id/n_factorial_button"
+            app:layout_constraintStart_toStartOf="@+id/n_factorial_button"
+            app:layout_constraintTop_toTopOf="@+id/backspace_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button63"
+            android:id="@+id/n_factorial_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="n!"
-            app:layout_constraintBottom_toBottomOf="@+id/button59"
-            app:layout_constraintEnd_toEndOf="@+id/button64"
-            app:layout_constraintStart_toStartOf="@+id/button64"
-            app:layout_constraintTop_toTopOf="@+id/button59" />
+            android:text="@string/n_factorial_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/seven_button"
+            app:layout_constraintEnd_toEndOf="@+id/y_root_of_x_button"
+            app:layout_constraintStart_toStartOf="@+id/y_root_of_x_button"
+            app:layout_constraintTop_toTopOf="@+id/seven_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button67"
+            android:id="@+id/left_bracket_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="("
-            app:layout_constraintBottom_toBottomOf="@+id/button62"
-            app:layout_constraintEnd_toEndOf="@+id/button68"
-            app:layout_constraintStart_toStartOf="@+id/button68"
-            app:layout_constraintTop_toTopOf="@+id/button62" />
+            android:text="@string/left_bracket_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/right_bracket_button"
+            app:layout_constraintEnd_toEndOf="@+id/x_squared_button"
+            app:layout_constraintStart_toStartOf="@+id/x_squared_button"
+            app:layout_constraintTop_toTopOf="@+id/right_bracket_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button68"
+            android:id="@+id/x_squared_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="x2"
-            app:layout_constraintBottom_toBottomOf="@+id/button63"
-            app:layout_constraintEnd_toEndOf="@+id/button69"
-            app:layout_constraintStart_toStartOf="@+id/button69"
-            app:layout_constraintTop_toTopOf="@+id/button63" />
+            android:text="@string/x_squared_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/n_factorial_button"
+            app:layout_constraintEnd_toEndOf="@+id/x_to_power_y_button"
+            app:layout_constraintStart_toStartOf="@+id/x_to_power_y_button"
+            app:layout_constraintTop_toTopOf="@+id/n_factorial_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button72"
+            android:id="@+id/ln_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="ln"
-            app:layout_constraintBottom_toBottomOf="@+id/button67"
-            app:layout_constraintEnd_toEndOf="@+id/button73"
-            app:layout_constraintStart_toStartOf="@+id/button73"
-            app:layout_constraintTop_toTopOf="@+id/button67" />
+            android:text="@string/ln_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/left_bracket_button"
+            app:layout_constraintEnd_toEndOf="@+id/sin_button"
+            app:layout_constraintStart_toStartOf="@+id/sin_button"
+            app:layout_constraintTop_toTopOf="@+id/left_bracket_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button73"
+            android:id="@+id/sin_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="sin"
-            app:layout_constraintBottom_toBottomOf="@+id/button68"
-            app:layout_constraintEnd_toEndOf="@+id/button74"
-            app:layout_constraintStart_toStartOf="@+id/button74"
-            app:layout_constraintTop_toTopOf="@+id/button68" />
+            android:text="@string/sin_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/x_squared_button"
+            app:layout_constraintEnd_toEndOf="@+id/cos_button"
+            app:layout_constraintStart_toStartOf="@+id/cos_button"
+            app:layout_constraintTop_toTopOf="@+id/x_squared_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button77"
+            android:id="@+id/inv_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="Inv"
-            app:layout_constraintBottom_toBottomOf="@+id/button72"
-            app:layout_constraintEnd_toEndOf="@+id/button78"
-            app:layout_constraintStart_toStartOf="@+id/button78"
-            app:layout_constraintTop_toTopOf="@+id/button72" />
+            android:text="@string/inv_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/ln_button"
+            app:layout_constraintEnd_toEndOf="@+id/sinh_button"
+            app:layout_constraintStart_toStartOf="@+id/sinh_button"
+            app:layout_constraintTop_toTopOf="@+id/ln_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button78"
+            android:id="@+id/sinh_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="sinh"
-            app:layout_constraintBottom_toBottomOf="@+id/button73"
-            app:layout_constraintEnd_toEndOf="@+id/button79"
-            app:layout_constraintStart_toStartOf="@+id/button79"
-            app:layout_constraintTop_toTopOf="@+id/button73" />
+            android:text="@string/sinh_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/sin_button"
+            app:layout_constraintEnd_toEndOf="@+id/cosh_button"
+            app:layout_constraintStart_toStartOf="@+id/cosh_button"
+            app:layout_constraintTop_toTopOf="@+id/sin_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button85"
+            android:id="@+id/blank_button"
             style="@style/scientific_calculator_shadowed_button_style"
             android:background="@drawable/main_calculator_blank_button"
-            android:text=" "
-            app:layout_constraintBottom_toBottomOf="@+id/button77"
-            app:layout_constraintEnd_toEndOf="@+id/button86"
-            app:layout_constraintStart_toStartOf="@+id/button86"
-            app:layout_constraintTop_toTopOf="@+id/button77" />
+            android:text="@string/blank_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/inv_button"
+            app:layout_constraintEnd_toEndOf="@+id/int_button"
+            app:layout_constraintStart_toStartOf="@+id/int_button"
+            app:layout_constraintTop_toTopOf="@+id/inv_button" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button86"
+            android:id="@+id/int_button"
             style="@style/scientific_calculator_dark_button_style"
-            android:text="Int"
-            app:layout_constraintBottom_toBottomOf="@+id/button78"
-            app:layout_constraintEnd_toEndOf="@+id/button87"
-            app:layout_constraintStart_toStartOf="@+id/button87"
-            app:layout_constraintTop_toTopOf="@+id/button78" />
+            android:text="@string/int_button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/sinh_button"
+            app:layout_constraintEnd_toEndOf="@+id/dms_button"
+            app:layout_constraintStart_toStartOf="@+id/dms_button"
+            app:layout_constraintTop_toTopOf="@+id/sinh_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

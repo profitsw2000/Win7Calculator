@@ -4,6 +4,7 @@
     <string name="calculator_menu_edit_item_text">Правка</string>
     <string name="calculator_menu_help_item_text">Справка</string>
 
+    <!-- General -->
     <string name="calculator_display_memory_sign">M</string>
     <string name="mc_button_text">MC</string>
     <string name="mr_button_text">MR</string>
@@ -32,6 +33,33 @@
     <string name="zero_button_text">0</string>
     <string name="comma_button_text">,</string>
     <string name="plus_button_text">+</string>
+
+    <!-- Scientific -->
+    <string name="blank_button_text"> </string>
+    <string name="inv_button_text">Inv</string>
+    <string name="ln_button_text">ln</string>
+    <string name="left_bracket_button_text">(</string>
+    <string name="right_bracket_button_text">)</string>
+    <string name="int_button_text">Int</string>
+    <string name="sinh_button_text">sinh</string>
+    <string name="sin_button_text">sin</string>
+    <string name="x_squared_button_text">x2</string>
+    <string name="n_factorial_button_text">n!</string>
+    <string name="dms_button_text">dms</string>
+    <string name="cosh_button_text">cosh</string>
+    <string name="cos_button_text">cos</string>
+    <string name="x_to_power_y_button_text">xy</string>
+    <string name="y_root_of_x_button_text">yvx</string>
+    <string name="pi_button_text">Pi</string>
+    <string name="tanh_button_text">tanh</string>
+    <string name="tan_button_text">tan</string>
+    <string name="x_to_power_three_button_text">x3</string>
+    <string name="third_root_button_text">vx</string>
+    <string name="fixed_to_exponent_button_text">F-E</string>
+    <string name="exponent_button_text">Exp</string>
+    <string name="modulus_button_text">Mod</string>
+    <string name="log_button_text">log</string>
+    <string name="ten_to_the_power_of_x_button_text">10x</string>
 
     <string name="divide_on_zero_error_text">Деление на ноль невозможно</string>
     <string name="invalid_input_error_text">Недопустимый ввод</string>
