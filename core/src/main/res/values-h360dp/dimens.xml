@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="ls_menu_item_text_vertical_margin">4dp</dimen>
+    <dimen name="ls_main_calculator_horizontal_margin">16dp</dimen>
+    <dimen name="ls_calculator_menu_text_view_horizontal_padding_size">6dp</dimen>
+    <dimen name="ls_calculator_menu_item_text_size">16sp</dimen>
+    <dimen name="ls_calculator_menu_space_between_items_text">8dp</dimen>
+    <dimen name="ls_calculator_menu_items_vertical_margin">6dp</dimen>
+    <dimen name="ls_calculator_display_margin">6dp</dimen>
+    <dimen name="ls_calculator_space_between_buttons_size">4dp</dimen>
+    <dimen name="ls_calculator_space_between_buttons_half_size">2dp</dimen>
+    <dimen name="ls_calculator_display_memory_sign_size">20sp</dimen>
+
+</resources>
