@@ -1,11 +1,11 @@
-package ru.profitsw2000.data.statemachine.data
+package ru.profitsw2000.data.statemachine.data.general
 
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 
-class ErrorState(
+class GeneralCalculatorErrorState(
     override val generalCalculatorDataEntity: GeneralCalculatorDataEntity
 ) : GeneralCalculatorState {
     override fun consumeAction(action: CalculatorAction): CalculatorState {
@@ -23,7 +23,7 @@ class ErrorState(
      * @return Initial state with some fields of calculator data set to default state
      */
     override fun clearAll(generalCalculatorDataEntity: GeneralCalculatorDataEntity): GeneralCalculatorState {
-        return InitialState(
+        return GeneralCalculatorInitialState(
             GeneralCalculatorDataEntity(
                 memoryNumber = generalCalculatorDataEntity.memoryNumber
             )

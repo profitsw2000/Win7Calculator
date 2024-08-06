@@ -27,7 +27,7 @@ import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.mappers.CalculatorMapper
 import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
-import ru.profitsw2000.data.statemachine.data.InitialState
+import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorInitialState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import kotlin.properties.Delegates
 
@@ -35,9 +35,11 @@ class GeneralCalculatorRepositoryImpl(
     private val calculatorMapper: CalculatorMapper
 ) : GeneralCalculatorRepository {
 
-    private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(
+    private var currentState by Delegates.observable<GeneralCalculatorState>(
+        GeneralCalculatorInitialState(
         GeneralCalculatorDataEntity()
-    )) { _, oldValue, newValue ->
+    )
+    ) { _, oldValue, newValue ->
         renderGeneralCalculatorState(newValue, oldValue)
     }
 
