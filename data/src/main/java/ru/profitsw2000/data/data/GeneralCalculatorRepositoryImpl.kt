@@ -24,19 +24,15 @@ import ru.profitsw2000.data.constants.HISTORY_STRING_OVERFLOW_SIGN
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.domain.GeneralCalculatorRepository
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
-import ru.profitsw2000.data.mappers.GeneralCalculatorMapper
+import ru.profitsw2000.data.mappers.CalculatorMapper
 import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
-import ru.profitsw2000.data.statemachine.data.ErrorState
-import ru.profitsw2000.data.statemachine.data.FirstOperandInputState
 import ru.profitsw2000.data.statemachine.data.InitialState
-import ru.profitsw2000.data.statemachine.data.OperationResultState
-import ru.profitsw2000.data.statemachine.data.SecondOperandInputState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import kotlin.properties.Delegates
 
 class GeneralCalculatorRepositoryImpl(
-    private val generalCalculatorMapper: GeneralCalculatorMapper
+    private val calculatorMapper: CalculatorMapper
 ) : GeneralCalculatorRepository {
 
     private var currentState by Delegates.observable<GeneralCalculatorState>(InitialState(
@@ -87,7 +83,7 @@ class GeneralCalculatorRepositoryImpl(
                     "${newState.generalCalculatorDataEntity.historyString.drop(historyStringLength - HISTORY_STRING_MAX_DIGIT_NUMBER)}"
         else newState.generalCalculatorDataEntity.historyString
 
-        generalCalculatorMutableDataSource.value = generalCalculatorMapper.map(
+        generalCalculatorMutableDataSource.value = calculatorMapper.map(
             newState.generalCalculatorDataEntity.copy(
                 historyString = historyString
             )
