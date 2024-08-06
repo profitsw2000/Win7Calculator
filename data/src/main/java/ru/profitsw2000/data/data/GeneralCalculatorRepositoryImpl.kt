@@ -39,8 +39,8 @@ class GeneralCalculatorRepositoryImpl(
         GeneralCalculatorInitialState(
         GeneralCalculatorDataEntity()
     )
-    ) { _, oldValue, newValue ->
-        renderGeneralCalculatorState(newValue, oldValue)
+    ) { _, _, newValue ->
+        renderGeneralCalculatorState(newValue)
     }
 
     private val generalCalculatorMutableDataSource: MutableStateFlow<GeneralCalculatorDataModel> = MutableStateFlow(GeneralCalculatorDataModel())
@@ -77,7 +77,7 @@ class GeneralCalculatorRepositoryImpl(
         currentState = currentState.consumeAction(action) as GeneralCalculatorState
     }
 
-    private fun renderGeneralCalculatorState(newState: GeneralCalculatorState, oldState: GeneralCalculatorState) {
+    override fun renderGeneralCalculatorState(newState: GeneralCalculatorState) {
         val historyStringLength = newState.generalCalculatorDataEntity.historyString.replace(
             HISTORY_STRING_SPACE_LETTER, " ").length
         val historyString = if (historyStringLength > HISTORY_STRING_MAX_DIGIT_NUMBER)

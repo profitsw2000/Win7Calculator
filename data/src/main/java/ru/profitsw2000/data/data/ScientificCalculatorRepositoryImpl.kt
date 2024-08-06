@@ -12,7 +12,20 @@ class ScientificCalculatorRepositoryImpl(
     override val scientificCalculatorDataSource: StateFlow<GeneralCalculatorDataModel>
         get() = TODO("Not yet implemented")
 
+    override val isFunctionsInverted: Boolean
+        get() = TODO("Not yet implemented")
+    override val angleUnitCode: Int
+        get() = TODO("Not yet implemented")
+
     override fun angleUnitSelected(angleUnitCode: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun changeAngleUnits(angleUnitCode: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun invertFunctions(isInverted: Boolean) {
         TODO("Not yet implemented")
     }
 

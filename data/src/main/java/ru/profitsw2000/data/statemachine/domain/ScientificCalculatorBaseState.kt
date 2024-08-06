@@ -1,9 +1,36 @@
 package ru.profitsw2000.data.statemachine.domain
 
+import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
+import ru.profitsw2000.data.entity.OperationType
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 
-interface ScientificCalculatorBaseState : GeneralCalculatorBaseState {
+interface ScientificCalculatorBaseState : ScientificCalculatorState {
+
+    fun clearMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun readMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun saveToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun addNumberToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun subtractNumberFromMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun negateOperand(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun calculateSquareRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun inputDigit(scientificCalculatorDataEntity: ScientificCalculatorDataEntity, digitToAppend: String): CalculatorState
+
+    fun primitiveMathOperation(scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
+                               scientificOperationType: ScientificOperationType,
+                               operationString: String
+    ): CalculatorState
+
+    fun reciprocOperation(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun calculateResult(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
     fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
