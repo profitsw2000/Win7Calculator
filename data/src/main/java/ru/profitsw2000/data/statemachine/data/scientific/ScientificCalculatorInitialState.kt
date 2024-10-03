@@ -293,16 +293,40 @@ class ScientificCalculatorInitialState(
     }
 
     /*
-    *Opens bracket to make new expression
+    * Opens bracket to make new expression
     * @param scientificCalculatorDataEntity - contains current calculator data
-    * @return
+    * @return ScientificCalculatorInitialState with same data, except history string (added open bracket sign)
+    * State before this operation writes to prevState field
      */
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorInitialState(
+            ScientificCalculatorDataEntity(
+                historyString = "${scientificCalculatorDataEntity.historyString}(",
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+                prevState = this
+            )
+        )
     }
 
+
+    /*
+    * Close bracket to make new expression
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @return previous stata, stored in prevState field of scientificCalculatorDataEntity with changed historyString field
+    * (added close bracket)
+     */
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+
+        if (scientificCalculatorDataEntity.prevState == null)
+            return this
+        else
+            return ScientificCalculatorInitialState(
+                scientificCalculatorDataEntity
+                    .prevState
+                    .scientificCalculatorDataEntity.copy(
+                        historyString = "${scientificCalculatorDataEntity.historyString})"
+                    )
+            )
     }
 
     override fun calculateNaturalLogarithm(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
