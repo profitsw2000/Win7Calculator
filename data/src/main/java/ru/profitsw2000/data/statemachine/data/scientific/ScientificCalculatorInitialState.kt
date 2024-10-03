@@ -19,6 +19,7 @@ import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
+import kotlin.math.ln
 import kotlin.math.sqrt
 
 class ScientificCalculatorInitialState(
@@ -329,8 +330,39 @@ class ScientificCalculatorInitialState(
             )
     }
 
+    /*
+    * Calculates natural logarithm
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and calculation result in mainString field
+    * if calculation completed successfully
+    * ScientificCalculatorErrorState if calculation completed with error
+     */
     override fun calculateNaturalLogarithm(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    doubleToCalculatorString(ln(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (numberFormatException: NumberFormatException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun calculateExponent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
