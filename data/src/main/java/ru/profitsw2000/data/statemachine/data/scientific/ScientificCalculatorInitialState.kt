@@ -85,8 +85,8 @@ class ScientificCalculatorInitialState(
 
     /**
      * Clear internal memory of calculator
-     * @param generalCalculatorDataEntity - contains current calculator data
-     * @return GeneralCalculatorInitialState with cleared memory of calculator data
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorInitialState with cleared memory of calculator data
      */
     override fun clearMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorInitialState(scientificCalculatorDataEntity.copy(memoryNumber = null))
@@ -237,7 +237,7 @@ class ScientificCalculatorInitialState(
      * @param1 scientificCalculatorDataEntity - contains current calculator data,
      * @param2 scientificOperationType - type of primitive math operation
      * @param3 operationString - operation sign, need to be added in history string
-     * @return ScientificCalculatorPrimitiveMathOperationState with changed historyString and operationTypeList fields of calculator data
+     * @return ScientificCalculatorPrimitiveMathOperationState with changed historyString and operationType fields of calculator data
      */
     override fun primitiveMathOperation(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
@@ -245,14 +245,12 @@ class ScientificCalculatorInitialState(
         operationString: String
     ): CalculatorState {
         val historyString = "${scientificCalculatorDataEntity.mainString}$HISTORY_STRING_SPACE_LETTER$operationString"
-        val scientificOperationTypeList = scientificCalculatorDataEntity.scientificOperationTypeList.dropLast(1) + listOf(scientificOperationType)
-        val operandList = scientificCalculatorDataEntity.operandList.dropLast(1) + calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
 
         return ScientificCalculatorPrimitiveMathOperationState(
             scientificCalculatorDataEntity.copy(
                 historyString = historyString,
-                scientificOperationTypeList = scientificOperationTypeList,
-                operandList = operandList
+                scientificOperationType = scientificOperationType,
+                operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
             )
         )
     }

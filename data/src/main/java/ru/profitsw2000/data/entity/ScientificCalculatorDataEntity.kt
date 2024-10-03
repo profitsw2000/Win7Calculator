@@ -1,14 +1,16 @@
 package ru.profitsw2000.data.entity
 
 import ru.profitsw2000.data.constants.NO_ERROR_CODE
+import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 
 data class ScientificCalculatorDataEntity(
     val mainString: String = "0",
     val historyString: String = "",
-    val operandList: List<Double> = listOf(0.0),
-    val scientificOperationTypeList: List<ScientificOperationType> = arrayListOf(ScientificOperationType.NO_OPERATION),
+    val operand: Double = 0.0,
+    val scientificOperationType: ScientificOperationType = ScientificOperationType.NO_OPERATION,
     val memoryNumber: Double? = null,
-    val errorCode: Int = NO_ERROR_CODE
+    val errorCode: Int = NO_ERROR_CODE,
+    val prevState: ScientificCalculatorBaseState? = null
 )
 
 enum class ScientificOperationType {
