@@ -19,8 +19,10 @@ import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
+import ru.profitsw2000.utils.calcSinh
 import kotlin.math.exp
 import kotlin.math.ln
+import kotlin.math.sinh
 import kotlin.math.sqrt
 import kotlin.math.truncate
 
@@ -449,7 +451,34 @@ class ScientificCalculatorInitialState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).calcSinh()
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}sinh(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sinh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sinh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun hyperbolicArcSinus(
