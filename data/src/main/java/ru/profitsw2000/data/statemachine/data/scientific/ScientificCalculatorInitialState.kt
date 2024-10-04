@@ -19,8 +19,10 @@ import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
+import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sqrt
+import kotlin.math.truncate
 
 class ScientificCalculatorInitialState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
@@ -341,7 +343,7 @@ class ScientificCalculatorInitialState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    doubleToCalculatorString(ln(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                    mainString = doubleToCalculatorString(ln(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
                     historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )
@@ -359,24 +361,90 @@ class ScientificCalculatorInitialState(
                 scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
                             "${scientificCalculatorDataEntity.mainString})",
-                    errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+                    errorCode = UNKNOWN_ERROR_CODE
                 )
             )
         }
     }
 
+    /*
+    * Calculates exponent raised to the power of entered number
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and calculation result in mainString field
+    * if calculation completed successfully
+    * ScientificCalculatorErrorState if calculation completed with error
+     */
     override fun calculateExponent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(exp(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (numberFormatException: NumberFormatException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /*
+    * Rounds entered number(placed in mainString field of scientificCalculatorDataEntity) to the next whole towards zero
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+    * rounded number placed in mainString field
+     */
     override fun integerOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}Int(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /*
+    * Calculates fractional part of entered number(placed in mainString field of scientificCalculatorDataEntity)
+    * and place it to the same field. History of operation writes to historyString field
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+    * fractional part of number placed in mainString field
+     */
     override fun fractionOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    calculatorStringToDouble(scientificCalculatorDataEntity.mainString) % 1),
+                historyString = "${scientificCalculatorDataEntity.historyString}frac(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /*
+    * Calculates hyperbolic sinus of entered number(placed in mainString field of scientificCalculatorDataEntity)
+    * and place it to the same field. History of operation writes to historyString field
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+    * result of implemented operation placed in mainString field
+     */
     override fun hyperbolicSinus(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
