@@ -5,6 +5,7 @@ import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
@@ -23,6 +24,7 @@ import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
 import ru.profitsw2000.utils.calcSinh
+import ru.profitsw2000.utils.powerTo
 import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.asinh
@@ -591,7 +593,33 @@ class ScientificCalculatorInitialState(
      * and overflow of Double number was happened.
      */
     override fun squareNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(2.0)
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}sqr(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sqr(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sqr(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun factorial(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
