@@ -23,6 +23,7 @@ import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
 import ru.profitsw2000.utils.calcSinh
+import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.asinh
 import kotlin.math.exp
@@ -303,7 +304,7 @@ class ScientificCalculatorInitialState(
         return this
     }
 
-    /*
+    /**
     * Opens bracket to make new expression
     * @param scientificCalculatorDataEntity - contains current calculator data
     * @return ScientificCalculatorInitialState with same data, except history string (added open bracket sign)
@@ -320,7 +321,7 @@ class ScientificCalculatorInitialState(
     }
 
 
-    /*
+    /**
     * Close bracket to make new expression
     * @param scientificCalculatorDataEntity - contains current calculator data
     * @return previous stata, stored in prevState field of scientificCalculatorDataEntity with changed historyString field
@@ -340,7 +341,7 @@ class ScientificCalculatorInitialState(
             )
     }
 
-    /*
+    /**
     * Calculates natural logarithm
     * @param scientificCalculatorDataEntity - contains current calculator data
     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and calculation result in mainString field
@@ -375,7 +376,7 @@ class ScientificCalculatorInitialState(
         }
     }
 
-    /*
+    /**
     * Calculates exponent raised to the power of entered number
     * @param scientificCalculatorDataEntity - contains current calculator data
     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and calculation result in mainString field
@@ -410,7 +411,7 @@ class ScientificCalculatorInitialState(
         }
     }
 
-    /*
+    /**
     * Rounds entered number(placed in mainString field of scientificCalculatorDataEntity) to the next whole towards zero
     * @param scientificCalculatorDataEntity - contains current calculator data
     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
@@ -428,7 +429,7 @@ class ScientificCalculatorInitialState(
         )
     }
 
-    /*
+    /**
     * Calculates fractional part of entered number(placed in mainString field of scientificCalculatorDataEntity)
     * and place it to the same field. History of operation writes to historyString field
     * @param scientificCalculatorDataEntity - contains current calculator data
@@ -446,7 +447,7 @@ class ScientificCalculatorInitialState(
         )
     }
 
-    /*
+    /**
     * Calculates hyperbolic sinus of entered number(placed in mainString field of scientificCalculatorDataEntity)
     * and place it to the same field. History of operation writes to historyString field
     * @param scientificCalculatorDataEntity - contains current calculator data
@@ -484,7 +485,7 @@ class ScientificCalculatorInitialState(
         }
     }
 
-    /*
+    /**
     * Calculates hyperbolic arcsinus of entered number(placed in mainString field of scientificCalculatorDataEntity)
     * and place it to the same field. History of operation writes to historyString field
     * @param scientificCalculatorDataEntity - contains current calculator data
@@ -503,7 +504,7 @@ class ScientificCalculatorInitialState(
         )
     }
 
-    /*
+    /**
     * Calculates sinus of entered angle(placed in mainString field of scientificCalculatorDataEntity)
     * and place result to the same field. Unit of angle depends on what is in angleUnitCode argument.
     * History of operation writes to historyString field and also depends on angleUnitCode.
@@ -538,7 +539,7 @@ class ScientificCalculatorInitialState(
         )
     }
 
-    /*
+    /**
     * Calculates arcsinus of entered number(placed in mainString field of scientificCalculatorDataEntity)
     * and place result angle to the same field. Unit of angle depends on what is in angleUnitCode argument.
     * History of operation writes to historyString field and also depends on angleUnitCode.
@@ -551,22 +552,44 @@ class ScientificCalculatorInitialState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
+        val enteredNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
         val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> asin(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-            RADIANS_ANGLE_CODE -> asin(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-            GRADS_ANGLE_CODE -> asin(radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-            else -> asin(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            DEGREES_ANGLE_CODE -> degreesFromRadians(asin(enteredNumber))
+            RADIANS_ANGLE_CODE -> asin(enteredNumber)
+            GRADS_ANGLE_CODE -> gradsFromRadians(asin(enteredNumber))
+            else -> degreesFromRadians(asin(enteredNumber))
         }
         val operationString = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> "sind"
-            RADIANS_ANGLE_CODE -> "sinr"
-            GRADS_ANGLE_CODE -> "sing"
-            else -> "sind"
+            DEGREES_ANGLE_CODE -> "asind"
+            RADIANS_ANGLE_CODE -> "asinr"
+            GRADS_ANGLE_CODE -> "asing"
+            else -> "asind"
         }
 
-        return if ()
+        return if (abs(enteredNumber) > 1) ScientificCalculatorErrorState(
+            scientificCalculatorDataEntity.copy(
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})",
+                errorCode = UNKNOWN_ERROR_CODE
+            )
+        ) else ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(result),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /**
+     * Calculates square of entered number(placed in mainString field of scientificCalculatorDataEntity)
+     * Result of operation placed to mainString field.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+     * result of implemented operation placed in mainString field.
+     * ScientificCalculatorErrorState - if result of operation is too big
+     * and overflow of Double number was happened.
+     */
     override fun squareNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }

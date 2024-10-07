@@ -119,4 +119,12 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
     fun radiansFromGrads(angleInGrads: Double): Double {
         return (PI*angleInGrads)/200
     }
+
+    fun degreesFromRadians(angleInRadians: Double): Double {
+        return (angleInRadians*180)/ PI
+    }
+
+    fun gradsFromRadians(angleInRadians: Double): Double {
+        return (angleInRadians*200)/ PI
+    }
 }
