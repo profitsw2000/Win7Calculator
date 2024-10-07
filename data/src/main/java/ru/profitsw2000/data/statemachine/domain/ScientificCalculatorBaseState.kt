@@ -4,6 +4,7 @@ import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.OperationType
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
+import kotlin.math.PI
 
 interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
@@ -110,4 +111,12 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
     fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
     fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun radiansFromDegrees(angleInDegrees: Double): Double {
+        return (PI*angleInDegrees)/180
+    }
+
+    fun radiansFromGrads(angleInGrads: Double): Double {
+        return (PI*angleInGrads)/200
+    }
 }

@@ -20,6 +20,7 @@ import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
 import ru.profitsw2000.utils.calcSinh
+import kotlin.math.asinh
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sinh
@@ -447,10 +448,7 @@ class ScientificCalculatorInitialState(
     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
     * result of implemented operation placed in mainString field
      */
-    override fun hyperbolicSinus(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState {
+    override fun hyperbolicSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
 
         return try {
             ScientificCalculatorFirstOperandReadState(
@@ -488,12 +486,18 @@ class ScientificCalculatorInitialState(
     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
     * result of implemented operation placed in mainString field
      */
-    override fun hyperbolicArcSinus(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState {
-        TODO("Not yet implemented")
+    override fun hyperbolicArcSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    asinh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}asinh(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
+
 
     override fun sinus(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
@@ -521,17 +525,11 @@ class ScientificCalculatorInitialState(
         TODO("Not yet implemented")
     }
 
-    override fun hyperbolicCosine(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState {
+    override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
-    override fun hyperbolicArcCosine(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState {
+    override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
@@ -573,11 +571,17 @@ class ScientificCalculatorInitialState(
         TODO("Not yet implemented")
     }
 
-    override fun tangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+    override fun tangent(
+        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
+        angleUnitCode: Int
+    ): CalculatorState {
         TODO("Not yet implemented")
     }
 
-    override fun arcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+    override fun arcTangent(
+        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
+        angleUnitCode: Int
+    ): CalculatorState {
         TODO("Not yet implemented")
     }
 
