@@ -44,15 +44,9 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
     fun fractionOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
-    fun hyperbolicSinus(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState
+    fun hyperbolicSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
-    fun hyperbolicArcSinus(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState
+    fun hyperbolicArcSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
     fun sinus(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
@@ -70,15 +64,9 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
     fun decimalToDegrees(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
-    fun hyperbolicCosine(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState
+    fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
-    fun hyperbolicArcCosine(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState
+    fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
     fun cosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
@@ -103,9 +91,13 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
     fun hyperbolicArcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
-    fun tangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+    fun tangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
+                angleUnitCode: Int
+    ): CalculatorState
 
-    fun arcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+    fun arcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
+                   angleUnitCode: Int
+    ): CalculatorState
 
     fun cubeNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 

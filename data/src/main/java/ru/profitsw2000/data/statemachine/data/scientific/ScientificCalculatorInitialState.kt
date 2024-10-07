@@ -481,6 +481,13 @@ class ScientificCalculatorInitialState(
         }
     }
 
+    /*
+    * Calculates hyperbolic arcsinus of entered number(placed in mainString field of scientificCalculatorDataEntity)
+    * and place it to the same field. History of operation writes to historyString field
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+    * result of implemented operation placed in mainString field
+     */
     override fun hyperbolicArcSinus(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
