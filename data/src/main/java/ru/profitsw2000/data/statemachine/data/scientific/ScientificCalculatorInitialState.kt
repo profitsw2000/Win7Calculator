@@ -1,8 +1,11 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.OperationType
@@ -20,9 +23,11 @@ import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
 import ru.profitsw2000.utils.calcSinh
+import kotlin.math.asin
 import kotlin.math.asinh
 import kotlin.math.exp
 import kotlin.math.ln
+import kotlin.math.sin
 import kotlin.math.sinh
 import kotlin.math.sqrt
 import kotlin.math.truncate
@@ -498,19 +503,68 @@ class ScientificCalculatorInitialState(
         )
     }
 
-
+    /*
+    * Calculates sinus of entered angle(placed in mainString field of scientificCalculatorDataEntity)
+    * and place result to the same field. Unit of angle depends on what is in angleUnitCode argument.
+    * History of operation writes to historyString field and also depends on angleUnitCode.
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+    * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+    * result of implemented operation placed in mainString field
+     */
     override fun sinus(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val result = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> sin(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            RADIANS_ANGLE_CODE -> sin(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+            GRADS_ANGLE_CODE -> sin(radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            else -> sin(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "sind"
+            RADIANS_ANGLE_CODE -> "sinr"
+            GRADS_ANGLE_CODE -> "sing"
+            else -> "sind"
+        }
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(result),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /*
+    * Calculates arcsinus of entered number(placed in mainString field of scientificCalculatorDataEntity)
+    * and place result angle to the same field. Unit of angle depends on what is in angleUnitCode argument.
+    * History of operation writes to historyString field and also depends on angleUnitCode.
+    * @param scientificCalculatorDataEntity - contains current calculator data
+    * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+    * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+    * result of implemented operation placed in mainString field
+     */
     override fun arcSinus(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val result = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> asin(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            RADIANS_ANGLE_CODE -> asin(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+            GRADS_ANGLE_CODE -> asin(radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            else -> asin(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "sind"
+            RADIANS_ANGLE_CODE -> "sinr"
+            GRADS_ANGLE_CODE -> "sing"
+            else -> "sind"
+        }
+
+        return if ()
     }
 
     override fun squareNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
