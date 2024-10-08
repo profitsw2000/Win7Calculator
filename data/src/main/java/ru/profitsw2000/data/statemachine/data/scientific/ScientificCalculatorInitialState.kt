@@ -662,8 +662,27 @@ class ScientificCalculatorInitialState(
         }
     }
 
+    /**
+     * Converts fractional part of entered angle value(placed in mainString field of scientificCalculatorDataEntity)
+     * from decimal format to minutes format.
+     * Result of conversion placed to mainString field.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+     * result of implemented operation placed in mainString field.
+     */
     override fun decimalToDegrees(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val fraction = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)%1
+        val integer = truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+        val convertedFraction = (fraction*60)/100
+        val convertedValue = integer + convertedFraction
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(convertedValue),
+                historyString = "${scientificCalculatorDataEntity.historyString}dms(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
     override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
