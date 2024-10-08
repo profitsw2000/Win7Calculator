@@ -1,5 +1,7 @@
 package ru.profitsw2000.utils
 
+import kotlin.math.PI
+import kotlin.math.exp
 import kotlin.math.pow
 import kotlin.math.sinh
 
@@ -28,8 +30,11 @@ fun Double.powerTo(x: Double): Double {
 
 fun Double.factorial(): Double {
     val result = if (this % 1 == 0.0) factorialRecursive(this)
-    else
+    else gamma(this)
 
+    checkForOverflow(result)
+
+    return result
 }
 
 private fun checkForOverflow(double: Double) {
@@ -45,5 +50,12 @@ private fun factorialRecursive(x: Double): Double {
 }
 
 private fun gamma(x: Double): Double {
-
+    val n = x + 1
+    return ((2*PI*n).pow(1/2) * n.pow(n-1) * exp(-n))/
+            (1 - sterling_koef_1/n +
+                    sterling_koef_2/n.pow(2) +
+                    sterling_koef_3/n.pow(3) +
+                    sterling_koef_4/n.pow(4) +
+                    sterling_koef_5/n.pow(5) +
+                    sterling_koef_6/n.pow(6))
 }

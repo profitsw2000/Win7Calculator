@@ -24,6 +24,7 @@ import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
 import ru.profitsw2000.utils.calcSinh
+import ru.profitsw2000.utils.factorial
 import ru.profitsw2000.utils.powerTo
 import kotlin.math.abs
 import kotlin.math.asin
@@ -622,8 +623,43 @@ class ScientificCalculatorInitialState(
         }
     }
 
+    /**
+     * Calculates factorial of entered number(placed in mainString field of scientificCalculatorDataEntity)
+     * Result of operation placed to mainString field.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+     * result of implemented operation placed in mainString field.
+     * ScientificCalculatorErrorState - if result of operation is too big
+     * and overflow of Double number was happened.
+     */
     override fun factorial(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).factorial()
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun decimalToDegrees(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
