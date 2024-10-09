@@ -19,5 +19,7 @@ enum class ScientificOperationType {
     MULTIPLY,
     DIVIDE,
     MODULUS,
+    POWER_OF,
+    ROOT_OF,
     NO_OPERATION
 }
