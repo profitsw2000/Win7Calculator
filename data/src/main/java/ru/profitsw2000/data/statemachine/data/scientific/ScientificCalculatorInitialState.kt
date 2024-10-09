@@ -8,25 +8,17 @@ import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
-import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
-import ru.profitsw2000.data.entity.OperationType
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
-import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorErrorState
-import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorFirstOperandInputState
-import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorFirstOperandReadState
-import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorInitialState
-import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorOperationResultState
 import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorPrimitiveMathOperationState
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
-import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
-import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
 import ru.profitsw2000.utils.calcCosh
 import ru.profitsw2000.utils.calcSinh
 import ru.profitsw2000.utils.factorial
 import ru.profitsw2000.utils.powerTo
+import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.acosh
@@ -36,7 +28,6 @@ import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sin
-import kotlin.math.sinh
 import kotlin.math.sqrt
 import kotlin.math.truncate
 
@@ -265,7 +256,7 @@ class ScientificCalculatorInitialState(
     ): CalculatorState {
         val historyString = "${scientificCalculatorDataEntity.mainString}$HISTORY_STRING_SPACE_LETTER$operationString"
 
-        return ScientificCalculatorPrimitiveMathOperationState(
+        return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
                 historyString = historyString,
                 scientificOperationType = scientificOperationType,
@@ -825,20 +816,56 @@ class ScientificCalculatorInitialState(
         )
     }
 
+    /**
+     * Changes current state to ScientificCalculatorMathOperationState,
+     * input number and operation sign writes to history string of calculator data,
+     * same as operation type.
+     * @param1 scientificCalculatorDataEntity - contains current calculator data,
+     * @param2 scientificOperationType - type of math operation
+     * @param3 operationString - operation sign, need to be added in history string
+     * @return GeneralCalculatorPrimitiveMathOperationState with changed historyString and operationType fields of calculator data
+     */
     override fun mathOperation(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = "${scientificCalculatorDataEntity.mainString}$HISTORY_STRING_SPACE_LETTER$operationString"
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                historyString = historyString,
+                scientificOperationType = scientificOperationType,
+                operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+            )
+        )
     }
 
+    /**
+     * Placed Pi number to the mainString field of scientificCalculatorDataEntity
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with scientificCalculatorDataEntity with Pi
+     * value placed in mainString field
+     */
     override fun piNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(PI)
+            )
+        )
     }
 
+    /**
+     * Placed 2*Pi number to the mainString field of scientificCalculatorDataEntity
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with scientificCalculatorDataEntity with 2*Pi
+     * value placed in mainString field
+     */
     override fun doublePiNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(2*PI)
+            )
+        )
     }
 
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
