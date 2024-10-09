@@ -1,6 +1,7 @@
 package ru.profitsw2000.utils
 
 import kotlin.math.PI
+import kotlin.math.cosh
 import kotlin.math.exp
 import kotlin.math.pow
 import kotlin.math.sinh
@@ -14,6 +15,14 @@ private const val sterling_koef_6 = 5246819.0/75246796800.0
 
 fun Double.calcSinh(): Double {
     val result = sinh(this)
+
+    checkForOverflow(result)
+
+    return result
+}
+
+fun Double.calcCosh(): Double {
+    val result = cosh(this)
 
     checkForOverflow(result)
 

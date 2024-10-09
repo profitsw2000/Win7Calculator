@@ -23,12 +23,16 @@ import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.GeneralCalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorState
+import ru.profitsw2000.utils.calcCosh
 import ru.profitsw2000.utils.calcSinh
 import ru.profitsw2000.utils.factorial
 import ru.profitsw2000.utils.powerTo
 import kotlin.math.abs
+import kotlin.math.acos
+import kotlin.math.acosh
 import kotlin.math.asin
 import kotlin.math.asinh
+import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sin
@@ -685,26 +689,140 @@ class ScientificCalculatorInitialState(
         )
     }
 
+    /**
+     * Calculates hyperbolic cosine of entered number(placed in mainString field of scientificCalculatorDataEntity)
+     * and place result to the same field. History of operation writes to historyString field
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+     * result of implemented operation placed in mainString field if no exception happened.
+     * Otherwise ScientificCalculatorErrorState with appropriate error code
+     */
     override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).calcCosh()
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates hyperbolic arccosine of entered number(placed in mainString field of scientificCalculatorDataEntity)
+     * and place it to the same field. History of operation writes to historyString field
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+     * result of implemented operation placed in mainString field
+     */
     override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    acosh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /**
+     * Calculates cosine of entered angle(placed in mainString field of scientificCalculatorDataEntity)
+     * and place result to the same field. Unit of angle depends on what is in angleUnitCode argument.
+     * History of operation writes to historyString field and also depends on angleUnitCode.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+     * result of implemented operation placed in mainString field
+     */
     override fun cosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val result = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> cos(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            RADIANS_ANGLE_CODE -> cos(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+            GRADS_ANGLE_CODE -> cos(radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            else -> cos(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "cosd"
+            RADIANS_ANGLE_CODE -> "cosr"
+            GRADS_ANGLE_CODE -> "cosg"
+            else -> "cosd"
+        }
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(result),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /**
+     * Calculates arccosine of entered number(placed in mainString field of scientificCalculatorDataEntity)
+     * and place result angle to the same field. Unit of angle depends on what is in angleUnitCode argument.
+     * History of operation writes to historyString field and also depends on angleUnitCode.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and
+     * result of implemented operation placed in mainString field or
+     * ScientificCalculatorErrorState if number in mainString field is greater than 1.
+     */
     override fun arcCosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+
+        val enteredNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+        val result = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> degreesFromRadians(acos(enteredNumber))
+            RADIANS_ANGLE_CODE -> acos(enteredNumber)
+            GRADS_ANGLE_CODE -> gradsFromRadians(acos(enteredNumber))
+            else -> degreesFromRadians(acos(enteredNumber))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "acosd"
+            RADIANS_ANGLE_CODE -> "acosr"
+            GRADS_ANGLE_CODE -> "acosg"
+            else -> "acosd"
+        }
+
+        return if (abs(enteredNumber) > 1) ScientificCalculatorErrorState(
+            scientificCalculatorDataEntity.copy(
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})",
+                errorCode = UNKNOWN_ERROR_CODE
+            )
+        ) else ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(result),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
     override fun mathOperation(
