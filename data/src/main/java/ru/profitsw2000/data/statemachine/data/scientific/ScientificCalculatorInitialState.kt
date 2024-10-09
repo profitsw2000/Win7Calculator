@@ -24,11 +24,13 @@ import kotlin.math.acos
 import kotlin.math.acosh
 import kotlin.math.asin
 import kotlin.math.asinh
+import kotlin.math.atanh
 import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlin.math.tanh
 import kotlin.math.truncate
 
 class ScientificCalculatorInitialState(
@@ -868,12 +870,56 @@ class ScientificCalculatorInitialState(
         )
     }
 
+    /**
+     * Calculate hyperbolic tangent of number, placed in mainString field of scientificCalculatorDataEntity
+     * and placed result back to the same field. This operation added to historyString field.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with calculator data placed in scientificCalculatorDataEntity.
+     * mainString of scientificCalculatorDataEntity contain result of tangent calculation,
+     * whereas historyString field appends with record of current operation.
+     */
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    tanh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}tanh(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /**
+     * Calculate hyperbolic arctangent of number, placed in mainString field of scientificCalculatorDataEntity
+     * and placed result back to the same field. This operation added to historyString field.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return
+     * - ScientificCalculatorFirstOperandReadState with calculator data placed in scientificCalculatorDataEntity
+     * if abs of number in mainString field equal or less than 1.
+     * mainString of scientificCalculatorDataEntity contain result of tangent calculation,
+     * whereas historyString field appends with record of current operation.
+     * - ScientificCalculatorErrorState if abs of number in mainString field more than 1.
+     * Error code then recorded in appropriate field.
+     */
     override fun hyperbolicArcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return if (abs(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)) <= 1)
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        atanh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        else ScientificCalculatorErrorState(
+            scientificCalculatorDataEntity.copy(
+                historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                        "${scientificCalculatorDataEntity.mainString})",
+                errorCode = UNKNOWN_ERROR_CODE
+            )
+        )
     }
 
     override fun tangent(
