@@ -953,21 +953,22 @@ class ScientificCalculatorInitialState(
             GRADS_ANGLE_CODE -> "tang"
             else -> "tand"
         }
-        return if (((angleInRadians/PI)*2.0)%2.0 != 0.0)
-            ScientificCalculatorFirstOperandReadState(
+
+        return if (((angleInRadians/PI)*2.0)%2.0 != 0.0 && ((angleInRadians/PI)*2.0)%1.0 == 0.0)
+            ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(tan(angleInRadians)),
                     historyString = "${scientificCalculatorDataEntity.historyString}" +
                             "$operationString(" +
-                            "${scientificCalculatorDataEntity.mainString})"
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
                 )
             )
-        else ScientificCalculatorErrorState(
+        else ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(tan(angleInRadians)),
                 historyString = "${scientificCalculatorDataEntity.historyString}" +
                         "$operationString(" +
-                        "${scientificCalculatorDataEntity.mainString})",
-                errorCode = INVALID_INPUT_ERROR_CODE
+                        "${scientificCalculatorDataEntity.mainString})"
             )
         )
     }
