@@ -30,6 +30,7 @@ import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlin.math.tan
 import kotlin.math.tanh
 import kotlin.math.truncate
 
@@ -922,11 +923,53 @@ class ScientificCalculatorInitialState(
         )
     }
 
+    /**
+     * Calculate tangent of number, placed in mainString field of scientificCalculatorDataEntity
+     * and placed result back to the same field. This operation added to historyString field.
+     * Unit of angle depends on what is in angleUnitCode argument.
+     * History of operation writes to historyString field and also depends on angleUnitCode.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return
+     * - ScientificCalculatorFirstOperandReadState with calculator data placed in scientificCalculatorDataEntity.
+     * mainString of scientificCalculatorDataEntity contain result of tangent calculation,
+     * whereas historyString field appends with record of current operation if calculation
+     * completed successfully.
+     * - ScientificCalculatorErrorState if overflow is happened.
+     * Error code then recorded in appropriate field.
+     */
     override fun tangent(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val angleInRadians = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+            RADIANS_ANGLE_CODE -> calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+            GRADS_ANGLE_CODE -> radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+            else -> radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "tand"
+            RADIANS_ANGLE_CODE -> "tanr"
+            GRADS_ANGLE_CODE -> "tang"
+            else -> "tand"
+        }
+        return if (((angleInRadians/PI)*2.0)%2.0 != 0.0)
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(tan(angleInRadians)),
+                    historyString = "${scientificCalculatorDataEntity.historyString}" +
+                            "$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        else ScientificCalculatorErrorState(
+            scientificCalculatorDataEntity.copy(
+                historyString = "${scientificCalculatorDataEntity.historyString}" +
+                        "$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})",
+                errorCode = INVALID_INPUT_ERROR_CODE
+            )
+        )
     }
 
     override fun arcTangent(
