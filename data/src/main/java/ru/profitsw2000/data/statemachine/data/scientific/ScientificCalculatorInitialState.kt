@@ -24,6 +24,7 @@ import kotlin.math.acos
 import kotlin.math.acosh
 import kotlin.math.asin
 import kotlin.math.asinh
+import kotlin.math.atan
 import kotlin.math.atanh
 import kotlin.math.cos
 import kotlin.math.exp
@@ -972,11 +973,44 @@ class ScientificCalculatorInitialState(
         )
     }
 
+    /**
+     * Calculates arctangent of number from mainString field of scientificCalculatorDataEntity.
+     * mainString field contains String type variable, therefore it converts to Double type,
+     * make calculation, convert it to String and write it back to mainString field.
+     * Result number depends on required angle units(degrees, radians or grads). Required
+     * angle units defined by angleUnitCode parameter.
+     * Symbol of completed operation appended to historyString field of scientificCalculatorDataEntity.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code for required angle units.
+     * @return ScientificCalculatorFirstOperandReadState with changed
+     * mainString and historyString fields of scientificCalculatorDataEntity field.
+     */
     override fun arcTangent(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+
+        val enteredNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+        val result = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> degreesFromRadians(atan(enteredNumber))
+            RADIANS_ANGLE_CODE -> atan(enteredNumber)
+            GRADS_ANGLE_CODE -> gradsFromRadians(atan(enteredNumber))
+            else -> degreesFromRadians(atan(enteredNumber))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "atand"
+            RADIANS_ANGLE_CODE -> "atanr"
+            GRADS_ANGLE_CODE -> "atang"
+            else -> "atand"
+        }
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(result),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
     override fun cubeNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
