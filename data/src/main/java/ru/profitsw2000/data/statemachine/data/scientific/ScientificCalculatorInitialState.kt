@@ -713,7 +713,7 @@ class ScientificCalculatorInitialState(
             )
         } catch (exception: Exception) {
             ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
+                ScientificCalculatorDataEntity(
                     historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
                             "${scientificCalculatorDataEntity.mainString})",
                     errorCode = UNKNOWN_ERROR_CODE
@@ -806,7 +806,7 @@ class ScientificCalculatorInitialState(
         }
 
         return if (abs(enteredNumber) > 1) ScientificCalculatorErrorState(
-            scientificCalculatorDataEntity.copy(
+            ScientificCalculatorDataEntity(
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString})",
                 errorCode = UNKNOWN_ERROR_CODE
@@ -916,7 +916,7 @@ class ScientificCalculatorInitialState(
                 )
             )
         else ScientificCalculatorErrorState(
-            scientificCalculatorDataEntity.copy(
+            ScientificCalculatorDataEntity(
                 historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
                         "${scientificCalculatorDataEntity.mainString})",
                 errorCode = UNKNOWN_ERROR_CODE
@@ -957,7 +957,7 @@ class ScientificCalculatorInitialState(
 
         return if (((angleInRadians/PI)*2.0)%2.0 != 0.0 && ((angleInRadians/PI)*2.0)%1.0 == 0.0)
             ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
+                ScientificCalculatorDataEntity(
                     historyString = "${scientificCalculatorDataEntity.historyString}" +
                             "$operationString(" +
                             "${scientificCalculatorDataEntity.mainString})",
@@ -1014,8 +1014,48 @@ class ScientificCalculatorInitialState(
         )
     }
 
+    /**
+     * Calculates third power of number placed in mainString field of scientificCalculatorDataEntity.
+     * mainString field contains String type variable, therefore it converts to Double type,
+     * make calculation, convert it to String and write it back to mainString field.
+     * Symbol of completed operation appended to historyString field of scientificCalculatorDataEntity.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return
+     * - ScientificCalculatorFirstOperandReadState with changed
+     * mainString and historyString fields of scientificCalculatorDataEntity field if operation
+     * completed successfully.
+     * - ScientificCalculatorErrorState if operation completed with error(overflow or other). Error code placed
+     * to errorCode field of new created scientificCalculatorDataEntity, where historyString
+     * remain the same, but appended by symbol of operation.
+     *
+     */
     override fun cubeNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(3.0)),
+                    historyString = "${scientificCalculatorDataEntity.historyString}cube(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cube(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cube(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun cubeRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
