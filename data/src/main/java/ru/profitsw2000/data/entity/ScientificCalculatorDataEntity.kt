@@ -10,7 +10,8 @@ data class ScientificCalculatorDataEntity(
     val scientificOperationType: ScientificOperationType = ScientificOperationType.NO_OPERATION,
     val memoryNumber: Double? = null,
     val errorCode: Int = NO_ERROR_CODE,
-    val prevState: ScientificCalculatorBaseState? = null
+    val prevState: ScientificCalculatorBaseState? = null,
+    val isScientificNotation: Boolean = false
 )
 
 enum class ScientificOperationType {
