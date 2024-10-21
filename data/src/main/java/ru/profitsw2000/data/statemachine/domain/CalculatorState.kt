@@ -36,4 +36,20 @@ interface CalculatorState {
         val decimalFormat = DecimalFormat("###.################")//("###.################")
         return decimalFormat.format(decimalNumber).replace('.', ',')
     }
+
+    /**
+     * Converts double number to string with require format - traditional or with scientific notation.
+     * Required format defined by second parameter.
+     * @param number - double number to convert
+     * @param isScientificNotation - boolean variable, that defines required format. If it false
+     * then required format is traditional, otherwise it is scientific notation.
+     */
+    fun doubleToCalculatorString(number: Double, isScientificNotation: Boolean): String {
+        return if (isScientificNotation) {
+            doubleToCalculatorString(number)
+        } else {
+            number.toString()
+        }
+    }
+
 }

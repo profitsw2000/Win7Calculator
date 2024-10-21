@@ -1102,8 +1102,25 @@ class ScientificCalculatorInitialState(
         }
     }
 
+    /**
+     * Changed boolean isScientificNotation to opposite value and according to it
+     * converts string with double number placed in mainString field of scientificCalculatorData from
+     * plain string format to scientific notation format or vice versa. Result of conversion placed to the same field.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstInputReadState with converted mainString field of scientificCalculatorDataEntity
+     */
     override fun fixedToExponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val isScientificNotation = !(scientificCalculatorDataEntity.isScientificNotation)
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    calculatorStringToDouble(scientificCalculatorDataEntity.mainString),
+                    isScientificNotation
+                ),
+                isScientificNotation = isScientificNotation
+            )
+        )
     }
 
     override fun exponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
