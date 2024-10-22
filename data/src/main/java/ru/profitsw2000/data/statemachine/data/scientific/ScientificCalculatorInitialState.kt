@@ -1124,7 +1124,13 @@ class ScientificCalculatorInitialState(
     }
 
     override fun exponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val mainString = if (scientificCalculatorDataEntity.mainString.contains(','))
+            "${scientificCalculatorDataEntity.mainString}e+0"
+        else "${scientificCalculatorDataEntity.mainString},e+0"
+
+        return ScientificCalculatorPowerNumberInputState(
+            scientificCalculatorDataEntity.copy(mainString = mainString)
+        )
     }
 
     override fun modulus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
