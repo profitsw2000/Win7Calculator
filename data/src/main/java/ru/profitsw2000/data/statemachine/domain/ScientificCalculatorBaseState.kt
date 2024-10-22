@@ -108,6 +108,8 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
     fun exponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
+    fun modulus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
     fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
     fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState

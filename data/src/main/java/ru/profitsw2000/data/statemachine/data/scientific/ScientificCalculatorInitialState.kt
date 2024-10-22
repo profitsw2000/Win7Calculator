@@ -1127,6 +1127,10 @@ class ScientificCalculatorInitialState(
         TODO("Not yet implemented")
     }
 
+    override fun modulus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        TODO("Not yet implemented")
+    }
+
     override fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
