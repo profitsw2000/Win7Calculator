@@ -29,6 +29,7 @@ import kotlin.math.atanh
 import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
+import kotlin.math.log10
 import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.tan
@@ -331,10 +332,10 @@ class ScientificCalculatorInitialState(
      */
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
 
-        if (scientificCalculatorDataEntity.prevState == null)
-            return this
+        return if (scientificCalculatorDataEntity.prevState == null)
+            this
         else
-            return ScientificCalculatorInitialState(
+            ScientificCalculatorInitialState(
                 scientificCalculatorDataEntity
                     .prevState
                     .scientificCalculatorDataEntity.copy(
@@ -1133,15 +1134,38 @@ class ScientificCalculatorInitialState(
         )
     }
 
-    override fun modulus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
-    }
-
     override fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) <= 0)
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}log(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            ) else
+                ScientificCalculatorFirstOperandReadState(
+                    scientificCalculatorDataEntity.copy(
+                        mainString = doubleToCalculatorString(
+                            log10(calculatorStringToDouble(
+                                scientificCalculatorDataEntity.mainString
+                                )
+                            )
+                        ),
+                        historyString = "${scientificCalculatorDataEntity.historyString}log(" +
+                                "${scientificCalculatorDataEntity.mainString})"
+                    )
+                )
     }
 
     override fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    10.0.powerTo(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 }
