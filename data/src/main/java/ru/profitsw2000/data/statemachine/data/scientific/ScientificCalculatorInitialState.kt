@@ -1124,6 +1124,15 @@ class ScientificCalculatorInitialState(
         )
     }
 
+    /**
+     * Changed mainString field of scientificCalculatorDataEntity parameter by adding
+     * to string additional symbols, transform it from conventional format of displayed number
+     * to format with power (exponential) part(looks like (base),e+(power)). Changed parameter
+     * writes to returned state instance.
+     * @param - scientificCalculatorDataEntity contains current calculator data
+     * @return - ScientificCalculatorPowerNumberInputState with changed scientificCalculatorDataEntity
+     * parameter as constructor.
+     */
     override fun exponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         val mainString = if (scientificCalculatorDataEntity.mainString.contains(','))
             "${scientificCalculatorDataEntity.mainString}e+0"
@@ -1134,6 +1143,21 @@ class ScientificCalculatorInitialState(
         )
     }
 
+    /**
+     * Takes number by converting mainString field of scientificCalculatorDataEntity
+     * parameter to double and calculates logarithm base ten of that number. Result number
+     * converts to string and writes it to mainString field of variable get by copying
+     * scientificCalculatorDataEntity parameter. Symbol of operation appended to historyString
+     * field and writes to historyString newly created variable. If calculation of logarithm
+     * completed with error, creates new variable of ScientificCalculatorDataEntity type,
+     * writes to historyString symbol of operation appended to historyString field of
+     * scientificCalculatorDataEntity parameter and error code number to errorCode field.
+     * Newly created var writes to returned state instance.
+     * @param - scientificCalculatorDataEntity contains current calculator data
+     * @return - ScientificCalculatorPowerNumberInputState with changed scientificCalculatorDataEntity
+     * parameter as constructor.
+     * - ScientificCalculatorErrorState if calculation completed with error.
+     */
     override fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) <= 0)
             ScientificCalculatorErrorState(
@@ -1144,7 +1168,7 @@ class ScientificCalculatorInitialState(
                 )
             ) else
                 ScientificCalculatorFirstOperandReadState(
-                    scientificCalculatorDataEntity.copy(
+                    ScientificCalculatorDataEntity(
                         mainString = doubleToCalculatorString(
                             log10(calculatorStringToDouble(
                                 scientificCalculatorDataEntity.mainString
@@ -1157,6 +1181,16 @@ class ScientificCalculatorInitialState(
                 )
     }
 
+    /**
+     * Takes number by converting mainString field of scientificCalculatorDataEntity
+     * parameter to double and calculates result got from raising 10 to power of number.
+     * Result number converts to string and writes it to mainString field of variable get by copying
+     * scientificCalculatorDataEntity parameter. Symbol of operation appended to historyString
+     * field of param and writes to historyString newly created variable.
+     * @param - scientificCalculatorDataEntity contains current calculator data
+     * @return - ScientificCalculatorFirstOperandReadState with changed scientificCalculatorDataEntity
+     * parameter as constructor.
+     */
     override fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
