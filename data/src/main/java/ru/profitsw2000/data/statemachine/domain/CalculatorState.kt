@@ -34,7 +34,8 @@ interface CalculatorState {
         val decimalNumber = BigDecimal(number).setScale(newScale, RoundingMode.HALF_EVEN)
 
         val decimalFormat = DecimalFormat("###.################")//("###.################")
-        return decimalFormat.format(decimalNumber).replace('.', ',')
+        return if (!isOutOfMaxDigitNumber(number)) decimalFormat.format(decimalNumber).replace('.', ',')
+        else number.toString().replace('.', ',')
     }
 
     /**
@@ -45,11 +46,22 @@ interface CalculatorState {
      * then required format is traditional, otherwise it is scientific notation.
      */
     fun doubleToCalculatorString(number: Double, isScientificNotation: Boolean): String {
-        return if (isScientificNotation) {
-            doubleToCalculatorString(number)
+        return if (!isScientificNotation) {
+            if (isOutOfMaxDigitNumber(number)) number.toString().replace('.', ',')
+            else doubleToCalculatorString(number)
         } else {
-            number.toString()
+            number.toString().replace('.', ',')
         }
     }
 
+    /**
+     * Defines if double number is in certain range, so contain certain amount of digit.
+     * @param number - double number to define it in range
+     * @return - true if is out of range and false if otherwise
+     */
+    fun isOutOfMaxDigitNumber(number: Double): Boolean {
+
+        return (number < 1.0e+32) && (number > -1.0e+32) && (number > 1.0e-32) && (number < -1.0e-32)
+
+    }
 }

@@ -118,7 +118,11 @@ class ScientificCalculatorInitialState(
             this
         } else {
             ScientificCalculatorFirstOperandReadState(
-                scientificCalculatorDataEntity.copy(mainString = doubleToCalculatorString(scientificCalculatorDataEntity.memoryNumber))
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        scientificCalculatorDataEntity.memoryNumber
+                    )
+                )
             )
         }
     }
