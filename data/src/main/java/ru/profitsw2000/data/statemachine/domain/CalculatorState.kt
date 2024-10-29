@@ -1,6 +1,7 @@
 package ru.profitsw2000.data.statemachine.domain
 
 import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -29,13 +30,14 @@ interface CalculatorState {
      * @return string, formatted specifically for calculator display
      */
     fun doubleToCalculatorString(number: Double): String {
-        val numberOfWholeInts = number.toString().split('.').elementAt(0).length
+
+        val decimalFormat = DecimalFormat("###.##################")//("###.################")
+        val numberOfWholeInts = decimalFormat.format(number).split(',').elementAt(0).length
         val newScale = GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER - numberOfWholeInts
         val decimalNumber = BigDecimal(number).setScale(newScale, RoundingMode.HALF_UP)
 
-        val decimalFormat = DecimalFormat("###.################")//("###.################")
         return if (!isOutOfMaxDigitNumber(number)) decimalFormat.format(decimalNumber).replace('.', ',')
-        else number.toString().replace('.', ',')
+        else number.toString().replace('.', ',').replace("E", "e+")
     }
 
     /**
@@ -61,7 +63,7 @@ interface CalculatorState {
      */
     fun isOutOfMaxDigitNumber(number: Double): Boolean {
 
-        return (number < 1.0e+32) && (number > -1.0e+32) && (number > 1.0e-32) && (number < -1.0e-32)
+        return !((number < 1.0E16 && number > 1.0E-16) || (number > -1.0E16 && number < -1.0E-16))
 
     }
 }

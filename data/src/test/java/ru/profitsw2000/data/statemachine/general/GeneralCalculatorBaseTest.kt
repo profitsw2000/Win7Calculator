@@ -9,10 +9,10 @@ class GeneralCalculatorBaseTest {
     @Test
     fun simpleNumber() {
         assertEquals(
-            "123456789012345,1",
+            "1,2345678901234568e+22",
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
-            ).doubleToCalculatorString(123456789012345.123)
+            ).doubleToCalculatorString(12345678901234567890123.0)
         )
     }
 }
