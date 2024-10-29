@@ -84,17 +84,11 @@ class ScientificCalculatorOperationResultState(
         TODO("Not yet implemented")
     }
 
-    override fun hyperbolicSinus(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState {
+    override fun hyperbolicSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
-    override fun hyperbolicArcSinus(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState {
+    override fun hyperbolicArcSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
@@ -124,17 +118,11 @@ class ScientificCalculatorOperationResultState(
         TODO("Not yet implemented")
     }
 
-    override fun hyperbolicCosine(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState {
+    override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
-    override fun hyperbolicArcCosine(
-        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
-        angleUnitCode: Int
-    ): CalculatorState {
+    override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
@@ -176,11 +164,17 @@ class ScientificCalculatorOperationResultState(
         TODO("Not yet implemented")
     }
 
-    override fun tangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+    override fun tangent(
+        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
+        angleUnitCode: Int
+    ): CalculatorState {
         TODO("Not yet implemented")
     }
 
-    override fun arcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+    override fun arcTangent(
+        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
+        angleUnitCode: Int
+    ): CalculatorState {
         TODO("Not yet implemented")
     }
 

@@ -31,7 +31,7 @@ interface CalculatorState {
     fun doubleToCalculatorString(number: Double): String {
         val numberOfWholeInts = number.toString().split('.').elementAt(0).length
         val newScale = GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER - numberOfWholeInts
-        val decimalNumber = BigDecimal(number).setScale(newScale, RoundingMode.HALF_EVEN)
+        val decimalNumber = BigDecimal(number).setScale(newScale, RoundingMode.HALF_UP)
 
         val decimalFormat = DecimalFormat("###.################")//("###.################")
         return if (!isOutOfMaxDigitNumber(number)) decimalFormat.format(decimalNumber).replace('.', ',')
