@@ -1,6 +1,6 @@
 package ru.profitsw2000.data.statemachine.domain
 
-import ru.profitsw2000.data.constants.MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -30,7 +30,7 @@ interface CalculatorState {
      */
     fun doubleToCalculatorString(number: Double): String {
         val numberOfWholeInts = number.toString().split('.').elementAt(0).length
-        val newScale = MAIN_STRING_MAX_DIGIT_NUMBER - numberOfWholeInts
+        val newScale = GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER - numberOfWholeInts
         val decimalNumber = BigDecimal(number).setScale(newScale, RoundingMode.HALF_EVEN)
 
         val decimalFormat = DecimalFormat("###.################")//("###.################")

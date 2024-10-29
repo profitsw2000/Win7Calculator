@@ -9,11 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.MenuCompat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.profitsw2000.data.constants.BUTTON_ADD_CODE
 import ru.profitsw2000.data.constants.BUTTON_BACKSPACE_CODE
@@ -34,7 +31,6 @@ import ru.profitsw2000.data.constants.BUTTON_SQUARE_ROOT_CODE
 import ru.profitsw2000.data.constants.BUTTON_SUBTRACT_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
-import ru.profitsw2000.data.constants.MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.NO_ERROR_CODE
 import ru.profitsw2000.data.model.GeneralCalculatorDataModel
 import ru.profitsw2000.navig.Controller

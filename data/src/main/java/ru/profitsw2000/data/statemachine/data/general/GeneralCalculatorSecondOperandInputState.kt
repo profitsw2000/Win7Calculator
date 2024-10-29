@@ -4,7 +4,7 @@ import android.util.Log
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
-import ru.profitsw2000.data.constants.MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.OperationType
@@ -202,8 +202,8 @@ class GeneralCalculatorSecondOperandInputState(
 
         return when {
             mainString.contains(",") && digitToAppend == "," -> this
-            mainString.length >= MAIN_STRING_MAX_DIGIT_NUMBER && !(mainString.contains(",")) -> this
-            mainString.length >= (MAIN_STRING_MAX_DIGIT_NUMBER + 1) -> this
+            mainString.length >= GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER && !(mainString.contains(",")) -> this
+            mainString.length >= (GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER + 1) -> this
             mainString == "0" && mainString.length < 2 -> GeneralCalculatorSecondOperandInputState(
                 generalCalculatorDataEntity.copy(
                     mainString = digitToAppend

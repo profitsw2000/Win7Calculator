@@ -19,7 +19,7 @@ import ru.profitsw2000.data.constants.BUTTON_PLUS_MINUS_CODE
 import ru.profitsw2000.data.constants.BUTTON_RECIPROC_CODE
 import ru.profitsw2000.data.constants.BUTTON_SQUARE_ROOT_CODE
 import ru.profitsw2000.data.constants.BUTTON_SUBTRACT_CODE
-import ru.profitsw2000.data.constants.HISTORY_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_HISTORY_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.HISTORY_STRING_OVERFLOW_SIGN
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.domain.GeneralCalculatorRepository
@@ -80,9 +80,9 @@ class GeneralCalculatorRepositoryImpl(
     override fun renderGeneralCalculatorState(newState: GeneralCalculatorState) {
         val historyStringLength = newState.generalCalculatorDataEntity.historyString.replace(
             HISTORY_STRING_SPACE_LETTER, " ").length
-        val historyString = if (historyStringLength > HISTORY_STRING_MAX_DIGIT_NUMBER)
+        val historyString = if (historyStringLength > GENERAL_CALCULATOR_HISTORY_STRING_MAX_DIGIT_NUMBER)
             "$HISTORY_STRING_OVERFLOW_SIGN" +
-                    "${newState.generalCalculatorDataEntity.historyString.drop(historyStringLength - HISTORY_STRING_MAX_DIGIT_NUMBER)}"
+                    "${newState.generalCalculatorDataEntity.historyString.drop(historyStringLength - GENERAL_CALCULATOR_HISTORY_STRING_MAX_DIGIT_NUMBER)}"
         else newState.generalCalculatorDataEntity.historyString
 
         generalCalculatorMutableDataSource.value = calculatorMapper.map(
