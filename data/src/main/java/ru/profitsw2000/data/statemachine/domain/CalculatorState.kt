@@ -31,7 +31,7 @@ interface CalculatorState {
      */
     fun doubleToCalculatorString(number: Double): String {
 
-        val decimalFormat = DecimalFormat("###.################")//("###.################")
+        val decimalFormat = DecimalFormat("###.################")
         val numberOfWholeInts = decimalFormat.format(number).split(',').elementAt(0).length
         val newScale = GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER - numberOfWholeInts
         val decimalNumber = BigDecimal(number).setScale(newScale, RoundingMode.HALF_UP)
@@ -71,7 +71,8 @@ interface CalculatorState {
      * @return String with formatted number
      */
     fun getScientificFormattedString(number: Double): String {
-        return if (number.toString().contains("E-")) number.toString().replace('.', ',').replace("E-", "e-")
-        else number.toString().replace('.', ',').replace("E", "e+")
+
+        return if (number.toString().contains("E-")) number.toString().replace('.', ',').replace("E-", "e-").replace("0e", "e")
+        else number.toString().replace('.', ',').replace("E", "e+").replace("0e", "e")
     }
 }
