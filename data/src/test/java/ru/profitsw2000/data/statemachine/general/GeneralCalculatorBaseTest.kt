@@ -90,7 +90,7 @@ class GeneralCalculatorBaseTest {
     @Test
     fun veryBigPositiveNumberManyDigits() {
         assertEquals(
-            "1,2345678901234567e+19",
+            "1,234567890123457e+19",
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
             ).doubleToCalculatorString(12345678901234567890.0)
@@ -100,7 +100,7 @@ class GeneralCalculatorBaseTest {
     @Test
     fun veryBigNegativeNumberManyDigits() {
         assertEquals(
-            "-1,2345678901234567,e+19",
+            "-1,234567890123457e+19",
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
             ).doubleToCalculatorString(-12345678901234567890.0)
@@ -110,7 +110,7 @@ class GeneralCalculatorBaseTest {
     @Test
     fun verySmallPositiveNumberManyDigits() {
         assertEquals(
-            "1,2345678901234568e-17",
+            "1,234567890123457e-17",
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
             ).doubleToCalculatorString(0.00000000000000001234567890123456789)
@@ -120,7 +120,7 @@ class GeneralCalculatorBaseTest {
     @Test
     fun verySmallNegativeNumberManyDigits() {
         assertEquals(
-            "-1,2345678901234568e-17",
+            "-1,234567890123457e-17",
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
             ).doubleToCalculatorString(-0.00000000000000001234567890123456789)
@@ -160,7 +160,7 @@ class GeneralCalculatorBaseTest {
     @Test
     fun multipleDigitNumberScNot() {
         assertEquals(
-            "123,4567e+2",
+            "1,234567e+2",
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
             ).doubleToCalculatorString(123.4567, true)
@@ -170,7 +170,7 @@ class GeneralCalculatorBaseTest {
     @Test
     fun multipleDigitNegativeNumberScNot() {
         assertEquals(
-            "-123,4567e+2",
+            "-1,234567e+2",
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
             ).doubleToCalculatorString(-123.4567, true)
@@ -203,27 +203,30 @@ class GeneralCalculatorBaseTest {
             123.45,
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
-            ).calculatorStringToDouble("123,45")
+            ).calculatorStringToDouble("123,45"),
+            0.0
         )
     }
 
     @Test
     fun overSixtyDecimalRev() {
         assertEquals(
-            0.123456789012345678,
+            0.12345678901234568,
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
-            ).calculatorStringToDouble("0,123456789012346")
+            ).calculatorStringToDouble("0,1234567890123456789"),
+            0.0
         )
     }
 
     @Test
     fun fourIntSixtyDecimalRev() {
         assertEquals(
-            1234.1234567890123456,
+            1234.123456789012,
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
-            ).calculatorStringToDouble("1234,123456789012")
+            ).calculatorStringToDouble("1234,123456789012"),
+            0.0
         )
     }
 
@@ -233,7 +236,8 @@ class GeneralCalculatorBaseTest {
             -1234.567890,
             GeneralCalculatorInitialState(
                 GeneralCalculatorDataEntity()
-            ).calculatorStringToDouble("-1234,56789")
+            ).calculatorStringToDouble("-1234,56789"),
+            0.0
         )
     }
 

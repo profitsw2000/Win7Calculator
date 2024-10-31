@@ -6,6 +6,8 @@ import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 interface CalculatorState {
 
@@ -71,8 +73,9 @@ interface CalculatorState {
      * @return String with formatted number
      */
     fun getScientificFormattedString(number: Double): String {
+        val  numberString = DecimalFormat("0.0##############E0", DecimalFormatSymbols(Locale.ENGLISH)).format(number)
 
-        return if (number.toString().contains("E-")) number.toString().replace('.', ',').replace("E-", "e-").replace("0e", "e")
-        else number.toString().replace('.', ',').replace("E", "e+").replace("0e", "e")
+        return if (numberString.contains("E-")) numberString.replace('.', ',').replace("E-", "e-").replace("0e", "e")
+        else numberString.replace('.', ',').replace("E", "e+").replace("0e", "e")
     }
 }
