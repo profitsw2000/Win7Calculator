@@ -49,7 +49,28 @@ class ScientificCalculatorInitialStateTest {
         )
 
         assertTrue(ReflectionEquals(trueFirstOperand).matches(
-            numberInMemoryInitialState.readMemory(numberInMemoryData)
+                numberInMemoryInitialState.readMemory(numberInMemoryData)
+            )
+        )
+        assertFalse(ReflectionEquals(falseFirstOperand).matches(
+                numberInMemoryInitialState.readMemory(numberInMemoryData)
+            )
+        )
+    }
+
+    @Test
+    fun savedToMemoryTest() {
+        val falseInitialState = ScientificCalculatorInitialState(
+            ScientificCalculatorDataEntity(
+                memoryNumber = 15.0
+            )
+        )
+
+        assertTrue(ReflectionEquals(baseInitialState).matches(
+            baseInitialState.readMemory(ScientificCalculatorDataEntity())
+        ))
+        assertFalse(ReflectionEquals(falseInitialState).matches(
+            baseInitialState.readMemory(ScientificCalculatorDataEntity())
         ))
     }
 }
