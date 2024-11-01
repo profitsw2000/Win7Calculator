@@ -1,20 +1,55 @@
 package ru.profitsw2000.data.statemachine.general
 
 import org.junit.Test
-import org.junit.Assert.assertEquals
-import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
-import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorInitialState
-
-private val baseData = GeneralCalculatorDataEntity()
-private val numberInMemoryData = GeneralCalculatorDataEntity(memoryNumber = 15.5)
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals
+import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandReadState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorInitialState
 
 class ScientificCalculatorInitialStateTest {
 
+    private val baseInitialState = ScientificCalculatorInitialState(
+        ScientificCalculatorDataEntity()
+    )
+
     @Test
     fun clearMemoryTest() {
-        assertEquals(
-            null,
-            GeneralCalculatorInitialState(numberInMemoryData).clearMemory(numberInMemoryData).generalCalculatorDataEntity.memoryNumber
+        val numberInMemoryData = ScientificCalculatorDataEntity(memoryNumber = 15.0)
+        val numberInMemoryInitialState = ScientificCalculatorInitialState(
+            numberInMemoryData
         )
+
+        assertTrue(ReflectionEquals(baseInitialState).matches(
+            numberInMemoryInitialState.clearMemory(numberInMemoryData)
+        ))
+        assertFalse(ReflectionEquals(numberInMemoryInitialState).matches(
+            numberInMemoryInitialState.clearMemory(numberInMemoryData)
+        ))
+    }
+
+    @Test
+    fun readMemoryTest() {
+        val trueFirstOperand = ScientificCalculatorFirstOperandReadState(
+            ScientificCalculatorDataEntity(
+                mainString = "15",
+                memoryNumber = 15.0
+            )
+        )
+        val falseFirstOperand = ScientificCalculatorFirstOperandReadState(
+            ScientificCalculatorDataEntity(
+                mainString = "1",
+                memoryNumber = 15.0
+            )
+        )
+        val numberInMemoryData = ScientificCalculatorDataEntity(memoryNumber = 15.0)
+        val numberInMemoryInitialState = ScientificCalculatorInitialState(
+            numberInMemoryData
+        )
+
+        assertTrue(ReflectionEquals(trueFirstOperand).matches(
+            numberInMemoryInitialState.readMemory(numberInMemoryData)
+        ))
     }
 }
