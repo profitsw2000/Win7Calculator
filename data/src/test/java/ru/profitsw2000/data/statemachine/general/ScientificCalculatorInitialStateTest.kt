@@ -4,10 +4,16 @@ import org.junit.Test
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
+import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorErrorState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandInputState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandReadState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorInitialState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorMathOperationState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorOperationResultState
 
 class ScientificCalculatorInitialStateTest {
 
@@ -211,6 +217,141 @@ class ScientificCalculatorInitialStateTest {
         ))
         assertFalse(ReflectionEquals(falseInitialState).matches(
             baseInitialState.calculateSquareRoot(falseCalculatorData)
+        ))
+    }
+
+    @Test
+    fun digitInputTest() {
+        val commaInputData = ScientificCalculatorDataEntity(mainString = "0,")
+        val digitInputData = ScientificCalculatorDataEntity(mainString = "3")
+        val falseDigitInputData = ScientificCalculatorDataEntity(mainString = "7")
+        val commaInputState = ScientificCalculatorFirstOperandInputState(commaInputData)
+        val digitInputState = ScientificCalculatorFirstOperandInputState(digitInputData)
+        val falseDigitInputState = ScientificCalculatorFirstOperandInputState(falseDigitInputData)
+
+        assertTrue(ReflectionEquals(commaInputState).matches(
+            baseInitialState.inputDigit(baseCalculatorData, ",")
+        ))
+        assertTrue(ReflectionEquals(digitInputState).matches(
+            baseInitialState.inputDigit(baseCalculatorData, "3")
+        ))
+        assertFalse(ReflectionEquals(falseDigitInputState).matches(
+            baseInitialState.inputDigit(baseCalculatorData, "3")
+        ))
+    }
+
+    @Test
+    fun primitiveMathOperationTest() {
+        val addCalculatorData = ScientificCalculatorDataEntity(
+            historyString = "0$HISTORY_STRING_SPACE_LETTER+",
+            scientificOperationType = ScientificOperationType.PLUS,
+            operand = 0.0
+        )
+        val divideCalculatorData = ScientificCalculatorDataEntity(
+            historyString = "0$HISTORY_STRING_SPACE_LETTER/",
+            scientificOperationType = ScientificOperationType.DIVIDE,
+            operand = 0.0
+        )
+        val addOperationState = ScientificCalculatorMathOperationState(addCalculatorData)
+        val divideOperationState = ScientificCalculatorMathOperationState(divideCalculatorData)
+
+        assertTrue(ReflectionEquals(addOperationState).matches(
+            baseInitialState.primitiveMathOperation(
+                baseCalculatorData,
+                ScientificOperationType.PLUS,
+                "+"
+            )
+        ))
+        assertTrue(ReflectionEquals(divideOperationState).matches(
+            baseInitialState.primitiveMathOperation(
+                baseCalculatorData,
+                ScientificOperationType.DIVIDE,
+                "/"
+            )
+        ))
+        assertFalse(ReflectionEquals(addOperationState).matches(
+            baseInitialState.primitiveMathOperation(
+                baseCalculatorData,
+                ScientificOperationType.DIVIDE,
+                "/"
+            )
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorDataEntity(
+            historyString = "0$HISTORY_STRING_SPACE_LETTER/",
+            scientificOperationType = ScientificOperationType.PLUS,
+            operand = 0.0
+        )).matches(
+            baseInitialState.primitiveMathOperation(
+                baseCalculatorData,
+                ScientificOperationType.PLUS,
+                "+"
+            )
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorDataEntity(
+            historyString = "0$HISTORY_STRING_SPACE_LETTER+",
+            scientificOperationType = ScientificOperationType.MODULUS,
+            operand = 0.0
+        )).matches(
+            baseInitialState.primitiveMathOperation(
+                baseCalculatorData,
+                ScientificOperationType.PLUS,
+                "+"
+            )
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorDataEntity(
+            historyString = "0$HISTORY_STRING_SPACE_LETTER+",
+            scientificOperationType = ScientificOperationType.PLUS,
+            operand = 2.0
+        )).matches(
+            baseInitialState.primitiveMathOperation(
+                baseCalculatorData,
+                ScientificOperationType.PLUS,
+                "+"
+            )
+        ))
+    }
+
+    @Test
+    fun reciprocationTest() {
+        val errorData = ScientificCalculatorDataEntity(
+            historyString = "reciproc(0)",
+            errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorData)
+        val resultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "reciproc(0)"
+        )
+        val resultState = ScientificCalculatorOperationResultState(resultData)
+
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.reciprocOperation(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(resultState).matches(
+            baseInitialState.reciprocOperation(baseCalculatorData)
+        ))
+    }
+
+    @Test
+    fun resultTest() {
+        assertTrue(ReflectionEquals(baseInitialState).matches(
+            baseInitialState.calculateResult(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorOperationResultState(
+            ScientificCalculatorDataEntity())).matches(
+                baseInitialState.calculateResult(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorOperationResultState(
+            ScientificCalculatorDataEntity(
+                mainString = "23"
+            ))).matches(
+            baseInitialState.calculateResult(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorOperationResultState(
+            ScientificCalculatorDataEntity(
+                historyString = "23"
+            ))).matches(
+            baseInitialState.calculateResult(baseCalculatorData)
         ))
     }
 }
