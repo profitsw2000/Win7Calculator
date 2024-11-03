@@ -63,7 +63,7 @@ interface CalculatorState {
      * @return - true if is out of range and false if otherwise
      */
     fun isOutOfMaxDigitNumber(number: Double): Boolean {
-        return !((number < 1.0E16 && number > 1.0E-16) || (number > -1.0E16 && number < -1.0E-16))
+        return !((number < 1.0E16 && number > 1.0E-16) || (number > -1.0E16 && number < -1.0E-16) || number == 0.0)
     }
 
     /**

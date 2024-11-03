@@ -245,9 +245,11 @@ class ScientificCalculatorInitialState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         digitToAppend: String
     ): CalculatorState {
-        return if (digitToAppend  == "0") this
-        else if(digitToAppend == ",") ScientificCalculatorFirstOperandInputState(scientificCalculatorDataEntity.copy(mainString = "0,"))
-        else ScientificCalculatorFirstOperandInputState(scientificCalculatorDataEntity.copy(mainString = digitToAppend))
+        return when (digitToAppend) {
+            "0" -> this
+            "," -> ScientificCalculatorFirstOperandInputState(scientificCalculatorDataEntity.copy(mainString = "0,"))
+            else -> ScientificCalculatorFirstOperandInputState(scientificCalculatorDataEntity.copy(mainString = digitToAppend))
+        }
     }
 
     /**

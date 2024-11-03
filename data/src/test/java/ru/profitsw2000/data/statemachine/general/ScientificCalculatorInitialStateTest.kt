@@ -5,6 +5,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
+import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandReadState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorInitialState
 
@@ -84,18 +85,18 @@ class ScientificCalculatorInitialStateTest {
             mainString = "3,6",
             memoryNumber = 3.6
         )
-        val dataWtihMemory = ScientificCalculatorDataEntity(
+        val dataWithMemory = ScientificCalculatorDataEntity(
             mainString = "10,2",
             memoryNumber = 5.3
         )
-        val dataWtihAddedMemory = ScientificCalculatorDataEntity(
+        val dataWithAddedMemory = ScientificCalculatorDataEntity(
             mainString = "10,2",
             memoryNumber = 15.5
         )
         val initialStateWithNumber = ScientificCalculatorInitialState(dataWithNumber)
         val initialStateWithAddedNumber = ScientificCalculatorInitialState(dataWithAddedNumber)
-        val initialStateWithData = ScientificCalculatorInitialState(dataWtihMemory)
-        val initialStateWithAddedData = ScientificCalculatorInitialState(dataWtihAddedMemory)
+        val initialStateWithData = ScientificCalculatorInitialState(dataWithMemory)
+        val initialStateWithAddedData = ScientificCalculatorInitialState(dataWithAddedMemory)
         val falseInitialStateWithMemory =  ScientificCalculatorInitialState(
             ScientificCalculatorDataEntity(memoryNumber = 15.5)
         )
@@ -104,7 +105,7 @@ class ScientificCalculatorInitialStateTest {
             baseInitialState.addNumberToMemory(baseCalculatorData)
         ))
         assertTrue(ReflectionEquals(initialStateWithAddedData).matches(
-            initialStateWithData.addNumberToMemory(dataWtihMemory)
+            initialStateWithData.addNumberToMemory(dataWithMemory)
         ))
         assertTrue(ReflectionEquals(initialStateWithAddedNumber).matches(
             initialStateWithNumber.addNumberToMemory(dataWithNumber)
@@ -115,8 +116,8 @@ class ScientificCalculatorInitialStateTest {
         assertFalse(ReflectionEquals(ScientificCalculatorInitialState(dataWithAddedNumber.copy(memoryNumber = 4.0))).matches(
             initialStateWithNumber.addNumberToMemory(dataWithNumber)
         ))
-        assertFalse(ReflectionEquals(ScientificCalculatorInitialState(dataWtihMemory.copy(memoryNumber = 15.6))).matches(
-            initialStateWithData.addNumberToMemory(dataWtihMemory)
+        assertFalse(ReflectionEquals(ScientificCalculatorInitialState(dataWithMemory.copy(memoryNumber = 15.6))).matches(
+            initialStateWithData.addNumberToMemory(dataWithMemory)
         ))
     }
 
@@ -149,7 +150,7 @@ class ScientificCalculatorInitialStateTest {
             baseInitialState.subtractNumberFromMemory(baseCalculatorData)
         ))
         assertTrue(ReflectionEquals(initialStateWithSubtractedData).matches(
-            initialStateWithData.subtractNumberFromMemory(dataWithNumber)
+            initialStateWithData.subtractNumberFromMemory(dataWithMemory)
         ))
         assertTrue(ReflectionEquals(initialStateWithSubtractedNumber).matches(
             initialStateWithNumber.subtractNumberFromMemory(dataWithNumber)
@@ -162,6 +163,54 @@ class ScientificCalculatorInitialStateTest {
         ))
         assertFalse(ReflectionEquals(ScientificCalculatorInitialState(dataWithMemory.copy(memoryNumber = 15.6))).matches(
             initialStateWithData.subtractNumberFromMemory(dataWithMemory)
+        ))
+    }
+
+    @Test
+    fun clearAllTest() {
+        val calculatorWithData = ScientificCalculatorDataEntity(
+            mainString = "523,12",
+            historyString = "1 +",
+            scientificOperationType = ScientificOperationType.PLUS,
+            memoryNumber = 5.5
+        )
+        val initialStateWithMemory = ScientificCalculatorInitialState(calculatorWithData)
+        val baseData = baseCalculatorData.copy(memoryNumber = 5.5)
+
+        assertTrue(ReflectionEquals(ScientificCalculatorInitialState(baseData)).matches(
+            initialStateWithMemory.clearAll(calculatorWithData)
+        ))
+        assertTrue(ReflectionEquals(ScientificCalculatorInitialState(baseData)).matches(
+            ScientificCalculatorInitialState(baseData).clearAll(baseData)
+        ))
+        assertFalse(ReflectionEquals(initialStateWithMemory).matches(
+            initialStateWithMemory.clearAll(calculatorWithData)
+        ))
+    }
+
+    @Test
+    fun negateMainStringTest() {
+        assertTrue(ReflectionEquals(baseInitialState).matches(
+            baseInitialState.negateOperand(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorInitialState(baseCalculatorData.copy(mainString = "-1"))).matches(
+            baseInitialState.negateOperand(baseCalculatorData)
+        ))
+    }
+
+    @Test
+    fun squareRootTest() {
+        val falseCalculatorData = ScientificCalculatorDataEntity(
+            mainString = "25",
+            historyString = "sqrt(0)"
+        )
+        val falseInitialState = ScientificCalculatorInitialState(falseCalculatorData)
+
+        assertTrue(ReflectionEquals(ScientificCalculatorFirstOperandReadState(baseCalculatorData.copy(historyString = "sqrt(0)"))).matches(
+            baseInitialState.calculateSquareRoot(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(falseInitialState).matches(
+            baseInitialState.calculateSquareRoot(falseCalculatorData)
         ))
     }
 }
