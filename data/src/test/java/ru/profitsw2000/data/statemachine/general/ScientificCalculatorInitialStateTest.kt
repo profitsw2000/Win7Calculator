@@ -354,4 +354,40 @@ class ScientificCalculatorInitialStateTest {
             baseInitialState.calculateResult(baseCalculatorData)
         ))
     }
+
+    @Test
+    fun openBracketTest() {
+        val firstStateData = baseCalculatorData.copy(memoryNumber = 2.36)
+        val firstState = ScientificCalculatorInitialState(firstStateData)
+        val secondStateData = baseCalculatorData.copy(
+            historyString = "(",
+            memoryNumber = 2.36,
+            prevState = firstState
+        )
+        val secondState = ScientificCalculatorInitialState(secondStateData)
+        val thirdStateData = baseCalculatorData.copy(
+            historyString = "((",
+            memoryNumber = 2.36,
+            prevState = secondState
+        )
+        val thirdState = ScientificCalculatorInitialState(thirdStateData)
+
+        assertTrue(ReflectionEquals(secondState).matches(
+            firstState.openBracket(firstStateData)
+        ))
+        assertTrue(ReflectionEquals(thirdState).matches(
+            secondState.openBracket(secondStateData)
+        ))
+        assertFalse(ReflectionEquals(thirdState).matches(
+            firstState.openBracket(firstStateData)
+        ))
+        assertFalse(ReflectionEquals(secondState).matches(
+            ScientificCalculatorInitialState(firstStateData.copy(memoryNumber = 2.35))
+        ))
+    }
+
+    @Test
+    fun closeBracketTest() {
+
+    }
 }

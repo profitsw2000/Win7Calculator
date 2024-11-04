@@ -337,17 +337,33 @@ class ScientificCalculatorInitialState(
     * (added close bracket)
      */
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        val historyString = if (scientificCalculatorDataEntity.historyString.last() == '(')
+            "${scientificCalculatorDataEntity.historyString}0)"
+        else "${scientificCalculatorDataEntity.historyString})"
+        val returnData = scientificCalculatorDataEntity.prevState.let {
+            scientificCalculatorDataEntity.copy(
+                mainString = "0",
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+                historyString = historyString
+            )
+        }
+        scientificCalculatorDataEntity?.copy(
+            mainString = "0",
+            memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+            historyString = historyString
+        )
+        val state = when(scientificCalculatorDataEntity.prevState) {
+            is ScientificCalculatorInitialState -> ScientificCalculatorInitialState(returnData)
+            is ScientificCalculatorFirstOperandInputState -> ScientificCalculatorFirstOperandInputState(returnData)
+            is ScientificCalculatorFirstOperandReadState -> ScientificCalculatorFirstOperandReadState(returnData)
+            is ScientificCalculatorMathOperationState -> ScientificCalculatorMathOperationState(returnData)
+            is ScientificCalculatorFirstOperandReadState -> ScientificCalculatorFirstOperandReadState(returnData)
+            else -> ScientificCalculatorInitialState(returnData)
+        }
 
         return if (scientificCalculatorDataEntity.prevState == null)
             this
-        else
-            ScientificCalculatorInitialState(
-                scientificCalculatorDataEntity
-                    .prevState
-                    .scientificCalculatorDataEntity.copy(
-                        historyString = "${scientificCalculatorDataEntity.historyString})"
-                    )
-            )
+        else state
     }
 
     /**
