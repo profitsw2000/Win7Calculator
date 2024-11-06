@@ -354,7 +354,7 @@ class ScientificCalculatorInitialState(
         )
         val state = when(scientificCalculatorDataEntity.prevState) {
             is ScientificCalculatorInitialState -> ScientificCalculatorInitialState(returnData)
-            is ScientificCalculatorMathOperationState -> ScientificCalculatorMathOperationState(returnData)
+            is ScientificCalculatorMathOperationState -> ScientificCalculatorSecondOperandReadState(returnData)
             else -> ScientificCalculatorInitialState(returnData)
         }
 
