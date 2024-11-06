@@ -392,7 +392,7 @@ class ScientificCalculatorInitialStateTest {
         val firstState = ScientificCalculatorInitialState(firstStateData)
         val recoveredFirstStateData = baseCalculatorData.copy(
             historyString = "((0))",
-            memoryNumber = 2.36
+            memoryNumber = 0.0
         )
         val recoveredFirstState = ScientificCalculatorInitialState(recoveredFirstStateData)
         val secondStateData = baseCalculatorData.copy(
@@ -402,14 +402,14 @@ class ScientificCalculatorInitialStateTest {
         )
         val recoveredSecondStateData = baseCalculatorData.copy(
             historyString = "((0)",
-            memoryNumber = 2.36,
+            memoryNumber = 0.0,
             prevState = firstState
         )
         val recoveredSecondState = ScientificCalculatorInitialState(recoveredSecondStateData)
         val secondState = ScientificCalculatorInitialState(secondStateData)
         val thirdStateData = baseCalculatorData.copy(
             historyString = "((",
-            memoryNumber = 2.36,
+            memoryNumber = 0.0,
             prevState = secondState
         )
         val thirdState = ScientificCalculatorInitialState(thirdStateData)
@@ -417,9 +417,18 @@ class ScientificCalculatorInitialStateTest {
         assertTrue(ReflectionEquals(recoveredSecondState).matches(
             thirdState.closeBracket(thirdStateData)
         ))
-/*        assertTrue(ReflectionEquals(recoveredFirstState).matches(
-            secondState.closeBracket(recoveredSecondStateData)
-        ))*/
+        assertTrue(ReflectionEquals(recoveredFirstState).matches(
+            recoveredSecondState.closeBracket(recoveredSecondStateData)
+        ))
+        assertTrue(ReflectionEquals(baseInitialState).matches(
+            baseInitialState.closeBracket(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(secondState).matches(
+            thirdState.closeBracket(thirdStateData)
+        ))
+        assertFalse(ReflectionEquals(firstState).matches(
+            recoveredSecondState.closeBracket(recoveredSecondStateData)
+        ))
     }
 
 

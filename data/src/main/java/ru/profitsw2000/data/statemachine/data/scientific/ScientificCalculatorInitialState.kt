@@ -337,30 +337,25 @@ class ScientificCalculatorInitialState(
     * (added close bracket)
      */
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val historyString = if (scientificCalculatorDataEntity.historyString.last() == '(')
+        val historyString = if (scientificCalculatorDataEntity.historyString.endsWith('('))
             "${scientificCalculatorDataEntity.historyString}0)"
         else "${scientificCalculatorDataEntity.historyString})"
-        val returnData = scientificCalculatorDataEntity.prevState.let {
-            scientificCalculatorDataEntity.copy(
+
+        return if (scientificCalculatorDataEntity.prevState == null)
+            this
+        else{
+            val returnData = scientificCalculatorDataEntity.prevState.scientificCalculatorDataEntity.copy(
                 mainString = "0",
                 memoryNumber = scientificCalculatorDataEntity.memoryNumber,
                 historyString = historyString
             )
-        }
-        scientificCalculatorDataEntity?.copy(
-            mainString = "0",
-            memoryNumber = scientificCalculatorDataEntity.memoryNumber,
-            historyString = historyString
-        )
-        val state = when(scientificCalculatorDataEntity.prevState) {
-            is ScientificCalculatorInitialState -> ScientificCalculatorInitialState(returnData)
-            is ScientificCalculatorMathOperationState -> ScientificCalculatorSecondOperandReadState(returnData)
-            else -> ScientificCalculatorInitialState(returnData)
+            when(scientificCalculatorDataEntity.prevState) {
+                is ScientificCalculatorInitialState -> ScientificCalculatorInitialState(returnData)
+                is ScientificCalculatorMathOperationState -> ScientificCalculatorSecondOperandReadState(returnData)
+                else -> ScientificCalculatorInitialState(returnData)
+            }
         }
 
-        return if (scientificCalculatorDataEntity.prevState == null)
-            this
-        else state
     }
 
     /**
