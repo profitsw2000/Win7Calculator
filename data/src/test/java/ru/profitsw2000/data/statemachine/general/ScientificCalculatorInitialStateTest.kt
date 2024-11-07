@@ -6,6 +6,7 @@ import org.junit.Assert.assertTrue
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorErrorState
@@ -456,6 +457,148 @@ class ScientificCalculatorInitialStateTest {
 
         assertTrue(ReflectionEquals(recoveredFirstState).matches(
             secondState.closeBracket(secondStateData)
+        ))
+    }
+
+    @Test
+    fun naturalLogarithmCalculationTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            historyString = "ln(0)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val zeroInputResultState = ScientificCalculatorErrorState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            historyString = "ln(1)",
+            mainString = "0"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.calculateNaturalLogarithm(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.calculateNaturalLogarithm(baseCalculatorData.copy(
+                mainString = "1"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.calculateNaturalLogarithm(baseCalculatorData.copy(
+                mainString = "1"
+            ))
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.calculateNaturalLogarithm(baseCalculatorData)
+        ))
+    }
+
+    @Test
+    fun exponentCalculationTest() {
+        val zeroExpResultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "powe(0)"
+        )
+        val zeroExpResultState = ScientificCalculatorFirstOperandReadState(zeroExpResultData)
+        val nonZeroExpResultData = ScientificCalculatorDataEntity(
+            mainString = "7,38905609893065",
+            historyString = "powe(2)"
+        )
+        val nonZeroExpResultState = ScientificCalculatorFirstOperandReadState(nonZeroExpResultData)
+
+        assertTrue(ReflectionEquals(zeroExpResultState).matches(
+            baseInitialState.calculateExponent(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroExpResultState).matches(
+            baseInitialState.calculateExponent(baseCalculatorData.copy(
+                mainString = "2"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroExpResultState).matches(
+            baseInitialState.calculateExponent(baseCalculatorData.copy(
+                mainString = "2"
+            ))
+        ))
+        assertFalse(ReflectionEquals(nonZeroExpResultState).matches(
+            baseInitialState.calculateExponent(baseCalculatorData)
+        ))
+    }
+
+    @Test
+    fun integerOfNumberCalculationTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "Int(0)"
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "7",
+            historyString = "Int(7,38905609893065)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.integerOfNumber(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.integerOfNumber(baseCalculatorData.copy(
+                mainString = "7,38905609893065"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.integerOfNumber(baseCalculatorData.copy(
+                mainString = "7,38905609893065"
+            ))
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.integerOfNumber(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(ScientificCalculatorFirstOperandReadState(ScientificCalculatorDataEntity(
+                mainString = "7",
+                historyString = "Int(7,)"
+            )
+        )).matches(
+            baseInitialState.integerOfNumber(baseCalculatorData.copy(
+                mainString = "7,"
+            ))
+        ))
+    }
+
+    @Test
+    fun fractionOfNumberCalculationTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "frac(0)"
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,38905609893065",
+            historyString = "frac(7,38905609893065)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.fractionOfNumber(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.fractionOfNumber(baseCalculatorData.copy(
+                mainString = "7,38905609893065"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.fractionOfNumber(baseCalculatorData.copy(
+                mainString = "7,38905609893065"
+            ))
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.fractionOfNumber(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(ScientificCalculatorFirstOperandReadState(ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "frac(7,)"
+        )
+        )).matches(
+            baseInitialState.fractionOfNumber(baseCalculatorData.copy(
+                mainString = "7,"
+            ))
         ))
     }
 }
