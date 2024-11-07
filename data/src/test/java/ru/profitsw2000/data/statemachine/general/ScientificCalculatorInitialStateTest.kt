@@ -14,6 +14,7 @@ import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFir
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorInitialState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorMathOperationState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorOperationResultState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandReadState
 
 class ScientificCalculatorInitialStateTest {
 
@@ -431,5 +432,30 @@ class ScientificCalculatorInitialStateTest {
         ))
     }
 
+    @Test
+    fun closeBracketMathOperationStateTest(){
+        val firstStateData = baseCalculatorData.copy(
+            historyString = "9,8$HISTORY_STRING_SPACE_LETTER+",
+            mainString = "9,8",
+            memoryNumber = 7.0
+        )
+        val firstState = ScientificCalculatorMathOperationState(firstStateData)
+        val recoveredFirstStateData = baseCalculatorData.copy(
+            historyString = "9,8$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(0)",
+            mainString = "0",
+            memoryNumber = 0.0
+        )
+        val recoveredFirstState = ScientificCalculatorSecondOperandReadState(recoveredFirstStateData)
+        val secondStateData = baseCalculatorData.copy(
+            historyString = "9,8$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            memoryNumber = 0.0,
+            mainString = "0",
+            prevState = firstState
+        )
+        val secondState = ScientificCalculatorInitialState(secondStateData)
 
+        assertTrue(ReflectionEquals(recoveredFirstState).matches(
+            secondState.closeBracket(secondStateData)
+        ))
+    }
 }
