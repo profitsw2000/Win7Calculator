@@ -510,6 +510,7 @@ class ScientificCalculatorInitialState(
     * result of implemented operation placed in mainString field
      */
     override fun hyperbolicArcSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(

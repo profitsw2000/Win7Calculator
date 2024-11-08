@@ -601,4 +601,107 @@ class ScientificCalculatorInitialStateTest {
             ))
         ))
     }
+
+    @Test
+    fun hyperbolicSinusTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "sinh(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,175201193643801",
+            historyString = "sinh(1)",
+            prevState = baseInitialState
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "10000",
+            historyString = "sinh(10000)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val errorResultState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.hyperbolicSinus(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.hyperbolicSinus(baseCalculatorData.copy(
+                mainString = "1",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.hyperbolicSinus(baseCalculatorData.copy(
+                mainString = "1",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.hyperbolicSinus(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorFirstOperandReadState(ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "sinh(0)"
+        )
+        )).matches(
+            baseInitialState.hyperbolicSinus(baseCalculatorData.copy(
+                mainString = "0",
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(errorResultState).matches(
+            baseInitialState.hyperbolicSinus(baseCalculatorData.copy(
+                mainString = "10000"
+            ))
+        ))
+    }
+
+    @Test
+    fun hyperbolicArcSinusTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "asinh(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "2,312438341272752",
+            historyString = "asinh(5)",
+            prevState = baseInitialState
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.hyperbolicArcSinus(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.hyperbolicArcSinus(baseCalculatorData.copy(
+                mainString = "5",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.hyperbolicArcSinus(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.hyperbolicArcSinus(baseCalculatorData.copy(
+                mainString = "5"
+            ))
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorFirstOperandReadState(ScientificCalculatorDataEntity(
+            mainString = "2,312438341272753",
+            historyString = "asinh(0)"
+        )
+        )).matches(
+            baseInitialState.hyperbolicArcSinus(baseCalculatorData.copy(
+                mainString = "0"
+            ))
+        ))
+    }
 }
