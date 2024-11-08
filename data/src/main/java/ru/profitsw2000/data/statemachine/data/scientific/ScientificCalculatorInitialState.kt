@@ -588,7 +588,7 @@ class ScientificCalculatorInitialState(
             scientificCalculatorDataEntity.copy(
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString})",
-                errorCode = UNKNOWN_ERROR_CODE
+                errorCode = INVALID_INPUT_ERROR_CODE
             )
         ) else ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(

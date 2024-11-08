@@ -4,9 +4,12 @@ import org.junit.Test
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
+import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorErrorState
@@ -16,6 +19,7 @@ import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorIni
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorMathOperationState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorOperationResultState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandReadState
+import java.sql.Ref
 
 class ScientificCalculatorInitialStateTest {
 
@@ -702,6 +706,273 @@ class ScientificCalculatorInitialStateTest {
             baseInitialState.hyperbolicArcSinus(baseCalculatorData.copy(
                 mainString = "0"
             ))
+        ))
+    }
+
+    @Test
+    fun degreesSinusTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "sind(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,939692620785908",
+            historyString = "sind(70)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                mainString = "70"
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                mainString = "70", prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData, DEGREES_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun radiansSinusTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "sinr(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,773890681557889",
+            historyString = "sinr(70)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                mainString = "70"
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                mainString = "70", prevState = baseInitialState
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData, RADIANS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun gradsSinusTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "sing(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,891006524188368",//891006524188368
+            historyString = "sing(70)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                mainString = "70"
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                mainString = "70", prevState = baseInitialState
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData, GRADS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun degreesArcSinusTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "asind(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "30",
+            historyString = "asind(0,5)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "90",
+            historyString = "asind(1)"
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "2",
+            historyString = "asind(2)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "0,5"
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "0,5", prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "1"
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "2"
+            ), DEGREES_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun radiansArcSinusTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "asinr(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,523598775598299",
+            historyString = "asinr(0,5)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,570796326794897",
+            historyString = "asinr(1)"
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "2",
+            historyString = "asinr(2)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "0,5"
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "0,5", prevState = baseInitialState
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData, RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "1"
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "2"
+            ), RADIANS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun gradsArcSinusTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "asing(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "33,333333333333336",
+            historyString = "asing(0,5)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "100",
+            historyString = "asing(1)"
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "2",
+            historyString = "asing(2)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "0,5"
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "0,5", prevState = baseInitialState
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "1"
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.arcSinus(baseCalculatorData.copy(
+                mainString = "2"
+            ), GRADS_ANGLE_CODE)
         ))
     }
 }
