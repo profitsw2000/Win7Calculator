@@ -60,7 +60,7 @@ private fun factorialRecursive(x: Double): Double {
 
 private fun gamma(x: Double): Double {
     val n = x + 1
-    return ((2*PI*n).pow(1/2) * n.pow(n-1) * exp(-n))/
+    return ((2*PI*n).pow(0.5) * n.pow(n-1) * exp(-n))/
             (1 - sterling_koef_1/n +
                     sterling_koef_2/n.pow(2) +
                     sterling_koef_3/n.pow(3) +

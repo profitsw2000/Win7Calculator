@@ -1033,4 +1033,61 @@ class ScientificCalculatorInitialStateTest {
             ))
         ))
     }
+
+    @Test
+    fun factorialTest() {
+
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "fact(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "3628800",
+            historyString = "fact(10)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val fractionInputResultData = ScientificCalculatorDataEntity(
+            mainString = "220,4148244515194",
+            historyString = "fact(5,35)"
+        )
+        val fractionInputResultState = ScientificCalculatorFirstOperandReadState(fractionInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "2000",
+            historyString = "fact(2000)",
+            errorCode = OVERFLOW_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.factorial(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.factorial(baseCalculatorData.copy(
+                mainString = "10"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.factorial(baseCalculatorData.copy(
+                mainString = "10",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.factorial(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(fractionInputResultState).matches(
+            baseInitialState.factorial(baseCalculatorData.copy(
+                mainString = "5,35"
+            ))
+        ))
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.factorial(baseCalculatorData.copy(
+                mainString = "2000"
+            ))
+        ))
+    }
 }

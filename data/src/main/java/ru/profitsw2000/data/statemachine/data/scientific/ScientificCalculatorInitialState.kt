@@ -610,7 +610,7 @@ class ScientificCalculatorInitialState(
      */
     override fun squareNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return try {
-            val a = ScientificCalculatorFirstOperandReadState(
+            ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(
                         calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(2.0)
@@ -619,7 +619,6 @@ class ScientificCalculatorInitialState(
                             "${scientificCalculatorDataEntity.mainString})"
                 )
             )
-            a
         } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
