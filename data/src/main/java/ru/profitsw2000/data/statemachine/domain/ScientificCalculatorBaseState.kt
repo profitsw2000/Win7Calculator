@@ -63,7 +63,9 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
     fun factorial(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
-    fun decimalToDegrees(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+    fun decimalToMinutes(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
+
+    fun minutesToDecimal(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 
     fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState
 

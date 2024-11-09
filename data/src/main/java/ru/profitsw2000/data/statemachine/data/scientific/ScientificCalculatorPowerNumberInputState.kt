@@ -114,7 +114,11 @@ class ScientificCalculatorPowerNumberInputState(
         TODO("Not yet implemented")
     }
 
-    override fun decimalToDegrees(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+    override fun decimalToMinutes(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        TODO("Not yet implemented")
+    }
+
+    override fun minutesToDecimal(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
