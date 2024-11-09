@@ -9,6 +9,7 @@ import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
@@ -930,7 +931,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "33,333333333333336",
+            mainString = "33,33333333333334",
             historyString = "asing(0,5)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -973,6 +974,63 @@ class ScientificCalculatorInitialStateTest {
             baseInitialState.arcSinus(baseCalculatorData.copy(
                 mainString = "2"
             ), GRADS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun squareNumberTest() {
+
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "sqr(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "81",
+            historyString = "sqr(9)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val bigInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,e+32",
+            historyString = "sqr(9999999999999999)"
+        )
+        val bigInputResultState = ScientificCalculatorFirstOperandReadState(bigInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "9,e+300",
+            historyString = "sqr(9,e+300)",
+            errorCode = OVERFLOW_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.squareNumber(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.squareNumber(baseCalculatorData.copy(
+                mainString = "9"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.squareNumber(baseCalculatorData.copy(
+                mainString = "9",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.squareNumber(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(bigInputResultState).matches(
+            baseInitialState.squareNumber(baseCalculatorData.copy(
+                mainString = "9999999999999999"
+            ))
+        ))
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.squareNumber(baseCalculatorData.copy(
+                mainString = "9,e+300"
+            ))
         ))
     }
 }
