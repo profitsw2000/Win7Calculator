@@ -769,10 +769,19 @@ class ScientificCalculatorInitialState(
      * result of implemented operation placed in mainString field
      */
     override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return ScientificCalculatorFirstOperandReadState(
+        val number = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+        return if (number < 1)
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        else ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(
-                    acosh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                    acosh(number)
                 ),
                 historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
                         "${scientificCalculatorDataEntity.mainString})"
@@ -845,10 +854,10 @@ class ScientificCalculatorInitialState(
         }
 
         return if (abs(enteredNumber) > 1) ScientificCalculatorErrorState(
-            ScientificCalculatorDataEntity(
+            scientificCalculatorDataEntity.copy(
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString})",
-                errorCode = UNKNOWN_ERROR_CODE
+                errorCode = INVALID_INPUT_ERROR_CODE
             )
         ) else ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(

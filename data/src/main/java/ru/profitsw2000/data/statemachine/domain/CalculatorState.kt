@@ -31,7 +31,7 @@ interface CalculatorState {
      * @param number - double type number to convert to string
      * @return string, formatted specifically for calculator display
      */
-    fun doubleToCalculatorString(number: Double): String {
+    fun  doubleToCalculatorString(number: Double): String {
 
         val decimalFormat = DecimalFormat("###.################")
         val numberOfWholeInts = decimalFormat.format(number).split(',').elementAt(0).length
