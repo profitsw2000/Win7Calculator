@@ -1651,18 +1651,18 @@ class ScientificCalculatorInitialStateTest {
     fun hyperbolicArcTangentTest() {
         val oneInputResultData = ScientificCalculatorDataEntity(
             mainString = "0",
-            historyString = "acosh(1)",
+            historyString = "atanh(1)",
             prevState = baseInitialState
         )
         val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "2,292431669561178",
-            historyString = "acosh(5)",
+            historyString = "atanh(5)",
             prevState = baseInitialState
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
         val errorResultData = ScientificCalculatorDataEntity(
-            historyString = "acosh(0)",
+            historyString = "atanh(0)",
             errorCode = INVALID_INPUT_ERROR_CODE
         )
         val errorResultState = ScientificCalculatorErrorState(errorResultData)
