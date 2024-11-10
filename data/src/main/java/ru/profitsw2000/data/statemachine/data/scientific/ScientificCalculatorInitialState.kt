@@ -929,7 +929,7 @@ class ScientificCalculatorInitialState(
      * whereas historyString field appends with record of current operation.
      */
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return ScientificCalculatorFirstOperandReadState(
+        val a = ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(
                     tanh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
@@ -938,6 +938,7 @@ class ScientificCalculatorInitialState(
                         "${scientificCalculatorDataEntity.mainString})"
             )
         )
+        return a
     }
 
     /**

@@ -1590,4 +1590,376 @@ class ScientificCalculatorInitialStateTest {
     }
 
 
+    @Test
+    fun hyperbolicTangentTest() {
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "tanh(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,761594155955765",
+            historyString = "tanh(1)",
+            prevState = baseInitialState
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val negativeResultData = ScientificCalculatorDataEntity(
+            mainString = "-1",
+            historyString = "tanh(-10000)"
+        )
+        val negativeResultState = ScientificCalculatorFirstOperandReadState(negativeResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.hyperbolicTangent(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.hyperbolicTangent(baseCalculatorData.copy(
+                mainString = "1",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.hyperbolicTangent(baseCalculatorData.copy(
+                mainString = "1",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.hyperbolicTangent(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(ScientificCalculatorFirstOperandReadState(ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "tanh(0)"
+        )
+        )).matches(
+            baseInitialState.hyperbolicTangent(baseCalculatorData.copy(
+                mainString = "0",
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(negativeResultState).matches(
+            baseInitialState.hyperbolicTangent(baseCalculatorData.copy(
+                mainString = "-10000"
+            ))
+        ))
+    }
+
+    @Test
+    fun hyperbolicArcTangentTest() {
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "acosh(1)",
+            prevState = baseInitialState
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "2,292431669561178",
+            historyString = "acosh(5)",
+            prevState = baseInitialState
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            historyString = "acosh(0)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val errorResultState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.hyperbolicArcCosine(baseCalculatorData.copy(
+                mainString = "1",
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.hyperbolicArcCosine(baseCalculatorData.copy(
+                mainString = "5",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.hyperbolicArcCosine(ScientificCalculatorDataEntity(
+                mainString = "1",
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.hyperbolicArcCosine(baseCalculatorData.copy(
+                mainString = "1"
+            ))
+        ))
+        assertTrue(ReflectionEquals(errorResultState).matches(
+            baseInitialState.hyperbolicArcCosine(baseCalculatorData)
+        ))
+    }
+
+    @Test
+    fun degreesTangentTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "cosd(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,342020143325669",
+            historyString = "cosd(70)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                mainString = "70"
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                mainString = "70", prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData, DEGREES_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun radiansTangentTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "cosr(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-0,11038724383905",
+            historyString = "cosr(80)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                mainString = "80"
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                mainString = "80", prevState = baseInitialState
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData, RADIANS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun gradsTangentTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "cosg(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,453990499739547",
+            historyString = "cosg(70)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                mainString = "70"
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                mainString = "70", prevState = baseInitialState
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData, GRADS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun degreesArcTangentTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "90",
+            historyString = "acosd(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "60,00000000000001",
+            historyString = "acosd(0,5)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "acosd(1)"
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "2",
+            historyString = "acosd(2)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "0,5"
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "0,5", prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "1"
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "2"
+            ), DEGREES_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun radiansArcTangentTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,570796326794897",
+            historyString = "acosr(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,047197551196598",
+            historyString = "acosr(0,5)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "acosr(1)"
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "2",
+            historyString = "acosr(2)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "0,5"
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "0,5", prevState = baseInitialState
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData, RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "1"
+            ), RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "2"
+            ), RADIANS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun gradsArcTangentTest() {
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "100",
+            historyString = "acosg(0)",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "66,66666666666667",
+            historyString = "acosg(0,5)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "acosg(1)"
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val errorResultData = ScientificCalculatorDataEntity(
+            mainString = "2",
+            historyString = "acosg(2)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val errorState = ScientificCalculatorErrorState(errorResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "0,5"
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "0,5", prevState = baseInitialState
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "1"
+            ), GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(errorState).matches(
+            baseInitialState.arcCosine(baseCalculatorData.copy(
+                mainString = "2"
+            ), GRADS_ANGLE_CODE)
+        ))
+    }
+
 }
