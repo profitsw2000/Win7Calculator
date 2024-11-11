@@ -1126,7 +1126,7 @@ class ScientificCalculatorInitialState(
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(1.0/3.0)),
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(3.33333333333333333333333333333E-1)),
                     historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )

@@ -1991,4 +1991,111 @@ class ScientificCalculatorInitialStateTest {
         ))
     }
 
+    @Test
+    fun cubePowerOfNumberTest() {
+        val zeroResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "cube(0)",
+            prevState = baseInitialState
+        )
+        val zeroResultState = ScientificCalculatorFirstOperandReadState(zeroResultData)
+        val nonZeroResultData = ScientificCalculatorDataEntity(
+            mainString = "1000",
+            historyString = "cube(10)"
+        )
+        val nonZeroResultState = ScientificCalculatorFirstOperandReadState(nonZeroResultData)
+        val bigNumberResultData =  ScientificCalculatorDataEntity(
+            historyString = "cube(1,e+150)",
+            errorCode = OVERFLOW_ERROR_CODE
+        )
+        val bigNumberResultState = ScientificCalculatorErrorState(bigNumberResultData)
+        val smallNumberResultData = ScientificCalculatorDataEntity(
+            mainString = "1,e-300",
+            historyString = "cube(1,e-100)"
+        )
+        val smallNumberResultState = ScientificCalculatorFirstOperandReadState(smallNumberResultData)
+
+        assertTrue(ReflectionEquals(zeroResultState).matches(
+            baseInitialState.cubeNumber(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroResultState).matches(
+            baseInitialState.cubeNumber(baseCalculatorData.copy(
+                mainString = "10"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroResultState).matches(
+            baseInitialState.cubeNumber(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(nonZeroResultState).matches(
+            baseInitialState.cubeNumber(baseCalculatorData.copy(
+                mainString = "0"
+            ))
+        ))
+        assertTrue(ReflectionEquals(bigNumberResultState).matches(
+            baseInitialState.cubeNumber(baseCalculatorData.copy(
+                mainString = "1,e+150"
+            ))
+        ))
+        assertTrue(ReflectionEquals(smallNumberResultState).matches(
+            baseInitialState.cubeNumber(baseCalculatorData.copy(
+                mainString = "1,e-100"
+            ))
+        ))
+    }
+
+    @Test
+    fun cubeRootOfNumberTest() {
+        val zeroResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "cuberoot(0)",
+            prevState = baseInitialState
+        )
+        val zeroResultState = ScientificCalculatorFirstOperandReadState(zeroResultData)
+        val nonZeroResultData = ScientificCalculatorDataEntity(
+            mainString = "3",
+            historyString = "cuberoot(27)"
+        )
+        val nonZeroResultState = ScientificCalculatorFirstOperandReadState(nonZeroResultData)
+        val bigNumberResultData =  ScientificCalculatorDataEntity(
+            mainString = "1,e+50",
+            historyString = "cube(1,e+150)"
+        )
+        val bigNumberResultState = ScientificCalculatorFirstOperandReadState(bigNumberResultData)
+        val smallNumberResultData = ScientificCalculatorDataEntity(
+            mainString = "1,e-100",
+            historyString = "cube(1,e-300)"
+        )
+        val smallNumberResultState = ScientificCalculatorFirstOperandReadState(smallNumberResultData)
+
+        assertTrue(ReflectionEquals(zeroResultState).matches(
+            baseInitialState.cubeRoot(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroResultState).matches(
+            baseInitialState.cubeRoot(baseCalculatorData.copy(
+                mainString = "27"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroResultState).matches(
+            baseInitialState.cubeRoot(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(nonZeroResultState).matches(
+            baseInitialState.cubeRoot(baseCalculatorData.copy(
+                mainString = "0"
+            ))
+        ))
+        assertTrue(ReflectionEquals(bigNumberResultState).matches(
+            baseInitialState.cubeRoot(baseCalculatorData.copy(
+                mainString = "1,e+150"
+            ))
+        ))
+        assertTrue(ReflectionEquals(smallNumberResultState).matches(
+            baseInitialState.cubeRoot(baseCalculatorData.copy(
+                mainString = "1,e-300"
+            ))
+        ))
+    }
 }

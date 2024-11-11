@@ -30,7 +30,7 @@ fun Double.calcCosh(): Double {
 }
 
 fun Double.powerTo(x: Double): Double {
-    val result = this.pow(x)
+    val result = Math.pow(this, x)//this.pow(x)
 
     checkForOverflow(result)
 
