@@ -953,7 +953,7 @@ class ScientificCalculatorInitialState(
      * Error code then recorded in appropriate field.
      */
     override fun hyperbolicArcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return if (abs(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)) <= 1)
+        return if (abs(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)) < 1)
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(
@@ -967,7 +967,7 @@ class ScientificCalculatorInitialState(
             ScientificCalculatorDataEntity(
                 historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
                         "${scientificCalculatorDataEntity.mainString})",
-                errorCode = UNKNOWN_ERROR_CODE
+                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
             )
         )
     }
