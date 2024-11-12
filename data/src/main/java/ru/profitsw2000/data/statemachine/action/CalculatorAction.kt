@@ -32,7 +32,7 @@ sealed class CalculatorAction {
 
     data object HyperbolicSinus : CalculatorAction()
 
-    data object Sinus : CalculatorAction()
+    data class Sinus(val angleUnitCode: Int) : CalculatorAction()
 
     data object SquaredX : CalculatorAction()
 
@@ -42,7 +42,7 @@ sealed class CalculatorAction {
 
     data object HyperbolicCosine : CalculatorAction()
 
-    data object Cosine : CalculatorAction()
+    data class Cosine(val angleUnitCode: Int) : CalculatorAction()
 
     data object XPowerY : CalculatorAction()
 
@@ -52,7 +52,7 @@ sealed class CalculatorAction {
 
     data object HyperbolicTangent : CalculatorAction()
 
-    data object Tangent : CalculatorAction()
+    data class Tangent(val angleUnitCode: Int) : CalculatorAction()
 
     data object XPowerThree : CalculatorAction()
 
@@ -74,17 +74,17 @@ sealed class CalculatorAction {
 
     data object HyperbolicArcSinus : CalculatorAction()
 
-    data object ArcSinus : CalculatorAction()
+    data class ArcSinus(val angleUnitCode: Int) : CalculatorAction()
 
     data object DecimalDegrees : CalculatorAction()
 
     data object HyperbolicArcCosine : CalculatorAction()
 
-    data object ArcCosine : CalculatorAction()
+    data class ArcCosine(val angleUnitCode: Int) : CalculatorAction()
 
     data object DoublePi : CalculatorAction()
 
     data object HyperbolicArcTangent : CalculatorAction()
 
-    data object ArcTangent : CalculatorAction()
+    data class ArcTangent(val angleUnitCode: Int) : CalculatorAction()
 }
