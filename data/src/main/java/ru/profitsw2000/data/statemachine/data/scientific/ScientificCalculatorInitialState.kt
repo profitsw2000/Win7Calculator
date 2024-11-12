@@ -11,7 +11,6 @@ import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
-import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorPrimitiveMathOperationState
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.utils.calcCosh
@@ -1160,7 +1159,7 @@ class ScientificCalculatorInitialState(
      * to format with power (exponential) part(looks like (base),e+(power)). Changed parameter
      * writes to returned state instance.
      * @param - scientificCalculatorDataEntity contains current calculator data
-     * @return - ScientificCalculatorPowerNumberInputState with changed scientificCalculatorDataEntity
+     * @return - ScientificCalculatorFirstOperandPowerNumberInputState with changed scientificCalculatorDataEntity
      * parameter as constructor.
      */
     override fun exponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
@@ -1168,7 +1167,7 @@ class ScientificCalculatorInitialState(
             "${scientificCalculatorDataEntity.mainString}e+0"
         else "${scientificCalculatorDataEntity.mainString},e+0"
 
-        return ScientificCalculatorPowerNumberInputState(
+        return ScientificCalculatorFirstOperandPowerNumberInputState(
             scientificCalculatorDataEntity.copy(mainString = mainString)
         )
     }
@@ -1184,7 +1183,7 @@ class ScientificCalculatorInitialState(
      * scientificCalculatorDataEntity parameter and error code number to errorCode field.
      * Newly created var writes to returned state instance.
      * @param - scientificCalculatorDataEntity contains current calculator data
-     * @return - ScientificCalculatorPowerNumberInputState with changed scientificCalculatorDataEntity
+     * @return - ScientificCalculatorFirstOperandPowerNumberInputState with changed scientificCalculatorDataEntity
      * parameter as constructor.
      * - ScientificCalculatorErrorState if calculation completed with error.
      */

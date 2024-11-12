@@ -15,6 +15,7 @@ import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorErrorState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandInputState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandPowerNumberInputState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandReadState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorInitialState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorMathOperationState
@@ -2161,6 +2162,51 @@ class ScientificCalculatorInitialStateTest {
         ))
         assertTrue(ReflectionEquals(fractionNonZeroResultState).matches(
             baseInitialState.fixedToExponentialFormat(fractionNonZeroSNResultData)
+        ))
+    }
+
+    @Test
+    fun exponentialFormatInputTest() {
+        val zeroInputResultData = baseCalculatorData.copy(
+            mainString = "0,e+0",
+            prevState = baseInitialState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandPowerNumberInputState(zeroInputResultData)
+        val nonZeroInputResultData = baseCalculatorData.copy(
+            mainString = "123,e+0"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandPowerNumberInputState(
+            nonZeroInputResultData
+        )
+        val fractionInputResultData = baseCalculatorData.copy(
+            mainString = "2,356e+0"
+        )
+        val fractionInputResultState = ScientificCalculatorFirstOperandPowerNumberInputState(
+            fractionInputResultData
+        )
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.exponentialFormat(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.exponentialFormat(baseCalculatorData.copy(
+                mainString = "123"
+            ))
+        ))
+        assertTrue(ReflectionEquals(fractionInputResultState).matches(
+            baseInitialState.exponentialFormat(baseCalculatorData.copy(
+                mainString = "2,356"
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroInputResultState).matches(
+            baseInitialState.exponentialFormat(baseCalculatorData)
+        ))
+        assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.exponentialFormat(baseCalculatorData.copy(
+                mainString = "12,3"
+            ))
         ))
     }
 }

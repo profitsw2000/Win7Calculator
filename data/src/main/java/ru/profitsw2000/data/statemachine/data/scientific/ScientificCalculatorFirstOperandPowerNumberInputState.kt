@@ -6,7 +6,7 @@ import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 
-class ScientificCalculatorPowerNumberInputState(
+class ScientificCalculatorFirstOperandPowerNumberInputState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
 ) : ScientificCalculatorBaseState {
     override fun clearMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
