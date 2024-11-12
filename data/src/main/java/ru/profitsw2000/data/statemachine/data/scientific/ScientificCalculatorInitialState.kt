@@ -26,6 +26,7 @@ import kotlin.math.asin
 import kotlin.math.asinh
 import kotlin.math.atan
 import kotlin.math.atanh
+import kotlin.math.cbrt
 import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
@@ -1122,32 +1123,14 @@ class ScientificCalculatorInitialState(
      *
      */
     override fun cubeRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return try {
-            ScientificCalculatorFirstOperandReadState(
-                scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(3.33333333333333333333333333333E-1)),
-                    historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
-                            "${scientificCalculatorDataEntity.mainString})"
-                )
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    cbrt(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
+                        "${scientificCalculatorDataEntity.mainString})"
             )
-        } catch (arithmeticException: ArithmeticException) {
-            ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
-                    historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
-                            "${scientificCalculatorDataEntity.mainString})",
-                    errorCode = OVERFLOW_ERROR_CODE
-                )
-            )
-        } catch (exception: Exception) {
-            ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
-                    historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
-                            "${scientificCalculatorDataEntity.mainString})",
-                    errorCode = UNKNOWN_ERROR_CODE
-                )
-            )
-        }
+        )
     }
 
     /**

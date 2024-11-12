@@ -1393,7 +1393,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "60,00000000000001",
+            mainString = "60",
             historyString = "acosd(0,5)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -2054,18 +2054,18 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroResultState = ScientificCalculatorFirstOperandReadState(zeroResultData)
         val nonZeroResultData = ScientificCalculatorDataEntity(
-            mainString = "3",
-            historyString = "cuberoot(27)"
+            mainString = "10000",
+            historyString = "cuberoot(1000000000000)"
         )
         val nonZeroResultState = ScientificCalculatorFirstOperandReadState(nonZeroResultData)
         val bigNumberResultData =  ScientificCalculatorDataEntity(
             mainString = "1,e+50",
-            historyString = "cube(1,e+150)"
+            historyString = "cuberoot(1,e+150)"
         )
         val bigNumberResultState = ScientificCalculatorFirstOperandReadState(bigNumberResultData)
         val smallNumberResultData = ScientificCalculatorDataEntity(
             mainString = "1,e-100",
-            historyString = "cube(1,e-300)"
+            historyString = "cuberoot(1,e-300)"
         )
         val smallNumberResultState = ScientificCalculatorFirstOperandReadState(smallNumberResultData)
 
@@ -2076,7 +2076,7 @@ class ScientificCalculatorInitialStateTest {
         ))
         assertTrue(ReflectionEquals(nonZeroResultState).matches(
             baseInitialState.cubeRoot(baseCalculatorData.copy(
-                mainString = "27"
+                mainString = "1000000000000"
             ))
         ))
         assertFalse(ReflectionEquals(zeroResultState).matches(

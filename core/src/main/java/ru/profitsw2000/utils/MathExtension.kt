@@ -1,10 +1,13 @@
 package ru.profitsw2000.utils
 
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.cosh
 import kotlin.math.exp
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sinh
+import kotlin.math.truncate
 
 private const val sterling_koef_1 = 1.0/12.0
 private const val sterling_koef_2 = 1.0/288.0
@@ -30,7 +33,7 @@ fun Double.calcCosh(): Double {
 }
 
 fun Double.powerTo(x: Double): Double {
-    val result = Math.pow(this, x)//this.pow(x)
+    val result = this.pow(x)
 
     checkForOverflow(result)
 
@@ -44,6 +47,11 @@ fun Double.factorial(): Double {
     checkForOverflow(result)
 
     return result
+}
+
+fun Double.round(decimals: Int): Double {
+    val factor = 10.0.pow(decimals)
+    return (this * factor).roundToInt() / factor
 }
 
 private fun checkForOverflow(double: Double) {
@@ -67,4 +75,10 @@ private fun gamma(x: Double): Double {
                     sterling_koef_4/n.pow(4) +
                     sterling_koef_5/n.pow(5) +
                     sterling_koef_6/n.pow(6))
+}
+
+fun Double.dropCalculationError(): Double {
+    val fraction = this % 1
+    return if (abs(fraction) <= 0.00000000000001) truncate(this)
+    else this
 }
