@@ -87,7 +87,4 @@ sealed class CalculatorAction {
     data object HyperbolicArcTangent : CalculatorAction()
 
     data object ArcTangent : CalculatorAction()
-
-
-
 }
