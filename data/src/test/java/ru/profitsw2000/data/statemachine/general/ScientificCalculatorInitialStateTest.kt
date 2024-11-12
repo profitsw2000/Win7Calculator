@@ -2098,4 +2098,69 @@ class ScientificCalculatorInitialStateTest {
             ))
         ))
     }
+
+    @Test
+    fun formatChangeTest() {
+        val zeroResultState = ScientificCalculatorFirstOperandReadState(baseCalculatorData)
+        val zeroSNResultData = baseCalculatorData.copy(
+            mainString = "0,e+0",
+            isScientificNotation = true
+        )
+        val zeroSNResultState = ScientificCalculatorFirstOperandReadState(zeroSNResultData)
+        val nonZeroResultData = baseCalculatorData.copy(
+            mainString = "5"
+        )
+        val nonZeroSNResultData = baseCalculatorData.copy(
+            mainString = "5,e+0",
+            isScientificNotation = true
+        )
+        val nonZeroResultState = ScientificCalculatorFirstOperandReadState(nonZeroResultData)
+        val nonZeroSNResultState = ScientificCalculatorFirstOperandReadState(nonZeroSNResultData)
+        val bigNonZeroResultData = baseCalculatorData.copy(
+            mainString = "-4567"
+        )
+        val bigNonZeroSNResultData = baseCalculatorData.copy(
+            mainString = "-4,567e+3",
+            isScientificNotation = true
+        )
+        val bigNonZeroResultState = ScientificCalculatorFirstOperandReadState(bigNonZeroResultData)
+        val bigNonZeroSNResultState = ScientificCalculatorFirstOperandReadState(bigNonZeroSNResultData)
+        val fractionNonZeroResultData = baseCalculatorData.copy(
+            mainString = "0,004567"
+        )
+        val fractionNonZeroSNResultData = baseCalculatorData.copy(
+            mainString = "4,567e-3",
+            isScientificNotation = true
+        )
+        val fractionNonZeroResultState = ScientificCalculatorFirstOperandReadState(fractionNonZeroResultData)
+        val fractionNonZeroSNResultState = ScientificCalculatorFirstOperandReadState(fractionNonZeroSNResultData)
+
+        assertTrue(ReflectionEquals(zeroSNResultState).matches(
+            baseInitialState.fixedToExponentialFormat(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(zeroResultState).matches(
+            baseInitialState.fixedToExponentialFormat(baseCalculatorData.copy(
+                mainString = "0,e+0",
+                isScientificNotation = true
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroSNResultState).matches(
+            baseInitialState.fixedToExponentialFormat(nonZeroResultData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroResultState).matches(
+            baseInitialState.fixedToExponentialFormat(nonZeroSNResultData)
+        ))
+        assertTrue(ReflectionEquals(bigNonZeroSNResultState).matches(
+            baseInitialState.fixedToExponentialFormat(bigNonZeroResultData)
+        ))
+        assertTrue(ReflectionEquals(bigNonZeroResultState).matches(
+            baseInitialState.fixedToExponentialFormat(bigNonZeroSNResultData)
+        ))
+        assertTrue(ReflectionEquals(fractionNonZeroSNResultState).matches(
+            baseInitialState.fixedToExponentialFormat(fractionNonZeroResultData)
+        ))
+        assertTrue(ReflectionEquals(fractionNonZeroResultState).matches(
+            baseInitialState.fixedToExponentialFormat(fractionNonZeroSNResultData)
+        ))
+    }
 }
