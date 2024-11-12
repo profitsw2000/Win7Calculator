@@ -1190,7 +1190,7 @@ class ScientificCalculatorInitialState(
     override fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) <= 0)
             ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
+                ScientificCalculatorDataEntity(
                     historyString = "${scientificCalculatorDataEntity.historyString}log(" +
                             "${scientificCalculatorDataEntity.mainString})",
                     errorCode = INVALID_INPUT_ERROR_CODE
@@ -1221,14 +1221,32 @@ class ScientificCalculatorInitialState(
      * parameter as constructor.
      */
     override fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    10.0.powerTo(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-                ),
-                historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
-                        "${scientificCalculatorDataEntity.mainString})"
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        10.0.powerTo(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
             )
-        )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 }

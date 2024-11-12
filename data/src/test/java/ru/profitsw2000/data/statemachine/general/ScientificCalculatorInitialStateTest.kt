@@ -2209,4 +2209,126 @@ class ScientificCalculatorInitialStateTest {
             ))
         ))
     }
+
+    @Test
+    fun logarithmTest(){
+        val zeroResultData = baseCalculatorData.copy(
+            historyString = "log(0)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val zeroResultState = ScientificCalculatorErrorState(zeroResultData)
+        val oneInputResultData = baseCalculatorData.copy(
+            mainString = "0",
+            historyString = "log(1)"
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val negativeInputResultData = baseCalculatorData.copy(
+            historyString = "log(-4)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val negativeInputResultState = ScientificCalculatorErrorState(negativeInputResultData)
+        val fractionInputResultData = baseCalculatorData.copy(
+            mainString = "-2",
+            historyString = "log(0,01)"
+        )
+        val fractionInputResultState = ScientificCalculatorFirstOperandReadState(fractionInputResultData)
+        val nonZeroInputResultData = baseCalculatorData.copy(
+            mainString = "3",
+            historyString = "log(1000)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+
+        assertTrue(ReflectionEquals(zeroResultState).matches(
+            baseInitialState.logarithmBaseTen(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.logarithmBaseTen(baseCalculatorData.copy(
+                mainString = "1"
+            ))
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            baseInitialState.logarithmBaseTen(baseCalculatorData.copy(
+                mainString = "-4"
+            ))
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            baseInitialState.logarithmBaseTen(baseCalculatorData.copy(
+                mainString = "1000"
+            ))
+        ))
+        assertTrue(ReflectionEquals(fractionInputResultState).matches(
+            baseInitialState.logarithmBaseTen(baseCalculatorData.copy(
+                mainString = "0,01"
+            ))
+        ))
+        assertFalse(ReflectionEquals(fractionInputResultState).matches(
+            baseInitialState.logarithmBaseTen(baseCalculatorData.copy(
+                mainString = "1000"
+            ))
+        ))
+    }
+
+    @Test
+    fun tenToPowerOfNumberTest() {
+        val zeroResultData = baseCalculatorData.copy(
+            mainString = "1",
+            historyString = "10^(0)",
+            prevState = baseInitialState
+        )
+        val zeroResultState = ScientificCalculatorFirstOperandReadState(zeroResultData)
+        val oneInputResultData = baseCalculatorData.copy(
+            mainString = "10000",
+            historyString = "10^(4)"
+        )
+        val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
+        val negativeInputResultData = baseCalculatorData.copy(
+            mainString = "0,0001",
+            historyString = "10^(-4)",
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+        val fractionInputResultData = baseCalculatorData.copy(
+            mainString = "4,466835921509632",
+            historyString = "10^(0,65)"
+        )
+        val fractionInputResultState = ScientificCalculatorFirstOperandReadState(fractionInputResultData)
+        val errorInputResultData = baseCalculatorData.copy(
+            historyString = "10^(1000)",
+            errorCode = OVERFLOW_ERROR_CODE
+        )
+        val errorInputResultState = ScientificCalculatorErrorState(errorInputResultData)
+
+        assertTrue(ReflectionEquals(zeroResultState).matches(
+            baseInitialState.tenPowerX(baseCalculatorData.copy(
+                prevState = baseInitialState
+            ))
+        ))
+        assertFalse(ReflectionEquals(zeroResultState).matches(
+            baseInitialState.tenPowerX(baseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            baseInitialState.tenPowerX(baseCalculatorData.copy(
+                mainString = "4"
+            ))
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            baseInitialState.tenPowerX(baseCalculatorData.copy(
+                mainString = "-4"
+            ))
+        ))
+        assertTrue(ReflectionEquals(errorInputResultState).matches(
+            baseInitialState.tenPowerX(baseCalculatorData.copy(
+                mainString = "1000"
+            ))
+        ))
+        assertTrue(ReflectionEquals(fractionInputResultState).matches(
+            baseInitialState.tenPowerX(baseCalculatorData.copy(
+                mainString = "0,65"
+            ))
+        ))
+        assertFalse(ReflectionEquals(fractionInputResultState).matches(
+            baseInitialState.tenPowerX(baseCalculatorData.copy(
+                mainString = "10"
+            ))
+        ))
+    }
 }
