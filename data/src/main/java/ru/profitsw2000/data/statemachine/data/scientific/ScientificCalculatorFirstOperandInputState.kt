@@ -18,6 +18,7 @@ import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorInputState
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sqrt
+import kotlin.math.truncate
 
 class ScientificCalculatorFirstOperandInputState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
@@ -416,12 +417,39 @@ class ScientificCalculatorFirstOperandInputState(
         }
     }
 
+    /**
+     * Rounds number, entered to the mainString of calculator data. Operation recorded to historyString
+     * of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     */
     override fun integerOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}Int(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /**
+     * Discards whole part of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     */
     override fun fractionOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    calculatorStringToDouble(scientificCalculatorDataEntity.mainString) % 1),
+                historyString = "${scientificCalculatorDataEntity.historyString}frac(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
     override fun hyperbolicSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
