@@ -15,6 +15,8 @@ import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorSecondOpe
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorInputState
+import ru.profitsw2000.utils.calcSinh
+import kotlin.math.asinh
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sqrt
@@ -452,12 +454,60 @@ class ScientificCalculatorFirstOperandInputState(
         )
     }
 
+    /**
+     * Calculates hyperbolic sinus of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState with corresponding error code.
+     */
     override fun hyperbolicSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).calcSinh()
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}sinh(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sinh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sinh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
-
+    /**
+     * Calculates hyperbolic arcsinus of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data.
+     */
     override fun hyperbolicArcSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    asinh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}asinh(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
     override fun sinus(
