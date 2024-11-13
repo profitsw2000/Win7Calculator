@@ -1,10 +1,13 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
+import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorFirstOperandInputState
+import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorSecondOperandInputState
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import kotlin.math.sqrt
@@ -207,11 +210,33 @@ class ScientificCalculatorFirstOperandInputState(
         }
     }
 
+    /**
+     * Append digit in second parameter of fun to mainString of calculator data if it
+     * satisfy to a certain condition.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     */
     override fun inputDigit(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         digitToAppend: String
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val mainString = scientificCalculatorDataEntity.mainString
+
+        return when {
+            mainString.contains(",") && digitToAppend == "," -> this
+            mainString.length >= GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER && !(mainString.contains(",")) -> this
+            mainString.length >= (GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER + 1) -> this
+            mainString == "0" && mainString.length < 2 -> ScientificCalculatorFirstOperandInputState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = digitToAppend
+                )
+            )
+            else -> ScientificCalculatorFirstOperandInputState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = "$mainString${digitToAppend}"
+                )
+            )
+        }
     }
 
     override fun primitiveMathOperation(
