@@ -219,12 +219,24 @@ class ScientificCalculatorInitialStateTest {
             historyString = "sqrt(0)"
         )
         val falseInitialState = ScientificCalculatorInitialState(falseCalculatorData)
+        val errorResultState = ScientificCalculatorErrorState(
+            baseCalculatorData.copy(
+                mainString = "-5",
+                historyString = "sqrt(-5)",
+                errorCode = INVALID_INPUT_ERROR_CODE
+            )
+        )
 
         assertTrue(ReflectionEquals(ScientificCalculatorFirstOperandReadState(baseCalculatorData.copy(historyString = "sqrt(0)"))).matches(
             baseInitialState.calculateSquareRoot(baseCalculatorData)
         ))
         assertFalse(ReflectionEquals(falseInitialState).matches(
             baseInitialState.calculateSquareRoot(falseCalculatorData)
+        ))
+        assertTrue(ReflectionEquals(errorResultState).matches(
+            baseInitialState.calculateSquareRoot(baseCalculatorData.copy(
+                mainString = "-5"
+            ))
         ))
     }
 
