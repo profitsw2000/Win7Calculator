@@ -1,20 +1,25 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
+import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorErrorState
 import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorFirstOperandInputState
+import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorFirstOperandReadState
 import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorSecondOperandInputState
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
+import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorInputState
 import kotlin.math.sqrt
 
 class ScientificCalculatorFirstOperandInputState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
-) : ScientificCalculatorBaseState {
+) : ScientificCalculatorInputState {
 
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         when(action) {
@@ -71,6 +76,14 @@ class ScientificCalculatorFirstOperandInputState(
             CalculatorAction.XPowerY -> TODO()
             CalculatorAction.YRootOfX -> TODO()
         }
+    }
+
+    override fun backspace(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        TODO("Not yet implemented")
+    }
+
+    override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        TODO("Not yet implemented")
     }
 
     /**
@@ -239,16 +252,55 @@ class ScientificCalculatorFirstOperandInputState(
         }
     }
 
+    /**
+     * Changes current state and writes to historyString, scientificOperationType and firstOperand fields
+     * of calculator data appropriate info.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @param scientificOperationType - contains operation type that needs to execute
+     * @param operationString - string with corresponding sign, depended on operation type
+     * @return ScientificCalculatorMathOperationState with updated calculator data
+     */
     override fun primitiveMathOperation(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                historyString = "${scientificCalculatorDataEntity.mainString}" +
+                        "$HISTORY_STRING_SPACE_LETTER$operationString",
+                scientificOperationType = scientificOperationType,
+                operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+            )
+        )
     }
 
+    /**
+     * Calculates result of one divided on number entered in mainString field and
+     * writes it back to mainString. Designator of committed operation appended to history string.
+     * Changes current state depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data if
+     * divider is not equal to zero
+     * ScientificCalculatorErrorState with updated calculator data if divider equal 0
+     */
     override fun reciprocOperation(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(1/(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                historyString = "reciproc(${scientificCalculatorDataEntity.mainString})"
+            ))
+        } catch (numberFormatException: NumberFormatException) {
+            ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
+                historyString = "reciproc(${scientificCalculatorDataEntity.mainString})",
+                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+            ))
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
+                historyString = "reciproc(${scientificCalculatorDataEntity.mainString})",
+                errorCode = UNKNOWN_ERROR_CODE
+            ))
+        }
     }
 
     override fun calculateResult(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
