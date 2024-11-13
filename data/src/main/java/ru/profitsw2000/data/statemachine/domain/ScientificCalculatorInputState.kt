@@ -4,7 +4,7 @@ import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 
 interface ScientificCalculatorInputState : ScientificCalculatorBaseState {
 
-    fun backspace(scientificCalculatorDataEntity: ScientificCalculatorDataEntity) : CalculatorState
+    fun clearDigit(scientificCalculatorDataEntity: ScientificCalculatorDataEntity) : CalculatorState
 
     fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity) : CalculatorState
 

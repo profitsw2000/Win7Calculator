@@ -78,12 +78,36 @@ class ScientificCalculatorFirstOperandInputState(
         }
     }
 
-    override fun backspace(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+    /**
+     * Deletes last character in mainString field.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     */
+    override fun clearDigit(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        val truncatedString = scientificCalculatorDataEntity.mainString.dropLast(1)
+        val mainString = if(truncatedString.length == 0 ||
+            truncatedString == "-0" ||
+            truncatedString == "-") "0"
+        else truncatedString
+
+        return ScientificCalculatorFirstOperandInputState(
+            scientificCalculatorDataEntity.copy(
+                mainString = mainString
+            )
+        )
     }
 
+    /**
+     * Clears mainString field of calculator data and sets it to "0" value.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     */
     override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandInputState(
+            scientificCalculatorDataEntity.copy(
+                mainString = "0"
+            )
+        )
     }
 
     /**
@@ -303,8 +327,11 @@ class ScientificCalculatorFirstOperandInputState(
         }
     }
 
+    /**
+     * Do nothing
+     */
     override fun calculateResult(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return this
     }
 
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
