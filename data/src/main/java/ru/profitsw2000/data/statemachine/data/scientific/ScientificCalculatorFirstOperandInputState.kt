@@ -15,6 +15,8 @@ import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorSecondOpe
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorInputState
+import kotlin.math.exp
+import kotlin.math.ln
 import kotlin.math.sqrt
 
 class ScientificCalculatorFirstOperandInputState(
@@ -342,12 +344,76 @@ class ScientificCalculatorFirstOperandInputState(
         TODO("Not yet implemented")
     }
 
+    /**
+     * Calculates natural logarithm of number, entered to mainString and changed current state to
+     * ScientificCalculatorFirstOperandInputState if calculation is successful or ScientificCalculatorErrorState
+     * if is not.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState if error occurred.
+     */
     override fun calculateNaturalLogarithm(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(ln(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (numberFormatException: NumberFormatException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates exponent raised to the power of entered number.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and calculation result in mainString field
+     * if calculation completed successfully
+     * ScientificCalculatorErrorState if calculation completed with error
+     */
     override fun calculateExponent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(exp(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (numberFormatException: NumberFormatException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun integerOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
