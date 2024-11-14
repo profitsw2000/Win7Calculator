@@ -30,11 +30,13 @@ import kotlin.math.acos
 import kotlin.math.acosh
 import kotlin.math.asin
 import kotlin.math.asinh
+import kotlin.math.atanh
 import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlin.math.tanh
 import kotlin.math.truncate
 
 class ScientificCalculatorFirstOperandInputState(
@@ -971,12 +973,52 @@ class ScientificCalculatorFirstOperandInputState(
         )
     }
 
+    /**
+     * Calculates hyperbolic tangent of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully.
+     */
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    tanh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}tanh(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+            )
+        )
     }
 
+    /**
+     * Calculates hyperbolic arctangent of entered number to the mainString of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on entered to mainString number.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data if modulus of a number
+     * of entered to mainString number is less than 1
+     * ScientificCalculatorErrorState with corresponding error code otherwise.
+     */
     override fun hyperbolicArcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return if (abs(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)) < 1)
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        atanh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+                )
+            )
+        else ScientificCalculatorErrorState(
+            ScientificCalculatorDataEntity(
+                historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+            )
+        )
     }
 
     override fun tangent(
