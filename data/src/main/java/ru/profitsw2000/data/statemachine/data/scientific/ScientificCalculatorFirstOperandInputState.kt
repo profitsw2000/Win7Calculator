@@ -24,6 +24,7 @@ import ru.profitsw2000.utils.calcSinh
 import ru.profitsw2000.utils.commaTruncate
 import ru.profitsw2000.utils.factorial
 import ru.profitsw2000.utils.powerTo
+import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.acosh
@@ -944,12 +945,30 @@ class ScientificCalculatorFirstOperandInputState(
         )
     }
 
+    /**
+     * Placed PI number to mainString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun piNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(PI)
+            )
+        )
     }
 
+    /**
+     * Placed double PI number to mainString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun doublePiNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(2*PI)
+            )
+        )
     }
 
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
