@@ -716,12 +716,50 @@ class ScientificCalculatorFirstOperandInputState(
         }
     }
 
+    /**
+     * Converts number, entered to mainString field of calculator data, from degrees unit
+     * with decimal fractional part to degrees unit with fractional part presented in minutes.
+     * Operation recorded to historyString of calculator data. Changes calculator state
+     * to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun decimalToMinutes(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val fraction = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)%1
+        val integer = truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+        val convertedFraction = (fraction*60)/100
+        val convertedValue = integer + convertedFraction
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(convertedValue),
+                historyString = "${scientificCalculatorDataEntity.historyString}dms(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+            )
+        )
     }
 
+    /**
+     * Converts number, entered to mainString field of calculator data, from degrees
+     * with fractional part presented in minutes to degrees with decimal fractional part.
+     * Operation recorded to historyString of calculator data. Changes calculator state
+     * to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun minutesToDecimal(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val fraction = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)%1
+        val integer = truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+        val convertedFraction = (fraction*100)/60
+        val convertedValue = integer + convertedFraction
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(convertedValue),
+                historyString = "${scientificCalculatorDataEntity.historyString}deg(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+            )
+        )
     }
 
     override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
