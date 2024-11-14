@@ -54,6 +54,17 @@ fun Double.round(decimals: Int): Double {
     return (this * factor).roundToInt() / factor
 }
 
+fun Double.dropCalculationError(): Double {
+    val fraction = this % 1
+    return if (abs(fraction) <= 0.00000000000001) truncate(this)
+    else this
+}
+
+fun String.commaTruncate(): String {
+    return if (this.last() == ',') this.dropLast(1)
+    else this
+}
+
 private fun checkForOverflow(double: Double) {
     if (double == Double.POSITIVE_INFINITY ||
         double == Double.NEGATIVE_INFINITY ||
@@ -75,10 +86,4 @@ private fun gamma(x: Double): Double {
                     sterling_koef_4/n.pow(4) +
                     sterling_koef_5/n.pow(5) +
                     sterling_koef_6/n.pow(6))
-}
-
-fun Double.dropCalculationError(): Double {
-    val fraction = this % 1
-    return if (abs(fraction) <= 0.00000000000001) truncate(this)
-    else this
 }
