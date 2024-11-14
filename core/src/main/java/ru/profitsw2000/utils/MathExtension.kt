@@ -60,6 +60,9 @@ fun Double.dropCalculationError(): Double {
     else this
 }
 
+/**
+ * Deletes last character if it is comma.
+ */
 fun String.commaTruncate(): String {
     return if (this.last() == ',') this.dropLast(1)
     else this

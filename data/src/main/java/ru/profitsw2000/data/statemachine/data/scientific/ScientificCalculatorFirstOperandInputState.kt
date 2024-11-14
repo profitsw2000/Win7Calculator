@@ -19,11 +19,13 @@ import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorSecondOpe
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorInputState
+import ru.profitsw2000.utils.calcCosh
 import ru.profitsw2000.utils.calcSinh
 import ru.profitsw2000.utils.commaTruncate
 import ru.profitsw2000.utils.factorial
 import ru.profitsw2000.utils.powerTo
 import kotlin.math.abs
+import kotlin.math.acosh
 import kotlin.math.asin
 import kotlin.math.asinh
 import kotlin.math.exp
@@ -540,6 +542,7 @@ class ScientificCalculatorFirstOperandInputState(
             )
         }
     }
+
     /**
      * Calculates hyperbolic arcsinus of entered to the mainString number of calculator data. Operation recorded to
      * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState.
@@ -762,12 +765,73 @@ class ScientificCalculatorFirstOperandInputState(
         )
     }
 
+    /**
+     * Calculates hyperbolic cosine of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState with corresponding error code.
+     */
     override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).calcCosh()
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates hyperbolic arccosine of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState with corresponding error code if error occurred.
+     */
     override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val number = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+        return if (number < 1)
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        else ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    acosh(number)
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+            )
+        )
     }
 
     override fun cosine(
