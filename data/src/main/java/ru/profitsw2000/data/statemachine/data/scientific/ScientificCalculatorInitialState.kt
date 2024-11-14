@@ -15,6 +15,7 @@ import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 import ru.profitsw2000.utils.calcCosh
 import ru.profitsw2000.utils.calcSinh
+import ru.profitsw2000.utils.commaTruncate
 import ru.profitsw2000.utils.factorial
 import ru.profitsw2000.utils.powerTo
 import kotlin.math.PI
@@ -882,7 +883,11 @@ class ScientificCalculatorInitialState(
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
-        val historyString = "${scientificCalculatorDataEntity.mainString}$HISTORY_STRING_SPACE_LETTER$operationString"
+        val historyString = "${scientificCalculatorDataEntity.historyString}" +
+                "${scientificCalculatorDataEntity.mainString.commaTruncate()}" +
+                "$HISTORY_STRING_SPACE_LETTER" +
+                "$operationString"
+
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
                 historyString = historyString,

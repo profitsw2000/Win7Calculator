@@ -25,9 +25,11 @@ import ru.profitsw2000.utils.commaTruncate
 import ru.profitsw2000.utils.factorial
 import ru.profitsw2000.utils.powerTo
 import kotlin.math.abs
+import kotlin.math.acos
 import kotlin.math.acosh
 import kotlin.math.asin
 import kotlin.math.asinh
+import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sin
@@ -834,26 +836,112 @@ class ScientificCalculatorFirstOperandInputState(
         )
     }
 
+    /**
+     * Calculate cosine of entered to mainString number. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads. Changes calculator state.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data.
+     */
     override fun cosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val result = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> cos(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            RADIANS_ANGLE_CODE -> cos(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+            GRADS_ANGLE_CODE -> cos(radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            else -> cos(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "cosd"
+            RADIANS_ANGLE_CODE -> "cosr"
+            GRADS_ANGLE_CODE -> "cosg"
+            else -> "cosd"
+        }
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(result),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+            )
+        )
     }
 
+    /**
+     * Calculate arccosine of entered to mainString number. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads. Changes calculator state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun arcCosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val enteredNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+        val result = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> degreesFromRadians(acos(enteredNumber))
+            RADIANS_ANGLE_CODE -> acos(enteredNumber)
+            GRADS_ANGLE_CODE -> gradsFromRadians(acos(enteredNumber))
+            else -> degreesFromRadians(acos(enteredNumber))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "acosd"
+            RADIANS_ANGLE_CODE -> "acosr"
+            GRADS_ANGLE_CODE -> "acosg"
+            else -> "acosd"
+        }
+
+        return if (abs(enteredNumber) > 1) ScientificCalculatorErrorState(
+            scientificCalculatorDataEntity.copy(
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                errorCode = INVALID_INPUT_ERROR_CODE
+            )
+        ) else ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(result),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+            )
+        )
     }
 
+    /**
+     * Changes current state to ScientificCalculatorMathOperationState,
+     * input number and operation sign writes to history string of calculator data,
+     * same as operation type.
+     * @param1 scientificCalculatorDataEntity - contains current calculator data,
+     * @param2 scientificOperationType - type of math operation
+     * @param3 operationString - operation sign, need to be added in history string
+     * @return GeneralCalculatorPrimitiveMathOperationState with changed historyString and operationType fields of calculator data
+     */
     override fun mathOperation(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = "${scientificCalculatorDataEntity.historyString}" +
+                "${scientificCalculatorDataEntity.mainString.commaTruncate()}" +
+                "$HISTORY_STRING_SPACE_LETTER" +
+                "$operationString"
+
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                historyString = historyString,
+                scientificOperationType = scientificOperationType,
+                operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+            )
+        )
     }
 
     override fun piNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
