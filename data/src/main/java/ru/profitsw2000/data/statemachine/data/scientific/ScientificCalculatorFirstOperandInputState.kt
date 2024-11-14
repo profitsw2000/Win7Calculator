@@ -30,12 +30,14 @@ import kotlin.math.acos
 import kotlin.math.acosh
 import kotlin.math.asin
 import kotlin.math.asinh
+import kotlin.math.atan
 import kotlin.math.atanh
 import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlin.math.tan
 import kotlin.math.tanh
 import kotlin.math.truncate
 
@@ -1021,18 +1023,88 @@ class ScientificCalculatorFirstOperandInputState(
         )
     }
 
+    /**
+     * Calculate tangent of entered to mainString number. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads. Changes calculator state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on entered number.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if
+     * entered number is not multiple to PI/2 or to 3*PI/2
+     * ScientificCalculatorErrorState with corresponding error code in calculator data if otherwise.
+     */
     override fun tangent(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val angleInRadians = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+            RADIANS_ANGLE_CODE -> calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+            GRADS_ANGLE_CODE -> radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+            else -> radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "tand"
+            RADIANS_ANGLE_CODE -> "tanr"
+            GRADS_ANGLE_CODE -> "tang"
+            else -> "tand"
+        }
+
+        return if (((angleInRadians/PI)*2.0)%2.0 != 0.0 && ((angleInRadians/PI)*2.0)%1.0 == 0.0)
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}" +
+                            "$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        else ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(tan(angleInRadians)),
+                historyString = "${scientificCalculatorDataEntity.historyString}" +
+                        "$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
+    /**
+     * Calculates arctangent of entered to mainString number. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads. Changes calculator state to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun arcTangent(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val enteredNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+        val result = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> degreesFromRadians(atan(enteredNumber))
+            RADIANS_ANGLE_CODE -> atan(enteredNumber)
+            GRADS_ANGLE_CODE -> gradsFromRadians(atan(enteredNumber))
+            else -> degreesFromRadians(atan(enteredNumber))
+        }
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "atand"
+            RADIANS_ANGLE_CODE -> "atanr"
+            GRADS_ANGLE_CODE -> "atang"
+            else -> "atand"
+        }
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(result),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+            )
+        )
     }
 
     override fun cubeNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
