@@ -143,8 +143,9 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandInputState with updated calculator data
      */
     override fun clearMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return ScientificCalculatorFirstOperandInputState(
+        return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.commaTruncate(),
                 memoryNumber = null
             )
         )
