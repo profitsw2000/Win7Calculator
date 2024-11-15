@@ -36,6 +36,7 @@ import kotlin.math.cbrt
 import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
+import kotlin.math.log10
 import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.tan
@@ -1202,15 +1203,90 @@ class ScientificCalculatorFirstOperandInputState(
         )
     }
 
+    /**
+     * Calculates logarithm base 10 of the number, entered to mainString field of calculator data.
+     * Operation recorded to historyString field of calculator data. Changes current state to
+     * ScientificCalculatorFirstOperandReadState or ScientificCalculatorErrorState, depending on
+     * number in mainString field.
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if
+     * number in mainString is more than zero
+     * ScientificCalculatorErrorState with appropriate code in errorCode field if otherwise
+     *
+     */
     override fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) <= 0)
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}log(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            ) else
+            ScientificCalculatorFirstOperandReadState(
+                ScientificCalculatorDataEntity(
+                    mainString = doubleToCalculatorString(
+                        log10(calculatorStringToDouble(
+                                scientificCalculatorDataEntity.mainString
+                            )
+                        )
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}log(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+                )
+            )
     }
 
+    /**
+     * Calculates 10 to the power of number, entered to mainString field of calculator data. Operation
+     * recorded to historyString field of calculator data. Changes calculator state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState if number is too big and overflow occurred.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState with corresponding error code in calculator data if error occurred.
+     */
     override fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        10.0.powerTo(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Clears all fields of calculator data (except memoryNumber) and reset current state to
+     * ScientificCalculatorInitialState.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorInitialState with default calculator data except memoryNumber field that
+     * saved old value.
+     */
     override fun clearAll(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorInitialState(
+            ScientificCalculatorDataEntity(
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber
+            )
+        )
     }
 }
