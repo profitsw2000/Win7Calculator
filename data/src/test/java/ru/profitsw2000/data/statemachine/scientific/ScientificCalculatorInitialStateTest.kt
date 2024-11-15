@@ -1,4 +1,4 @@
-package ru.profitsw2000.data.statemachine.general
+package ru.profitsw2000.data.statemachine.scientific
 
 import org.junit.Test
 import org.junit.Assert.assertFalse
@@ -21,7 +21,6 @@ import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorIni
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorMathOperationState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorOperationResultState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandReadState
-import java.sql.Ref
 
 class ScientificCalculatorInitialStateTest {
 
