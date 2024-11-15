@@ -79,4 +79,36 @@ class ScientificCalculatorFirstOperandInputStateTest {
             zerocommaMinusInputState.clearDigit(zeroMinusCommaInputData)
         ))
     }
+
+    @Test
+    fun clearEnteredNumberTest() {
+        val zeroResultData = ScientificCalculatorDataEntity(
+            mainString = "0"
+        )
+        val zeroResultState = ScientificCalculatorFirstOperandInputState(zeroResultData)
+        val nonZeroResultData = ScientificCalculatorDataEntity(
+            mainString = "-333333"
+        )
+        val nonZeroResultState = ScientificCalculatorFirstOperandInputState(nonZeroResultData)
+        val historyData = ScientificCalculatorDataEntity(
+            mainString = "22,33",
+            historyString = "43 + ("
+        )
+        val historyState = ScientificCalculatorFirstOperandInputState(historyData)
+        val historyResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "43 + ("
+        )
+        val historyResultState = ScientificCalculatorFirstOperandInputState(historyResultData)
+
+        assertTrue(ReflectionEquals(zeroResultState).matches(
+            nonZeroResultState.clearEntered(nonZeroResultData)
+        ))
+        assertTrue(ReflectionEquals(historyResultState).matches(
+            historyState.clearEntered(historyData)
+        ))
+        assertFalse(ReflectionEquals(zeroResultState).matches(
+            historyState.clearEntered(historyData)
+        ))
+    }
 }
