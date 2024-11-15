@@ -72,5 +72,11 @@ class ScientificCalculatorFirstOperandInputStateTest {
         assertTrue(ReflectionEquals(zeroInputState).matches(
             zerocommaInputState.clearDigit(zeroCommaInputData)
         ))
+        assertTrue(ReflectionEquals(zeroInputState).matches(
+            nonZeroInputResultState.clearDigit(nonZeroInputResultData)
+        ))
+        assertTrue(ReflectionEquals(zeroInputState).matches(
+            zerocommaMinusInputState.clearDigit(zeroMinusCommaInputData)
+        ))
     }
 }
