@@ -1159,17 +1159,47 @@ class ScientificCalculatorFirstOperandInputState(
                     cbrt(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
                 ),
                 historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
-                        "${scientificCalculatorDataEntity.mainString})"
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
             )
         )
     }
 
+    /**
+     * Changes the number display format, entered to mainString field of calculator data,
+     * from conventional to scientific notation and backward. State of calculator changed to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun fixedToExponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val isScientificNotation = !(scientificCalculatorDataEntity.isScientificNotation)
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    calculatorStringToDouble(scientificCalculatorDataEntity.mainString),
+                    isScientificNotation
+                ),
+                isScientificNotation = isScientificNotation
+            )
+        )
     }
 
+    /**
+     * Changes current state to ScientificCalculatorFirstOperandPowerNumberInputState, in which number
+     * in mainString field is presented in scientific notation format and exponent number entering
+     * took place. Mantissa of this number is that in the mainString field of calculator data of
+     * current state.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandPowerNumberInputState with updated calculator data
+     */
     override fun exponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val mainString = if (scientificCalculatorDataEntity.mainString.contains(','))
+            "${scientificCalculatorDataEntity.mainString}e+0"
+        else "${scientificCalculatorDataEntity.mainString},e+0"
+
+        return ScientificCalculatorFirstOperandPowerNumberInputState(
+            scientificCalculatorDataEntity.copy(mainString = mainString)
+        )
     }
 
     override fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
