@@ -32,6 +32,7 @@ import kotlin.math.asin
 import kotlin.math.asinh
 import kotlin.math.atan
 import kotlin.math.atanh
+import kotlin.math.cbrt
 import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
@@ -1107,12 +1108,60 @@ class ScientificCalculatorFirstOperandInputState(
         )
     }
 
+    /**
+     * Calculates number, entered to mainString of calculator data, to the power of 3. Operation
+     * recorded to historyString of calculator data. Changes calculator state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState if number is too big and overflow occurred.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun cubeNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(3.0)),
+                    historyString = "${scientificCalculatorDataEntity.historyString}cube(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cube(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cube(" +
+                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates cube root of entered to mainString number and write result number back to mainString.
+     * Completed operation writes to historyString, current state changed.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun cubeRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doubleToCalculatorString(
+                    cbrt(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
+                        "${scientificCalculatorDataEntity.mainString})"
+            )
+        )
     }
 
     override fun fixedToExponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
