@@ -111,4 +111,19 @@ class ScientificCalculatorFirstOperandInputStateTest {
             historyState.clearEntered(historyData)
         ))
     }
+
+    @Test
+    fun readMemoryTest() {
+        val zeroInputData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            memoryNumber = 3.99
+        )
+        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val nonZeroInputData = ScientificCalculatorDataEntity(
+            mainString = "12,54",
+            memoryNumber = 3.99
+        )
+        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+
+    }
 }
