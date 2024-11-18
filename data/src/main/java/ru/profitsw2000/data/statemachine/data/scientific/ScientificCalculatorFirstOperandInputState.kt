@@ -197,13 +197,16 @@ class ScientificCalculatorFirstOperandInputState(
      */
     override fun addNumberToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         val addedNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-
-        return ScientificCalculatorFirstOperandReadState(
+        val calculatorData = if (addedNumber == 0.0) {
+            scientificCalculatorDataEntity
+        } else {
             scientificCalculatorDataEntity.copy(
                 memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) addedNumber
                 else calculatorStringToDouble(scientificCalculatorDataEntity.mainString) + addedNumber
             )
-        )
+        }
+
+        return ScientificCalculatorFirstOperandReadState(calculatorData)
     }
 
     /**
@@ -213,13 +216,16 @@ class ScientificCalculatorFirstOperandInputState(
      */
     override fun subtractNumberFromMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         val subtractedNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-
-        return ScientificCalculatorFirstOperandReadState(
+        val calculatorData = if (subtractedNumber == 0.0) {
+            scientificCalculatorDataEntity
+        } else {
             scientificCalculatorDataEntity.copy(
-                memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) subtractedNumber
-                else calculatorStringToDouble(scientificCalculatorDataEntity.mainString) + subtractedNumber
+                memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) 0 - subtractedNumber
+                else calculatorStringToDouble(scientificCalculatorDataEntity.mainString) - subtractedNumber
             )
-        )
+        }
+
+        return ScientificCalculatorFirstOperandReadState(calculatorData)
     }
 
     /**

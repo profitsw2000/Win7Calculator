@@ -143,4 +143,100 @@ class ScientificCalculatorFirstOperandInputStateTest {
             nonZeroInputState.readMemory(nonZeroInputData)
         ))
     }
+
+    @Test
+    fun saveToMemoryTest() {
+        val zeroInputData = ScientificCalculatorDataEntity(
+            prevState = baseState
+        )
+        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputData)
+        val zeroInputMemoryData = ScientificCalculatorDataEntity(
+            memoryNumber = 2.35
+        )
+        val zeroInputMemoryState = ScientificCalculatorFirstOperandInputState(zeroInputMemoryData)
+        val zeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(
+            ScientificCalculatorDataEntity()
+        )
+        val nonZeroInputData = ScientificCalculatorDataEntity(
+            mainString = "35,23"
+        )
+        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "35,23",
+            memoryNumber = 35.23
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val nonZeroInputMemoryData = ScientificCalculatorDataEntity(
+            mainString = "7,68",
+            memoryNumber = 35.23
+        )
+        val nonZeroInputMemoryState = ScientificCalculatorFirstOperandInputState(nonZeroInputMemoryData)
+        val nonZeroInputMemoryResultData = ScientificCalculatorDataEntity(
+            mainString = "7,68",
+            memoryNumber = 7.68
+        )
+        val nonZeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputMemoryResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            zeroInputState.saveToMemory(zeroInputData)
+        ))
+        assertTrue(ReflectionEquals(zeroInputMemoryResultState).matches(
+            zeroInputMemoryState.saveToMemory(zeroInputMemoryData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            nonZeroInputState.saveToMemory(nonZeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputMemoryResultState).matches(
+            nonZeroInputMemoryState.saveToMemory(nonZeroInputMemoryData)
+        ))
+    }
+
+    @Test
+    fun addToMemoryTest() {
+        val zeroInputData = ScientificCalculatorDataEntity(
+            prevState = baseState
+        )
+        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputData)
+        val zeroInputMemoryData = ScientificCalculatorDataEntity(
+            memoryNumber = 2.35
+        )
+        val zeroInputMemoryState = ScientificCalculatorFirstOperandInputState(zeroInputMemoryData)
+        val zeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(
+            ScientificCalculatorDataEntity()
+        )
+        val nonZeroInputData = ScientificCalculatorDataEntity(
+            mainString = "35,23"
+        )
+        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "35,23",
+            memoryNumber = 35.23
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val nonZeroInputMemoryData = ScientificCalculatorDataEntity(
+            mainString = "7,68",
+            memoryNumber = 35.23
+        )
+        val nonZeroInputMemoryState = ScientificCalculatorFirstOperandInputState(nonZeroInputMemoryData)
+        val nonZeroInputMemoryResultData = ScientificCalculatorDataEntity(
+            mainString = "7,68",
+            memoryNumber = 7.68
+        )
+        val nonZeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputMemoryResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            zeroInputState.saveToMemory(zeroInputData)
+        ))
+        assertTrue(ReflectionEquals(zeroInputMemoryResultState).matches(
+            zeroInputMemoryState.saveToMemory(zeroInputMemoryData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            nonZeroInputState.saveToMemory(nonZeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputMemoryResultState).matches(
+            nonZeroInputMemoryState.saveToMemory(nonZeroInputMemoryData)
+        ))
+    }
 }
