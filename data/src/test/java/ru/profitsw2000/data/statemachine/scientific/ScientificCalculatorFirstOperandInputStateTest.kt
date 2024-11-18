@@ -115,15 +115,32 @@ class ScientificCalculatorFirstOperandInputStateTest {
     @Test
     fun readMemoryTest() {
         val zeroInputData = ScientificCalculatorDataEntity(
-            mainString = "0",
-            memoryNumber = 3.99
+            memoryNumber = 3.99,
+            prevState = baseState
         )
         val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "3,99",
+            memoryNumber = 3.99,
+            prevState = baseState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputData = ScientificCalculatorDataEntity(
             mainString = "12,54",
             memoryNumber = 3.99
         )
         val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "3,99",
+            memoryNumber = 3.99
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
 
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            zeroInputState.readMemory(zeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            nonZeroInputState.readMemory(nonZeroInputData)
+        ))
     }
 }
