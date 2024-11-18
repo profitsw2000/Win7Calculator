@@ -204,7 +204,9 @@ class ScientificCalculatorFirstOperandInputStateTest {
         )
         val zeroInputMemoryState = ScientificCalculatorFirstOperandInputState(zeroInputMemoryData)
         val zeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(
-            ScientificCalculatorDataEntity()
+            ScientificCalculatorDataEntity(
+                memoryNumber = 2.35
+            )
         )
         val nonZeroInputData = ScientificCalculatorDataEntity(
             mainString = "35,23"
@@ -222,21 +224,71 @@ class ScientificCalculatorFirstOperandInputStateTest {
         val nonZeroInputMemoryState = ScientificCalculatorFirstOperandInputState(nonZeroInputMemoryData)
         val nonZeroInputMemoryResultData = ScientificCalculatorDataEntity(
             mainString = "7,68",
-            memoryNumber = 7.68
+            memoryNumber = 42.91
         )
         val nonZeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputMemoryResultData)
 
         assertTrue(ReflectionEquals(zeroInputResultState).matches(
-            zeroInputState.saveToMemory(zeroInputData)
+            zeroInputState.addNumberToMemory(zeroInputData)
         ))
         assertTrue(ReflectionEquals(zeroInputMemoryResultState).matches(
-            zeroInputMemoryState.saveToMemory(zeroInputMemoryData)
+            zeroInputMemoryState.addNumberToMemory(zeroInputMemoryData)
         ))
         assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
-            nonZeroInputState.saveToMemory(nonZeroInputData)
+            nonZeroInputState.addNumberToMemory(nonZeroInputData)
         ))
         assertTrue(ReflectionEquals(nonZeroInputMemoryResultState).matches(
-            nonZeroInputMemoryState.saveToMemory(nonZeroInputMemoryData)
+            nonZeroInputMemoryState.addNumberToMemory(nonZeroInputMemoryData)
+        ))
+    }
+
+    @Test
+    fun subtractFromMemoryTest() {
+        val zeroInputData = ScientificCalculatorDataEntity(
+            prevState = baseState
+        )
+        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputData)
+        val zeroInputMemoryData = ScientificCalculatorDataEntity(
+            memoryNumber = 2.35
+        )
+        val zeroInputMemoryState = ScientificCalculatorFirstOperandInputState(zeroInputMemoryData)
+        val zeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(
+            ScientificCalculatorDataEntity(
+                memoryNumber = 2.35
+            )
+        )
+        val nonZeroInputData = ScientificCalculatorDataEntity(
+            mainString = "35,23"
+        )
+        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "35,23",
+            memoryNumber = -35.23
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val nonZeroInputMemoryData = ScientificCalculatorDataEntity(
+            mainString = "7,68",
+            memoryNumber = 35.23
+        )
+        val nonZeroInputMemoryState = ScientificCalculatorFirstOperandInputState(nonZeroInputMemoryData)
+        val nonZeroInputMemoryResultData = ScientificCalculatorDataEntity(
+            mainString = "7,68",
+            memoryNumber = 27.55
+        )
+        val nonZeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputMemoryResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            zeroInputState.subtractNumberFromMemory(zeroInputData)
+        ))
+        assertTrue(ReflectionEquals(zeroInputMemoryResultState).matches(
+            zeroInputMemoryState.subtractNumberFromMemory(zeroInputMemoryData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            nonZeroInputState.subtractNumberFromMemory(nonZeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputMemoryResultState).matches(
+            nonZeroInputMemoryState.subtractNumberFromMemory(nonZeroInputMemoryData)
         ))
     }
 }

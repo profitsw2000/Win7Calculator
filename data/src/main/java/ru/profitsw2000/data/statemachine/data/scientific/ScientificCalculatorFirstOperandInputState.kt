@@ -202,7 +202,9 @@ class ScientificCalculatorFirstOperandInputState(
         } else {
             scientificCalculatorDataEntity.copy(
                 memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) addedNumber
-                else calculatorStringToDouble(scientificCalculatorDataEntity.mainString) + addedNumber
+                else calculatorStringToDouble(
+                    doubleToCalculatorString(scientificCalculatorDataEntity.memoryNumber + addedNumber)
+                )
             )
         }
 
@@ -221,7 +223,9 @@ class ScientificCalculatorFirstOperandInputState(
         } else {
             scientificCalculatorDataEntity.copy(
                 memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) 0 - subtractedNumber
-                else calculatorStringToDouble(scientificCalculatorDataEntity.mainString) - subtractedNumber
+                else calculatorStringToDouble(
+                    doubleToCalculatorString(scientificCalculatorDataEntity.memoryNumber - subtractedNumber)
+                )
             )
         }
 
