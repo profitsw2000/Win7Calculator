@@ -4,12 +4,15 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
+import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorErrorState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandInputState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandReadState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorInitialState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorMathOperationState
 
 class ScientificCalculatorFirstOperandInputStateTest {
 
@@ -471,6 +474,67 @@ class ScientificCalculatorFirstOperandInputStateTest {
         ))
         assertTrue(ReflectionEquals(longNumberCommaState).matches(
             longNumberCommaState.inputDigit(longNumberCommaData, ",")
+        ))
+    }
+
+    @Test
+    fun mathOperationTest() {
+        val zeroInputData = baseData
+        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            historyString = "0$HISTORY_STRING_SPACE_LETTER+",
+            scientificOperationType = ScientificOperationType.PLUS,
+            operand = 0.0
+        )
+        val zeroInputResultState = ScientificCalculatorMathOperationState(zeroInputResultData)
+        val nonZeroInputData = ScientificCalculatorDataEntity(
+            mainString = "4,98"
+        )
+        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "4,98",
+            historyString = "4,98$HISTORY_STRING_SPACE_LETTER/",
+            scientificOperationType = ScientificOperationType.DIVIDE,
+            operand = 4.98
+        )
+        val nonZeroInputResultState = ScientificCalculatorMathOperationState(nonZeroInputResultData)
+        val nonZeroCommaInputData = ScientificCalculatorDataEntity(
+            mainString = "498,"
+        )
+        val nonZeroCommaInputState = ScientificCalculatorFirstOperandInputState(nonZeroCommaInputData)
+        val nonZeroCommaInputResultData = ScientificCalculatorDataEntity(
+            mainString = "498",
+            historyString = "498$HISTORY_STRING_SPACE_LETTER/",
+            scientificOperationType = ScientificOperationType.DIVIDE,
+            operand = 498.0
+        )
+        val nonZeroCommaInputResultState = ScientificCalculatorMathOperationState(nonZeroCommaInputResultData)
+        val prevInputData = ScientificCalculatorDataEntity(
+            mainString = "56",
+            historyString = "0$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = zeroInputResultState
+        )
+        val prevInputState = ScientificCalculatorFirstOperandInputState(prevInputData)
+        val prevInputResultData = ScientificCalculatorDataEntity(
+            mainString = "56",
+            historyString = "0$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(56$HISTORY_STRING_SPACE_LETTER+",
+            scientificOperationType = ScientificOperationType.PLUS,
+            operand = 56.0,
+            prevState = zeroInputResultState
+        )
+        val prevInputResultState = ScientificCalculatorMathOperationState(prevInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            zeroInputState.primitiveMathOperation(zeroInputData, ScientificOperationType.PLUS, "+")
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            nonZeroInputState.primitiveMathOperation(nonZeroInputData, ScientificOperationType.DIVIDE, "/")
+        ))
+        assertTrue(ReflectionEquals(nonZeroCommaInputResultState).matches(
+            nonZeroCommaInputState.primitiveMathOperation(nonZeroCommaInputData, ScientificOperationType.DIVIDE, "/")
+        ))
+        assertTrue(ReflectionEquals(prevInputResultState).matches(
+            prevInputState.primitiveMathOperation(prevInputData, ScientificOperationType.PLUS, "+")
         ))
     }
 }

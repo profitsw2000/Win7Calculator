@@ -328,6 +328,7 @@ class ScientificCalculatorFirstOperandInputState(
     ): CalculatorState {
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.commaTruncate(),
                 historyString = "${scientificCalculatorDataEntity.mainString.commaTruncate()}" +
                         "$HISTORY_STRING_SPACE_LETTER$operationString",
                 scientificOperationType = scientificOperationType,
