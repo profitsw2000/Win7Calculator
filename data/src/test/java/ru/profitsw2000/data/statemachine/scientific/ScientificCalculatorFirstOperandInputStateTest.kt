@@ -4,7 +4,9 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
+import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorErrorState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandInputState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandReadState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorInitialState
@@ -289,6 +291,186 @@ class ScientificCalculatorFirstOperandInputStateTest {
         ))
         assertTrue(ReflectionEquals(nonZeroInputMemoryResultState).matches(
             nonZeroInputMemoryState.subtractNumberFromMemory(nonZeroInputMemoryData)
+        ))
+    }
+
+    @Test
+    fun changeSignTest() {
+        val zeroInputData = ScientificCalculatorDataEntity(
+            prevState = baseState
+        )
+        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val nonZeroInputData = ScientificCalculatorDataEntity(
+            mainString = "6,427"
+        )
+        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-6,427"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandInputState(nonZeroInputResultData)
+        val nonZeroNegativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-5,68"
+        )
+        val nonZeroNegativeInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroNegativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "5,68"
+        )
+        val nonZeroNegativeInputResultState = ScientificCalculatorFirstOperandInputState(nonZeroNegativeInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputState).matches(
+            zeroInputState.negateOperand(zeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            nonZeroInputState.negateOperand(nonZeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroNegativeInputResultState).matches(
+            nonZeroNegativeInputState.negateOperand(nonZeroNegativeInputData)
+        ))
+    }
+
+    @Test
+    fun squareRootTest() {
+        val zeroInputData = ScientificCalculatorDataEntity(
+            prevState = baseState
+        )
+        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            historyString = "sqrt(0)",
+            prevState = baseState
+        )
+        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val nonZeroInputData = ScientificCalculatorDataEntity(
+            mainString = "5,76"
+        )
+        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "2,4",
+            historyString = "sqrt(5,76)"
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val nonZeroNegativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-5,68"
+        )
+        val nonZeroNegativeInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroNegativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-5,68",
+            historyString = "sqrt(-5,68)",
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val nonZeroNegativeInputResultState = ScientificCalculatorErrorState(nonZeroNegativeInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            zeroInputState.calculateSquareRoot(zeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            nonZeroInputState.calculateSquareRoot(nonZeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroNegativeInputResultState).matches(
+            nonZeroNegativeInputState.calculateSquareRoot(nonZeroNegativeInputData)
+        ))
+    }
+
+    @Test
+    fun digitInputTest() {
+        val zeroState = ScientificCalculatorFirstOperandInputState(baseData)
+        val commaToZeroResultData = ScientificCalculatorDataEntity(
+            mainString = "0,"
+        )
+        val commaToZeroResultState = ScientificCalculatorFirstOperandInputState(commaToZeroResultData)
+        val nonZeroToZeroResultData = ScientificCalculatorDataEntity(
+            mainString = "4"
+        )
+        val nonZeroToZeroResultState = ScientificCalculatorFirstOperandInputState(nonZeroToZeroResultData)
+        val commaToNonZeroData = ScientificCalculatorDataEntity(
+            mainString = "43"
+        )
+        val commaToNonZeroState = ScientificCalculatorFirstOperandInputState(commaToNonZeroData)
+        val commaToNonZeroResultData = ScientificCalculatorDataEntity(
+            mainString = "43,"
+        )
+        val commaToNonZeroResultState = ScientificCalculatorFirstOperandInputState(commaToNonZeroResultData)
+        val nonZeroToNonZeroData = ScientificCalculatorDataEntity(
+            mainString = "43"
+        )
+        val nonZeroToNonZeroState = ScientificCalculatorFirstOperandInputState(nonZeroToNonZeroData)
+        val nonZeroToNonZeroResultData = ScientificCalculatorDataEntity(
+            mainString = "439"
+        )
+        val nonZeroToNonZeroResultState = ScientificCalculatorFirstOperandInputState(nonZeroToNonZeroResultData)
+        val commaToNegativeData = ScientificCalculatorDataEntity(
+            mainString = "-75"
+        )
+        val commaToNegativeState = ScientificCalculatorFirstOperandInputState(commaToNegativeData)
+        val commaToNegativeResultData = ScientificCalculatorDataEntity(
+            mainString = "-75,"
+        )
+        val commaToNegativeResultState = ScientificCalculatorFirstOperandInputState(commaToNegativeResultData)
+        val nonZeroToNegativeData = ScientificCalculatorDataEntity(
+            mainString = "-23"
+        )
+        val nonZeroToNegativeState = ScientificCalculatorFirstOperandInputState(nonZeroToNegativeData)
+        val nonZeroToNegativeResultData = ScientificCalculatorDataEntity(
+            mainString = "-239"
+        )
+        val nonZeroToNegativeResultState = ScientificCalculatorFirstOperandInputState(nonZeroToNegativeResultData)
+        val longNumberData = ScientificCalculatorDataEntity(
+            mainString = "123456789012345"
+        )
+        val longNumberState = ScientificCalculatorFirstOperandInputState(longNumberData)
+        val maxNumberData = ScientificCalculatorDataEntity(
+            mainString = "1234567890123456"
+        )
+        val maxNumberState = ScientificCalculatorFirstOperandInputState(maxNumberData)
+        val longNumberCommaData = ScientificCalculatorDataEntity(
+            mainString = "123456789012345,"
+        )
+        val longNumberCommaState = ScientificCalculatorFirstOperandInputState(longNumberCommaData)
+        val maxNumberCommaData = ScientificCalculatorDataEntity(
+            mainString = "123456789012345,6"
+        )
+        val maxNumberCommaState = ScientificCalculatorFirstOperandInputState(maxNumberCommaData)
+
+        assertTrue(ReflectionEquals(zeroState).matches(
+            zeroState.inputDigit(baseData, "0")
+        ))
+        assertTrue(ReflectionEquals(commaToZeroResultState).matches(
+            zeroState.inputDigit(baseData, ",")
+        ))
+        assertTrue(ReflectionEquals(nonZeroToZeroResultState).matches(
+            zeroState.inputDigit(baseData, "4")
+        ))
+        assertTrue(ReflectionEquals(commaToNonZeroResultState).matches(
+            commaToNonZeroState.inputDigit(commaToNonZeroData, ",")
+        ))
+        assertTrue(ReflectionEquals(nonZeroToNonZeroResultState).matches(
+            nonZeroToNonZeroState.inputDigit(nonZeroToNonZeroData, "9")
+        ))
+        assertTrue(ReflectionEquals(commaToNegativeResultState).matches(
+            commaToNegativeState.inputDigit(commaToNegativeData, ",")
+        ))
+        assertTrue(ReflectionEquals(nonZeroToNegativeResultState).matches(
+            nonZeroToNegativeState.inputDigit(nonZeroToNegativeData, "9")
+        ))
+        assertTrue(ReflectionEquals(commaToNonZeroResultState).matches(
+            commaToNonZeroResultState.inputDigit(commaToNonZeroResultData, ",")
+        ))
+        assertTrue(ReflectionEquals(commaToNegativeResultState).matches(
+            commaToNegativeResultState.inputDigit(commaToNegativeResultData, ",")
+        ))
+        assertTrue(ReflectionEquals(maxNumberState).matches(
+            longNumberState.inputDigit(longNumberData, "6")
+        ))
+        assertTrue(ReflectionEquals(maxNumberState).matches(
+            maxNumberState.inputDigit(maxNumberData, "7")
+        ))
+        assertTrue(ReflectionEquals(maxNumberCommaState).matches(
+            longNumberCommaState.inputDigit(longNumberCommaData, "6")
+        ))
+        assertTrue(ReflectionEquals(maxNumberCommaState).matches(
+            maxNumberCommaState.inputDigit(maxNumberCommaData, "7")
+        ))
+        assertTrue(ReflectionEquals(longNumberCommaState).matches(
+            longNumberCommaState.inputDigit(longNumberCommaData, ",")
         ))
     }
 }

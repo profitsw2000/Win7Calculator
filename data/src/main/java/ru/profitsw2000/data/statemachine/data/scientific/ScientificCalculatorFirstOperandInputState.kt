@@ -300,7 +300,7 @@ class ScientificCalculatorFirstOperandInputState(
             mainString.contains(",") && digitToAppend == "," -> this
             mainString.length >= GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER && !(mainString.contains(",")) -> this
             mainString.length >= (GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER + 1) -> this
-            mainString == "0" && mainString.length < 2 -> ScientificCalculatorFirstOperandInputState(
+            mainString == "0" && mainString.length < 2 && digitToAppend != "," -> ScientificCalculatorFirstOperandInputState(
                 scientificCalculatorDataEntity.copy(
                     mainString = digitToAppend
                 )
