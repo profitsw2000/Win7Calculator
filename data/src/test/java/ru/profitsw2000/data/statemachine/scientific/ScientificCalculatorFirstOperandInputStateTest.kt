@@ -4,6 +4,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
+import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
@@ -535,6 +536,65 @@ class ScientificCalculatorFirstOperandInputStateTest {
         ))
         assertTrue(ReflectionEquals(prevInputResultState).matches(
             prevInputState.primitiveMathOperation(prevInputData, ScientificOperationType.PLUS, "+")
+        ))
+    }
+
+    @Test
+    fun reciprocationTest() {
+        val prevData = ScientificCalculatorDataEntity(
+            mainString = "5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+",
+            scientificOperationType = ScientificOperationType.PLUS,
+            operand = 5.0
+        )
+        val prevState = ScientificCalculatorMathOperationState(prevData)
+        val zeroInputData = ScientificCalculatorDataEntity(
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(reciproc(0)",
+            prevState = prevState,
+            errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+        )
+        val zeroInputResultState = ScientificCalculatorErrorState(zeroInputResultData)
+        val nonZeroInputData = ScientificCalculatorDataEntity(
+            mainString = "10,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,1",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(" +
+                    "reciproc(10)",
+            prevState = prevState
+        )
+        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-12,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-0,08",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(" +
+                    "reciproc(-12,5)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
+            zeroInputState.reciprocOperation(zeroInputData)
+        ))
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
+            nonZeroInputState.reciprocOperation(nonZeroInputData)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.reciprocOperation(negativeInputData)
         ))
     }
 }

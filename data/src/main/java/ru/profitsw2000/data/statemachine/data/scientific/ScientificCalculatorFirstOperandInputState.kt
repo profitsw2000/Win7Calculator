@@ -329,7 +329,8 @@ class ScientificCalculatorFirstOperandInputState(
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
                 mainString = scientificCalculatorDataEntity.mainString.commaTruncate(),
-                historyString = "${scientificCalculatorDataEntity.mainString.commaTruncate()}" +
+                historyString = "${scientificCalculatorDataEntity.historyString}" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()}" +
                         "$HISTORY_STRING_SPACE_LETTER$operationString",
                 scientificOperationType = scientificOperationType,
                 operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
@@ -350,16 +351,19 @@ class ScientificCalculatorFirstOperandInputState(
         return try {
             ScientificCalculatorFirstOperandReadState(scientificCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(1/(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
-                historyString = "reciproc(${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+                historyString = "${scientificCalculatorDataEntity.historyString}" +
+                        "reciproc(${scientificCalculatorDataEntity.mainString.commaTruncate()})"
             ))
         } catch (numberFormatException: NumberFormatException) {
             ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
-                historyString = "reciproc(${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                historyString = "${scientificCalculatorDataEntity.historyString}" +
+                        "reciproc(${scientificCalculatorDataEntity.mainString.commaTruncate()})",
                 errorCode = DIVIDE_ON_ZERO_ERROR_CODE
             ))
         } catch (exception: Exception) {
             ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
-                historyString = "reciproc(${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                historyString = "${scientificCalculatorDataEntity.historyString}" +
+                        "reciproc(${scientificCalculatorDataEntity.mainString.commaTruncate()})",
                 errorCode = UNKNOWN_ERROR_CODE
             ))
         }
