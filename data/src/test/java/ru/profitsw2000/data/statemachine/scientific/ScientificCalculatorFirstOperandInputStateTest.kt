@@ -16,6 +16,9 @@ import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFir
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorInitialState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorMathOperationState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorOperationResultState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandInputState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandPowerNumberInputState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandReadState
 
 class ScientificCalculatorFirstOperandInputStateTest {
 
@@ -734,14 +737,60 @@ class ScientificCalculatorFirstOperandInputStateTest {
         )
         val prevSCMOSState = ScientificCalculatorMathOperationState(prevSCMOSData)
         val currentSCMOSData = currentSCFOISData.copy(
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevSCMOSState
         )
         val currentSCMOSState = ScientificCalculatorFirstOperandInputState(currentSCMOSData)
         val resultSCMOSData = resultSCFOISData.copy(
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(33)"
         )
-        val resultSCMOSState = ScientificCalculatorFirstOperandReadState(resultSCMOSData)
+        val resultSCMOSState = ScientificCalculatorSecondOperandReadState(resultSCMOSData)
 
+        val prevSCSOISData = ScientificCalculatorDataEntity(
+            mainString = "123,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER"
+        )
+        val prevSCSOISState = ScientificCalculatorSecondOperandInputState(prevSCSOISData)
+        val currentSCSOISData = currentSCFOISData.copy(
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevSCSOISState
+        )
+        val currentSCSOISState = ScientificCalculatorFirstOperandInputState(currentSCSOISData)
+        val resultSCSOISData = resultSCFOISData.copy(
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(33)"
+        )
+        val resultSCSOISState = ScientificCalculatorSecondOperandReadState(resultSCSOISData)
+
+        val prevSCSOPNISData = ScientificCalculatorDataEntity(
+            mainString = "5,e+3",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER"
+        )
+        val prevSCSOPNISState = ScientificCalculatorSecondOperandPowerNumberInputState(prevSCSOPNISData)
+        val currentSCSOPNISData = currentSCFOISData.copy(
+            historyString = "5,e+3$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevSCSOPNISState
+        )
+        val currentSCSOPNISState = ScientificCalculatorFirstOperandInputState(currentSCSOPNISData)
+        val resultSCSOPNISData = resultSCFOISData.copy(
+            historyString = "5,e+3$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(33)"
+        )
+        val resultSCSOPNISState = ScientificCalculatorSecondOperandReadState(resultSCSOPNISData)
+
+
+        val prevSCSORSData = ScientificCalculatorDataEntity(
+            mainString = "678",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER"
+        )
+        val prevSCSORSState = ScientificCalculatorSecondOperandPowerNumberInputState(prevSCSORSData)
+        val currentSCSORSData = currentSCFOISData.copy(
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevSCSORSState
+        )
+        val currentSCSORSState = ScientificCalculatorFirstOperandInputState(currentSCSORSData)
+        val resultSCSORSData = resultSCFOISData.copy(
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(33)"
+        )
+        val resultSCSORSState = ScientificCalculatorSecondOperandReadState(resultSCSORSData)
 
         assertTrue(ReflectionEquals(nullPrevResultState).matches(
             nullPrevState.closeBracket(nullPrevData)
@@ -760,6 +809,18 @@ class ScientificCalculatorFirstOperandInputStateTest {
         ))
         assertTrue(ReflectionEquals(resultSCORSState).matches(
             currentSCORSState.closeBracket(currentSCORSData)
+        ))
+        assertTrue(ReflectionEquals(resultSCMOSState).matches(
+            currentSCMOSState.closeBracket(currentSCMOSData)
+        ))
+        assertTrue(ReflectionEquals(resultSCSOISState).matches(
+            currentSCSOISState.closeBracket(currentSCSOISData)
+        ))
+        assertTrue(ReflectionEquals(resultSCSOPNISState).matches(
+            currentSCSOPNISState.closeBracket(currentSCSOPNISData)
+        ))
+        assertTrue(ReflectionEquals(resultSCSORSState).matches(
+            currentSCSORSState.closeBracket(currentSCSORSData)
         ))
     }
 }
