@@ -263,21 +263,23 @@ class ScientificCalculatorFirstOperandInputState(
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
                     mainString = sqrtString,
-                    historyString = if (scientificCalculatorDataEntity.historyString == "") "sqrt(${scientificCalculatorDataEntity.mainString.commaTruncate()})"
-                    else "sqrt(${scientificCalculatorDataEntity.historyString})"
+                    historyString = "${scientificCalculatorDataEntity.historyString}" +
+                            "sqrt(${scientificCalculatorDataEntity.mainString})"
                 )
             )
         } catch (numberFormatException: NumberFormatException) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
-                    historyString = "sqrt(${scientificCalculatorDataEntity.mainString})",
+                    historyString = "${scientificCalculatorDataEntity.historyString}" +
+                            "sqrt(${scientificCalculatorDataEntity.mainString})",
                     errorCode = INVALID_INPUT_ERROR_CODE
                 )
             )
         } catch (exception: Exception) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
-                    historyString = "sqrt(${scientificCalculatorDataEntity.mainString})",
+                    historyString = "${scientificCalculatorDataEntity.historyString}" +
+                            "sqrt(${scientificCalculatorDataEntity.mainString})",
                     errorCode = UNKNOWN_ERROR_CODE
                 )
             )
@@ -405,12 +407,18 @@ class ScientificCalculatorFirstOperandInputState(
      * (depending on state preceded bracket opening)with updated calculator data
      */
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return if (scientificCalculatorDataEntity.prevState == null) this
+        return if (scientificCalculatorDataEntity.prevState == null)
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.commaTruncate()
+                )
+            )
         else {
             val returnData = scientificCalculatorDataEntity.prevState.scientificCalculatorDataEntity.copy(
                 mainString = scientificCalculatorDataEntity.mainString.commaTruncate(),
                 memoryNumber = scientificCalculatorDataEntity.memoryNumber,
-                historyString = "${scientificCalculatorDataEntity.historyString.commaTruncate()})"
+                historyString = "${scientificCalculatorDataEntity.historyString.commaTruncate()}" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
             )
             when(scientificCalculatorDataEntity.prevState){
                 is ScientificCalculatorMathOperationState -> ScientificCalculatorSecondOperandReadState(returnData)
