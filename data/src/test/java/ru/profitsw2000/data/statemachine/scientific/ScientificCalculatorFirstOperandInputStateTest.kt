@@ -5,6 +5,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
@@ -821,6 +822,74 @@ class ScientificCalculatorFirstOperandInputStateTest {
         ))
         assertTrue(ReflectionEquals(resultSCSORSState).matches(
             currentSCSORSState.closeBracket(currentSCSORSData)
+        ))
+    }
+
+    @Test
+    fun naturalLogarithmTest() {
+        val negativeNumberData = ScientificCalculatorDataEntity(
+            mainString = "-12,",
+            memoryNumber = 2.3
+        )
+        val negativeNumberState = ScientificCalculatorFirstOperandInputState(negativeNumberData)
+        val negativeNumberResultData = ScientificCalculatorDataEntity(
+            mainString = "-12,",
+            historyString = "ln(-12)",
+            memoryNumber = 2.3,
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val negativeNumberResultState = ScientificCalculatorErrorState(negativeNumberResultData)
+
+        val zeroNumberData = ScientificCalculatorDataEntity(
+            mainString = "0,",
+            memoryNumber = 2.3
+        )
+        val zeroNumberState = ScientificCalculatorFirstOperandInputState(zeroNumberData)
+        val zeroNumberResultData = ScientificCalculatorDataEntity(
+            mainString = "0,",
+            historyString = "ln(0)",
+            memoryNumber = 2.3,
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val zeroNumberResultState = ScientificCalculatorErrorState(zeroNumberResultData)
+
+        val positiveNumberData = ScientificCalculatorDataEntity(
+            mainString = "6,",
+            memoryNumber = 2.3
+        )
+        val positiveNumberState = ScientificCalculatorFirstOperandInputState(positiveNumberData)
+        val positiveNumberResultData = ScientificCalculatorDataEntity(
+            mainString = "1,791759469228055",
+            historyString = "ln(6)",
+            memoryNumber = 2.3
+        )
+        val positiveNumberResultState = ScientificCalculatorFirstOperandReadState(positiveNumberResultData)
+
+        val firstState = ScientificCalculatorMathOperationState(baseData)
+        val prevData = ScientificCalculatorDataEntity(
+            mainString = "13,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = firstState
+        )
+        val prevState = ScientificCalculatorFirstOperandInputState(prevData)
+        val prevResultData = ScientificCalculatorDataEntity(
+            mainString = "2,564949357461537",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(ln(13)",
+            prevState = firstState
+        )
+        val prevResultState = ScientificCalculatorFirstOperandReadState(prevResultData)
+
+        assertTrue(ReflectionEquals(negativeNumberResultState).matches(
+            negativeNumberState.calculateNaturalLogarithm(negativeNumberData)
+        ))
+        assertTrue(ReflectionEquals(zeroNumberResultState).matches(
+            zeroNumberState.calculateNaturalLogarithm(zeroNumberData)
+        ))
+        assertTrue(ReflectionEquals(positiveNumberResultState).matches(
+            positiveNumberState.calculateNaturalLogarithm(positiveNumberData)
+        ))
+        assertTrue(ReflectionEquals(prevResultState).matches(
+            prevState.calculateNaturalLogarithm(prevData)
         ))
     }
 }
