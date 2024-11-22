@@ -26,6 +26,14 @@ class ScientificCalculatorFirstOperandInputStateTest {
     private val baseData = ScientificCalculatorDataEntity()
     private val baseState = ScientificCalculatorInitialState(baseData)
 
+    private val prevData = ScientificCalculatorDataEntity(
+        mainString = "5",
+        historyString = "5$HISTORY_STRING_SPACE_LETTER+",
+        scientificOperationType = ScientificOperationType.PLUS,
+        operand = 5.0
+    )
+    private val prevState = ScientificCalculatorMathOperationState(prevData)
+
     @Test
     fun clearMemoryTest() {
         val numberInMemoryData = ScientificCalculatorDataEntity(
@@ -547,13 +555,6 @@ class ScientificCalculatorFirstOperandInputStateTest {
 
     @Test
     fun reciprocationTest() {
-        val prevData = ScientificCalculatorDataEntity(
-            mainString = "5",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+",
-            scientificOperationType = ScientificOperationType.PLUS,
-            operand = 5.0
-        )
-        val prevState = ScientificCalculatorMathOperationState(prevData)
         val zeroInputData = ScientificCalculatorDataEntity(
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState
@@ -606,13 +607,6 @@ class ScientificCalculatorFirstOperandInputStateTest {
 
     @Test
     fun openBracketTest() {
-        val prevData = ScientificCalculatorDataEntity(
-            mainString = "5",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+",
-            scientificOperationType = ScientificOperationType.PLUS,
-            operand = 5.0
-        )
-        val prevState = ScientificCalculatorMathOperationState(prevData)
         val zeroInputData = ScientificCalculatorDataEntity(
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState
@@ -895,12 +889,6 @@ class ScientificCalculatorFirstOperandInputStateTest {
 
     @Test
     fun exponentTest() {
-        val prevData = ScientificCalculatorDataEntity(
-            mainString = "5",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+",
-        )
-        val prevState = ScientificCalculatorMathOperationState(prevData)
-
         val zeroInputData = ScientificCalculatorDataEntity(
             mainString = "0,",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
@@ -970,12 +958,6 @@ class ScientificCalculatorFirstOperandInputStateTest {
 
     @Test
     fun integerOfNumberTest() {
-        val prevData = ScientificCalculatorDataEntity(
-            mainString = "5",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+",
-        )
-        val prevState = ScientificCalculatorMathOperationState(prevData)
-
         val negativeInputData = ScientificCalculatorDataEntity(
             mainString = "-33,452",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
@@ -1013,12 +995,6 @@ class ScientificCalculatorFirstOperandInputStateTest {
 
     @Test
     fun fractionOfNumberTest() {
-        val prevData = ScientificCalculatorDataEntity(
-            mainString = "5",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+",
-        )
-        val prevState = ScientificCalculatorMathOperationState(prevData)
-
         val negativeInputData = ScientificCalculatorDataEntity(
             mainString = "-33,452",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
@@ -1051,6 +1027,111 @@ class ScientificCalculatorFirstOperandInputStateTest {
         ))
         assertTrue(ReflectionEquals(commaInputResultState).matches(
             commaInputState.fractionOfNumber(commaInputData)
+        ))
+    }
+
+    @Test
+    fun hyperbolicSinusCalculationTest() {
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,2",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-12,2458839965655",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(sinh(-3,2)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val commaInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val commaInputState = ScientificCalculatorFirstOperandInputState(commaInputData)
+        val commaInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-10,0178749274099",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(sinh(-3)",
+            prevState = prevState
+        )
+        val commaInputResultState = ScientificCalculatorFirstOperandReadState(commaInputResultData)
+
+        val bigInputData = ScientificCalculatorDataEntity(
+            mainString = "999999,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val bigInputState = ScientificCalculatorFirstOperandInputState(bigInputData)
+        val bigInputResultData = ScientificCalculatorDataEntity(
+            mainString = "999999,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(sinh(999999)",
+            errorCode = INVALID_INPUT_ERROR_CODE,
+            prevState = prevState
+        )
+        val bigInputResultState = ScientificCalculatorErrorState(bigInputResultData)
+
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.hyperbolicSinus(negativeInputData)
+        ))
+        assertTrue(ReflectionEquals(commaInputResultState).matches(
+            commaInputState.hyperbolicSinus(commaInputData)
+        ))
+        assertTrue(ReflectionEquals(bigInputResultState).matches(
+            bigInputState.hyperbolicSinus(bigInputData)
+        ))
+    }
+
+    @Test
+    fun hyperbolicArcCosinusTest() {
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,2",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-1,87986358439691",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(asinh(-3,2)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val commaInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val commaInputState = ScientificCalculatorFirstOperandInputState(commaInputData)
+        val commaInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-1,818446459232067",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(asinh(-3)",
+            prevState = prevState
+        )
+        val commaInputResultState = ScientificCalculatorFirstOperandReadState(commaInputResultData)
+
+        val bigInputData = ScientificCalculatorDataEntity(
+            mainString = "999999,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val bigInputState = ScientificCalculatorFirstOperandInputState(bigInputData)
+        val bigInputResultData = ScientificCalculatorDataEntity(
+            mainString = "14,50865673852397",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(asinh(999999)",
+            prevState = prevState
+        )
+        val bigInputResultState = ScientificCalculatorFirstOperandInputState(bigInputResultData)
+
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.hyperbolicArcSinus(negativeInputData)
+        ))
+        assertTrue(ReflectionEquals(commaInputResultState).matches(
+            commaInputState.hyperbolicArcSinus(commaInputData)
+        ))
+        assertTrue(ReflectionEquals(bigInputResultState).matches(
+            bigInputState.hyperbolicArcSinus(bigInputData)
         ))
     }
 }
