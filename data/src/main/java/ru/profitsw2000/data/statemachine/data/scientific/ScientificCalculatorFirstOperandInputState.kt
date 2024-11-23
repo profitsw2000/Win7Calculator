@@ -620,13 +620,14 @@ class ScientificCalculatorFirstOperandInputState(
             else -> "sind"
         }
 
-        return ScientificCalculatorFirstOperandReadState(
+        val a = ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(result),
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
             )
         )
+        return a
     }
 
     /**
