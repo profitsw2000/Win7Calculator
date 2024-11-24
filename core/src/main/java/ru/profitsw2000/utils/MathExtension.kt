@@ -1,5 +1,6 @@
 package ru.profitsw2000.utils
 
+import kotlinx.coroutines.yield
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cosh

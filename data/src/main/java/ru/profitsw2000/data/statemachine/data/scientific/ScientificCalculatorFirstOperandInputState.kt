@@ -724,33 +724,41 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
      */
     override fun factorial(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return try {
-            ScientificCalculatorFirstOperandReadState(
-                scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).factorial()
-                    ),
-                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
-                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+        return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) > -1.0) {
+            try {
+                ScientificCalculatorFirstOperandReadState(
+                    scientificCalculatorDataEntity.copy(
+                        mainString = doubleToCalculatorString(
+                            calculatorStringToDouble(scientificCalculatorDataEntity.mainString).factorial()
+                        ),
+                        historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                                "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
+                    )
                 )
-            )
-        } catch (arithmeticException: ArithmeticException) {
-            ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
-                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
-                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
-                    errorCode = OVERFLOW_ERROR_CODE
+            } catch (arithmeticException: ArithmeticException) {
+                ScientificCalculatorErrorState(
+                    scientificCalculatorDataEntity.copy(
+                        historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                                "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                        errorCode = OVERFLOW_ERROR_CODE
+                    )
                 )
-            )
-        } catch (exception: Exception) {
-            ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
-                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
-                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
-                    errorCode = UNKNOWN_ERROR_CODE
+            } catch (exception: Exception) {
+                ScientificCalculatorErrorState(
+                    scientificCalculatorDataEntity.copy(
+                        historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                                "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                        errorCode = UNKNOWN_ERROR_CODE
+                    )
                 )
+            }
+        } else ScientificCalculatorErrorState(
+            scientificCalculatorDataEntity.copy(
+                historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                errorCode = INVALID_INPUT_ERROR_CODE
             )
-        }
+        )
     }
 
     /**
