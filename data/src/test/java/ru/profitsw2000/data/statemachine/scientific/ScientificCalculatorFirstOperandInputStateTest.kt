@@ -2257,7 +2257,178 @@ class ScientificCalculatorFirstOperandInputStateTest {
 
     @Test
     fun degreesTangentTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "70,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "2,747477419454622",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tand(70)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
 
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-70,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-2,74747741945462",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tand(-70)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val firstErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "90,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val firstErrorInputState = ScientificCalculatorFirstOperandInputState(firstErrorInputData)
+        val firstErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "90,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tand(90)",
+            prevState = prevState,
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val firstErrorInputResultState = ScientificCalculatorErrorState(firstErrorInputResultData)
+
+        val secondErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "270,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val secondErrorInputState = ScientificCalculatorFirstOperandInputState(secondErrorInputData)
+        val secondErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "270,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tand(270)",
+            prevState = prevState,
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val secondErrorInputResultState = ScientificCalculatorErrorState(secondErrorInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.tangent(positiveInputData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.tangent(negativeInputData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(firstErrorInputResultState).matches(
+            firstErrorInputState.tangent(firstErrorInputData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(secondErrorInputResultState).matches(
+            secondErrorInputState.tangent(secondErrorInputData, DEGREES_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun radiansTangentTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "70,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,221959918136943",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tanr(70)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-70,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-1,22195991813694",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tanr(-70)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.tangent(positiveInputData, RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.tangent(negativeInputData, RADIANS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun gradsTangentTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "70,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,96261050550515",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tang(70)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-70,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-1,96261050550515",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tang(-70)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val firstErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "100,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val firstErrorInputState = ScientificCalculatorFirstOperandInputState(firstErrorInputData)
+        val firstErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "100,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tang(100)",
+            prevState = prevState,
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val firstErrorInputResultState = ScientificCalculatorErrorState(firstErrorInputResultData)
+
+        val secondErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "300,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val secondErrorInputState = ScientificCalculatorFirstOperandInputState(secondErrorInputData)
+        val secondErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "300,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tang(300)",
+            prevState = prevState,
+            errorCode = INVALID_INPUT_ERROR_CODE
+        )
+        val secondErrorInputResultState = ScientificCalculatorErrorState(secondErrorInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.tangent(positiveInputData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.tangent(negativeInputData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(firstErrorInputResultState).matches(
+            firstErrorInputState.tangent(firstErrorInputData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(secondErrorInputResultState).matches(
+            secondErrorInputState.tangent(secondErrorInputData, GRADS_ANGLE_CODE)
+        ))
     }
 
 }

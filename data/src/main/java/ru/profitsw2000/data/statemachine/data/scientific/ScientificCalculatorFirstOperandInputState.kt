@@ -1106,7 +1106,7 @@ class ScientificCalculatorFirstOperandInputState(
                 mainString = doubleToCalculatorString(tan(angleInRadians)),
                 historyString = "${scientificCalculatorDataEntity.historyString}" +
                         "$operationString(" +
-                        "${scientificCalculatorDataEntity.mainString})"
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
             )
         )
     }
