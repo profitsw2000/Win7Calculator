@@ -2091,4 +2091,45 @@ class ScientificCalculatorFirstOperandInputStateTest {
             negativeErrorInputState.arcCosine(negativeErrorInputData, GRADS_ANGLE_CODE)
         ))
     }
+
+    @Test
+    fun piNumberTest() {
+        val piData = ScientificCalculatorDataEntity(
+            mainString = "-0,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val piState = ScientificCalculatorFirstOperandInputState(piData)
+        val piResultData = ScientificCalculatorDataEntity(
+            mainString = "3,141592653589793",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val piResultState = ScientificCalculatorFirstOperandReadState(piResultData)
+
+        assertTrue(ReflectionEquals(piResultState).matches(
+            piState.piNumber(piData)
+        ))
+    }
+
+    @Test
+    fun doublePiNumberTest() {
+        val piData = ScientificCalculatorDataEntity(
+            mainString = "-0,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val piState = ScientificCalculatorFirstOperandInputState(piData)
+        val piResultData = ScientificCalculatorDataEntity(
+            mainString = "6,283185307179586",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val piResultState = ScientificCalculatorFirstOperandReadState(piResultData)
+
+        assertTrue(ReflectionEquals(piResultState).matches(
+            piState.doublePiNumber(piData)
+        ))
+    }
+
 }
