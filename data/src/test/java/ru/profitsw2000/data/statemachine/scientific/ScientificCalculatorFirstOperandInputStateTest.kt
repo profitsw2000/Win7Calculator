@@ -1881,4 +1881,214 @@ class ScientificCalculatorFirstOperandInputStateTest {
             negativeInputState.cosine(negativeInputData, GRADS_ANGLE_CODE)
         ))
     }
+
+    @Test
+    fun degreesArcCosineTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "0,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "60",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosd(0,5)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-0,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "120",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosd(-0,5)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val positiveErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "1,1",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveErrorInputState = ScientificCalculatorFirstOperandInputState(positiveErrorInputData)
+        val positiveErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,1",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosd(1,1)",
+            errorCode = INVALID_INPUT_ERROR_CODE,
+            prevState = prevState
+        )
+        val positiveErrorInputResultState = ScientificCalculatorErrorState(positiveErrorInputResultData)
+
+        val negativeErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "-2,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeErrorInputState = ScientificCalculatorFirstOperandInputState(negativeErrorInputData)
+        val negativeErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-2,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosd(-2)",
+            errorCode = INVALID_INPUT_ERROR_CODE,
+            prevState = prevState
+        )
+        val negativeErrorInputResultState = ScientificCalculatorErrorState(negativeErrorInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.arcCosine(positiveInputData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.arcCosine(negativeInputData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(positiveErrorInputResultState).matches(
+            positiveErrorInputState.arcCosine(positiveErrorInputData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeErrorInputResultState).matches(
+            negativeErrorInputState.arcCosine(negativeErrorInputData, DEGREES_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun radiansArcCosineTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "0,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,047197551196598",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosr(0,5)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-0,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "2,094395102393196",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosr(-0,5)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val positiveErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "1,1",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveErrorInputState = ScientificCalculatorFirstOperandInputState(positiveErrorInputData)
+        val positiveErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,1",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosr(1,1)",
+            errorCode = INVALID_INPUT_ERROR_CODE,
+            prevState = prevState
+        )
+        val positiveErrorInputResultState = ScientificCalculatorErrorState(positiveErrorInputResultData)
+
+        val negativeErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "-2,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeErrorInputState = ScientificCalculatorFirstOperandInputState(negativeErrorInputData)
+        val negativeErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-2,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosr(-2)",
+            errorCode = INVALID_INPUT_ERROR_CODE,
+            prevState = prevState
+        )
+        val negativeErrorInputResultState = ScientificCalculatorErrorState(negativeErrorInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.arcCosine(positiveInputData, RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.arcCosine(negativeInputData, RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(positiveErrorInputResultState).matches(
+            positiveErrorInputState.arcCosine(positiveErrorInputData, RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeErrorInputResultState).matches(
+            negativeErrorInputState.arcCosine(negativeErrorInputData, RADIANS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun gradsArcCosineTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "0,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "66,66666666666667",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosg(0,5)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-0,5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "133,3333333333333",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosg(-0,5)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val positiveErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "1,1",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveErrorInputState = ScientificCalculatorFirstOperandInputState(positiveErrorInputData)
+        val positiveErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,1",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosg(1,1)",
+            errorCode = INVALID_INPUT_ERROR_CODE,
+            prevState = prevState
+        )
+        val positiveErrorInputResultState = ScientificCalculatorErrorState(positiveErrorInputResultData)
+
+        val negativeErrorInputData = ScientificCalculatorDataEntity(
+            mainString = "-2,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeErrorInputState = ScientificCalculatorFirstOperandInputState(negativeErrorInputData)
+        val negativeErrorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-2,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(acosg(-2)",
+            errorCode = INVALID_INPUT_ERROR_CODE,
+            prevState = prevState
+        )
+        val negativeErrorInputResultState = ScientificCalculatorErrorState(negativeErrorInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.arcCosine(positiveInputData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.arcCosine(negativeInputData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(positiveErrorInputResultState).matches(
+            positiveErrorInputState.arcCosine(positiveErrorInputData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeErrorInputResultState).matches(
+            negativeErrorInputState.arcCosine(negativeErrorInputData, GRADS_ANGLE_CODE)
+        ))
+    }
 }
