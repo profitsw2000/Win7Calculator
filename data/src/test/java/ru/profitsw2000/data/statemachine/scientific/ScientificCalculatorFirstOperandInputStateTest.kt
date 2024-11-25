@@ -24,6 +24,7 @@ import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorOpe
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandInputState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandPowerNumberInputState
 import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorSecondOperandReadState
+import java.sql.Ref
 
 class ScientificCalculatorFirstOperandInputStateTest {
 
@@ -2130,6 +2131,133 @@ class ScientificCalculatorFirstOperandInputStateTest {
         assertTrue(ReflectionEquals(piResultState).matches(
             piState.doublePiNumber(piData)
         ))
+    }
+
+    @Test
+    fun hyperbolicTangentTest() {
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-0,99505475368673",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tanh(-3)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "3,2",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "0,996682397839651",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tanh(3,2)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val bigInputData = ScientificCalculatorDataEntity(
+            mainString = "999999,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val bigInputState = ScientificCalculatorFirstOperandInputState(bigInputData)
+        val bigInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tanh(999999)",
+            prevState = prevState
+        )
+        val bigInputResultState = ScientificCalculatorFirstOperandReadState(bigInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.hyperbolicTangent(positiveInputData)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.hyperbolicTangent(negativeInputData)
+        ))
+        assertTrue(ReflectionEquals(bigInputResultState).matches(
+            bigInputState.hyperbolicTangent(bigInputData)
+        ))
+    }
+
+    @Test
+    fun hyperbolicArcTangentTest() {
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-0,9",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-1,47221948958322",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanh(-0,9)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "0,9",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,47221948958322",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanh(0,9)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val bigInputData = ScientificCalculatorDataEntity(
+            mainString = "2,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val bigInputState = ScientificCalculatorFirstOperandInputState(bigInputData)
+        val bigInputResultData = ScientificCalculatorDataEntity(
+            mainString = "2,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanh(2)",
+            errorCode = INVALID_INPUT_ERROR_CODE,
+            prevState = prevState
+        )
+        val bigInputResultState = ScientificCalculatorErrorState(bigInputResultData)
+
+        val oneInputData = ScientificCalculatorDataEntity(
+            mainString = "1,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val oneInputState = ScientificCalculatorFirstOperandInputState(oneInputData)
+        val oneInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanh(1)",
+            errorCode = DIVIDE_ON_ZERO_ERROR_CODE,
+            prevState = prevState
+        )
+        val oneInputResultState = ScientificCalculatorErrorState(oneInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.hyperbolicArcTangent(positiveInputData)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.hyperbolicArcTangent(negativeInputData)
+        ))
+        assertTrue(ReflectionEquals(bigInputResultState).matches(
+            bigInputState.hyperbolicArcTangent(bigInputData)
+        ))
+        assertTrue(ReflectionEquals(oneInputResultState).matches(
+            oneInputState.hyperbolicArcTangent(oneInputData)
+        ))
+    }
+
+    @Test
+    fun degreesTangentTest() {
+
     }
 
 }

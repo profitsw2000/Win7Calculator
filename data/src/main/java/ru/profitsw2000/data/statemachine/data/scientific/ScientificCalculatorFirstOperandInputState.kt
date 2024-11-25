@@ -1038,7 +1038,7 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState with corresponding error code otherwise.
      */
     override fun hyperbolicArcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return if (abs(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)) < 1)
+        return if (abs(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)) < 1.0)
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(
@@ -1048,11 +1048,17 @@ class ScientificCalculatorFirstOperandInputState(
                             "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
                 )
             )
-        else ScientificCalculatorErrorState(
-            ScientificCalculatorDataEntity(
+        else if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) == 1.0) ScientificCalculatorErrorState(
+            scientificCalculatorDataEntity.copy(
                 historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
                         "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
                 errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+            )
+        ) else ScientificCalculatorErrorState(
+            scientificCalculatorDataEntity.copy(
+                historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                        "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                errorCode = INVALID_INPUT_ERROR_CODE
             )
         )
     }
@@ -1088,7 +1094,7 @@ class ScientificCalculatorFirstOperandInputState(
 
         return if (((angleInRadians/PI)*2.0)%2.0 != 0.0 && ((angleInRadians/PI)*2.0)%1.0 == 0.0)
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}" +
                             "$operationString(" +
                             "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
