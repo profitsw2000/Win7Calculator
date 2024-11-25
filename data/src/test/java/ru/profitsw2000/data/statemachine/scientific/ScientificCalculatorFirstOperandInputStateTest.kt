@@ -2431,4 +2431,111 @@ class ScientificCalculatorFirstOperandInputStateTest {
         ))
     }
 
+    @Test
+    fun degreesArcTangentTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "71,56505117707799",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atand(3)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-71,565051177078",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atand(-3)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.arcTangent(positiveInputData, DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.arcTangent(negativeInputData, DEGREES_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun radiansArcTangentTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,249045772398254",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanr(3)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-1,24904577239825",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanr(-3)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.arcTangent(positiveInputData, RADIANS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.arcTangent(negativeInputData, RADIANS_ANGLE_CODE)
+        ))
+    }
+
+    @Test
+    fun gradsArcTangentTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "79,51672353008667",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atang(3)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-79,5167235300867",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atang(-3)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.arcTangent(positiveInputData, GRADS_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.arcTangent(negativeInputData, GRADS_ANGLE_CODE)
+        ))
+    }
 }
