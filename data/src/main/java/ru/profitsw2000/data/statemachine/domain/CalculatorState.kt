@@ -3,6 +3,7 @@ package ru.profitsw2000.data.statemachine.domain
 import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
+import ru.profitsw2000.utils.commaTruncate
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -77,5 +78,19 @@ interface CalculatorState {
 
         return if (numberString.contains("E-")) numberString.replace('.', ',').replace("E-", "e-").replace("0e", "e")
         else numberString.replace('.', ',').replace("E", "e+").replace("0e", "e")
+    }
+
+    /**
+     * Format conventional calculator string according to parameter value.
+     * @param isScientificNotation - boolean parameter to decide whether to format string to scientific form or not
+     * @return formatted to scientific form string if param is true, otherwise return same string, but
+     * with truncated comma at the end of it if has.
+     */
+    fun String.calcFormat(isScientificNotation: Boolean): String {
+        return if (isScientificNotation) {
+            getScientificFormattedString(calculatorStringToDouble(this))
+        } else {
+            this.commaTruncate()
+        }
     }
 }
