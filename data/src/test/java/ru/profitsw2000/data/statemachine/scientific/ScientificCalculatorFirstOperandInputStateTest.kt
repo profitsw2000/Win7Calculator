@@ -2538,4 +2538,115 @@ class ScientificCalculatorFirstOperandInputStateTest {
             negativeInputState.arcTangent(negativeInputData, GRADS_ANGLE_CODE)
         ))
     }
+
+    @Test
+    fun cubeNumberTest() {
+        val errorInputData = ScientificCalculatorDataEntity(
+            mainString = "3,e+200",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val errorInputState = ScientificCalculatorFirstOperandInputState(errorInputData)
+        val errorInputResultData = ScientificCalculatorDataEntity(
+            mainString = "3,e+200",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(cube(3,e+200)",
+            errorCode = OVERFLOW_ERROR_CODE,
+            prevState = prevState
+        )
+        val errorInputResultState = ScientificCalculatorErrorState(errorInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-3,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-27",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(cube(-3)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        assertTrue(ReflectionEquals(errorInputResultState).matches(
+            errorInputState.cubeNumber(errorInputData)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.cubeNumber(negativeInputData)
+        ))
+    }
+
+    @Test
+    fun cubeRootNumberTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "195112,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "58",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(cuberoot(195112)",
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-17576,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-26",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(cuberoot(-17576)",
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.cubeRoot(positiveInputData)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.cubeRoot(negativeInputData)
+        ))
+    }
+
+    @Test
+    fun formatChangeTest() {
+        val positiveInputData = ScientificCalculatorDataEntity(
+            mainString = "195112,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1,95112e+5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            isScientificNotation = true,
+            prevState = prevState
+        )
+        val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
+
+        val negativeInputData = ScientificCalculatorDataEntity(
+            mainString = "-17576,",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState
+        )
+        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputResultData = ScientificCalculatorDataEntity(
+            mainString = "-1,7576e+4",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            isScientificNotation = true,
+            prevState = prevState
+        )
+        val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
+
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
+            positiveInputState.fixedToExponentialFormat(positiveInputData)
+        ))
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
+            negativeInputState.fixedToExponentialFormat(negativeInputData)
+        ))
+    }
 }

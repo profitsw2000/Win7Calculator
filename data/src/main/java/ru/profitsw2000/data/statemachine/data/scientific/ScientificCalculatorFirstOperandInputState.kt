@@ -1169,7 +1169,7 @@ class ScientificCalculatorFirstOperandInputState(
             )
         } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}cube(" +
                             "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
                     errorCode = OVERFLOW_ERROR_CODE
@@ -1177,7 +1177,7 @@ class ScientificCalculatorFirstOperandInputState(
             )
         } catch (exception: Exception) {
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}cube(" +
                             "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
                     errorCode = UNKNOWN_ERROR_CODE
