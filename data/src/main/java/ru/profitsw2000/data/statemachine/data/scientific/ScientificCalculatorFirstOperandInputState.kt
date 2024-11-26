@@ -1262,7 +1262,7 @@ class ScientificCalculatorFirstOperandInputState(
                 )
             ) else
             ScientificCalculatorFirstOperandReadState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(
                         log10(calculatorStringToDouble(
                                 scientificCalculatorDataEntity.mainString
@@ -1291,22 +1291,22 @@ class ScientificCalculatorFirstOperandInputState(
                     mainString = doubleToCalculatorString(
                         10.0.powerTo(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
                     ),
-                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                    historyString = "${scientificCalculatorDataEntity.historyString}powten(" +
                             "${scientificCalculatorDataEntity.mainString.commaTruncate()})"
                 )
             )
         } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
-                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}powten(" +
                             "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
                     errorCode = OVERFLOW_ERROR_CODE
                 )
             )
         } catch (exception: Exception) {
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
-                    historyString = "${scientificCalculatorDataEntity.historyString}10^(" +
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}powten(" +
                             "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
                     errorCode = UNKNOWN_ERROR_CODE
                 )
