@@ -6,7 +6,6 @@ import org.junit.Test
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
 import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
-import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
@@ -43,10 +42,12 @@ class ScientificCalculatorFirstOperandInputStateTest {
     fun clearMemoryTest() {
         val numberInMemoryData = ScientificCalculatorDataEntity(
             mainString = "55,",
-            memoryNumber = 15.0
+            memoryNumber = 15.0,
+            isScientificNotation = true
         )
         val clearedMemoryData = ScientificCalculatorDataEntity(
-            mainString = "55"
+            mainString = "5,5e+1",
+            isScientificNotation = true
         )
         val numberInMemoryState = ScientificCalculatorFirstOperandInputState(
             numberInMemoryData
