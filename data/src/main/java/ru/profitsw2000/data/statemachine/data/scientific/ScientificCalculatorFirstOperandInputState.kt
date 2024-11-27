@@ -279,7 +279,19 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState with appropriate code in errorCode field
      */
     override fun calculateSquareRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return try {
+        val number = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+
+        return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) < 0)
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}" +
+                            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        else {
             val sqrtDouble = sqrt(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
             val sqrtString = doubleToCalculatorString(sqrtDouble, scientificCalculatorDataEntity.isScientificNotation)
 
@@ -290,26 +302,6 @@ class ScientificCalculatorFirstOperandInputState(
                             "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
                                 scientificCalculatorDataEntity.isScientificNotation
                             )})"
-                )
-            )
-        } catch (numberFormatException: NumberFormatException) {
-            ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
-                    historyString = "${scientificCalculatorDataEntity.historyString}" +
-                            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
-                                scientificCalculatorDataEntity.isScientificNotation
-                            )})",
-                    errorCode = INVALID_INPUT_ERROR_CODE
-                )
-            )
-        } catch (exception: Exception) {
-            ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
-                    historyString = "${scientificCalculatorDataEntity.historyString}" +
-                            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
-                                scientificCalculatorDataEntity.isScientificNotation
-                            )})",
-                    errorCode = UNKNOWN_ERROR_CODE
                 )
             )
         }
@@ -471,12 +463,11 @@ class ScientificCalculatorFirstOperandInputState(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 memoryNumber = scientificCalculatorDataEntity.memoryNumber,
-                historyString = "${scientificCalculatorDataEntity.historyString.calcFormat(
-                    scientificCalculatorDataEntity.isScientificNotation
-                )}" +
+                historyString = "${scientificCalculatorDataEntity.historyString}" +
                         "${scientificCalculatorDataEntity.mainString.calcFormat(
                             scientificCalculatorDataEntity.isScientificNotation
-                        )})"
+                        )})",
+                isScientificNotation = scientificCalculatorDataEntity.isScientificNotation
             )
             when(scientificCalculatorDataEntity.prevState){
                 is ScientificCalculatorMathOperationState -> ScientificCalculatorSecondOperandReadState(returnData)
