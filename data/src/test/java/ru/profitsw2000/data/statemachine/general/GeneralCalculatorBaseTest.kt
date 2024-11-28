@@ -3,7 +3,9 @@ package ru.profitsw2000.data.statemachine.general
 import org.junit.Test
 import org.junit.Assert.assertEquals
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
+import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorInitialState
+import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandInputState
 
 class GeneralCalculatorBaseTest {
 
@@ -414,6 +416,16 @@ class GeneralCalculatorBaseTest {
                 GeneralCalculatorDataEntity()
             ).calculatorStringToDouble("556,e+32"),
             0.0
+        )
+    }
+
+    @Test
+    fun calculTest() {
+        assertEquals(
+            "32223",
+            ScientificCalculatorFirstOperandInputState(
+                ScientificCalculatorDataEntity()
+            ).calcul()
         )
     }
 }
