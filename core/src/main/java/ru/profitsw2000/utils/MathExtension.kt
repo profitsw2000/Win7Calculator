@@ -1,6 +1,7 @@
 package ru.profitsw2000.utils
 
 import kotlinx.coroutines.yield
+import java.math.BigDecimal
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cosh
@@ -59,6 +60,16 @@ fun Double.dropCalculationError(): Double {
     val fraction = this % 1
     return if (abs(fraction) <= 0.00000000000001) truncate(this)
     else this
+}
+
+fun Double.subtract(number: Double): Double {
+    return BigDecimal.valueOf(this).subtract(BigDecimal.valueOf(number)).toDouble()
+}
+
+fun Double.exponent(): Double {
+    val result = exp(this)
+    checkForOverflow(result)
+    return result
 }
 
 /**

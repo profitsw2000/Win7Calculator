@@ -22,8 +22,10 @@ import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorInputState
 import ru.profitsw2000.utils.calcCosh
 import ru.profitsw2000.utils.calcSinh
 import ru.profitsw2000.utils.commaTruncate
+import ru.profitsw2000.utils.exponent
 import ru.profitsw2000.utils.factorial
 import ru.profitsw2000.utils.powerTo
+import ru.profitsw2000.utils.subtract
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
@@ -489,26 +491,63 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState if error occurred.
      */
     override fun calculateNaturalLogarithm(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return try {
-            ScientificCalculatorFirstOperandReadState(
-                scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        ln(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
-                        scientificCalculatorDataEntity.isScientificNotation
-                        ),
-                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
-                            "${scientificCalculatorDataEntity.mainString.calcFormat(
-                                scientificCalculatorDataEntity.isScientificNotation
-                            )})"
+        return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) > 0.0)
+                ScientificCalculatorFirstOperandReadState(
+                    scientificCalculatorDataEntity.copy(
+                        mainString = doubleToCalculatorString(
+                            ln(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
+                            scientificCalculatorDataEntity.isScientificNotation
+                            ),
+                        historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                                "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                    scientificCalculatorDataEntity.isScientificNotation
+                                )})"
+                    )
                 )
-            )
-        } catch (numberFormatException: NumberFormatException) {
-            ScientificCalculatorErrorState(
+            else ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
                     mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                         scientificCalculatorDataEntity.isScientificNotation
                     ),
                     historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+    }
+
+    /**
+     * Calculates exponent raised to the power of entered number.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and calculation result in mainString field
+     * if calculation completed successfully
+     * ScientificCalculatorErrorState if calculation completed with error
+     */
+    override fun calculateExponent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        return try {
+            val result = calculatorStringToDouble(scientificCalculatorDataEntity.mainString).exponent()
+
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(
+                        result,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                    )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
                                 scientificCalculatorDataEntity.isScientificNotation
                             )})",
@@ -521,54 +560,10 @@ class ScientificCalculatorFirstOperandInputState(
                     mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                         scientificCalculatorDataEntity.isScientificNotation
                     ),
-                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
-                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
-                    errorCode = UNKNOWN_ERROR_CODE
-                )
-            )
-        }
-    }
-
-    /**
-     * Calculates exponent raised to the power of entered number.
-     * @param scientificCalculatorDataEntity - contains current calculator data
-     * @return ScientificCalculatorFirstOperandReadState with operation saved in historyString and calculation result in mainString field
-     * if calculation completed successfully
-     * ScientificCalculatorErrorState if calculation completed with error
-     */
-    override fun calculateExponent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return try {
-            ScientificCalculatorFirstOperandReadState(
-                scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        exp(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
-                        scientificCalculatorDataEntity.isScientificNotation
-                        ),
                     historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
                                 scientificCalculatorDataEntity.isScientificNotation
-                            )})"
-                )
-            )
-        } catch (numberFormatException: NumberFormatException) {
-            ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
-                    mainString = scientificCalculatorDataEntity.mainString.calcFormat(
-                        scientificCalculatorDataEntity.isScientificNotation
-                    ),
-                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
-                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
-                    errorCode = INVALID_INPUT_ERROR_CODE
-                )
-            )
-        } catch (exception: Exception) {
-            ScientificCalculatorErrorState(
-                scientificCalculatorDataEntity.copy(
-                    mainString = scientificCalculatorDataEntity.mainString.calcFormat(
-                        scientificCalculatorDataEntity.isScientificNotation
-                    ),
-                    historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
-                            "${scientificCalculatorDataEntity.mainString.commaTruncate()})",
+                            )})",
                     errorCode = UNKNOWN_ERROR_CODE
                 )
             )
@@ -603,10 +598,13 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandInputState with updated calculator data
      */
     override fun fractionOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        val number = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+        val result = number.subtract(truncate(number))
+
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
                 mainString = doubleToCalculatorString(
-                    calculatorStringToDouble(scientificCalculatorDataEntity.mainString) % 1,
+                            result,
                             scientificCalculatorDataEntity.isScientificNotation
                     ),
                 historyString = "${scientificCalculatorDataEntity.historyString}frac(" +
