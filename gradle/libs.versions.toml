@@ -15,6 +15,7 @@ constraintlayout = "2.1.4"
 viewmodel = "2.8.1"
 koin = "3.2.0"
 mockito = "5.14.2"
+bigMath = "2.3.2"
 
 applicationId = "ru.profitsw2000.win7calculator"
 compileSdk = "34"
@@ -39,6 +40,7 @@ androidx-viewmodel = {group = "androidx.lifecycle", name = "lifecycle-viewmodel-
 koin = {group = "io.insert-koin", name = "koin-android", version.ref = "koin"}
 mockito-core = {group = "org.mockito", name = "mockito-core", version.ref = "mockito"}
 mockito-kotlin = {group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito"}
+big-math = {group = "ch.obermuhlner", name = "big-math", version.ref = "bigMath"}
 
 android-gradlePlugin = {group = "com.android.tools.build", name = "gradle", version.ref = "app"}
 kotlin-gradlePlugin = {group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin"}

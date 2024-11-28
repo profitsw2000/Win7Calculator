@@ -759,7 +759,7 @@ class ScientificCalculatorFirstOperandInputState(
             )
         ) else ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(result),
+                mainString = doubleToCalculatorString(result, scientificCalculatorDataEntity.isScientificNotation),
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString.calcFormat(
                             scientificCalculatorDataEntity.isScientificNotation
