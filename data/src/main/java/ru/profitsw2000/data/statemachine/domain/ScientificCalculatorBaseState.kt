@@ -1,8 +1,10 @@
 package ru.profitsw2000.data.statemachine.domain
 
+import ch.obermuhlner.math.big.BigDecimalMath
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.utils.dropCalculationError
+import java.math.MathContext
 import kotlin.math.PI
 
 interface ScientificCalculatorBaseState : ScientificCalculatorState {

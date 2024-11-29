@@ -102,32 +102,44 @@ interface CalculatorState {
         val mathContext = MathContext(scale)
         val addendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val augendBigDecimal = BigDecimalMath.toBigDecimal(augend.toStandardFormat())
+        val result = addendBigDecimal.add(augendBigDecimal, mathContext).stripTrailingZeros()
 
-        return addendBigDecimal.add(augendBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+        checkForOverflow(result)
+
+        return result.toString().toCalculatorFormat()
     }
 
     fun String.subtract(subtrahend: String): String {
         val mathContext = MathContext(scale)
         val minuendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val subtrahendBigDecimal = BigDecimalMath.toBigDecimal(subtrahend.toStandardFormat())
+        val result = minuendBigDecimal.subtract(subtrahendBigDecimal, mathContext).stripTrailingZeros()
 
-        return minuendBigDecimal.subtract(subtrahendBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+        checkForOverflow(result)
+
+        return result.toString().toCalculatorFormat()
     }
 
     fun String.multiply(multiplicand: String): String {
         val mathContext = MathContext(scale)
         val multiplierBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val multiplicandBigDecimal = BigDecimalMath.toBigDecimal(multiplicand.toStandardFormat())
+        val result = multiplierBigDecimal.multiply(multiplicandBigDecimal, mathContext).stripTrailingZeros()
 
-        return multiplierBigDecimal.multiply(multiplicandBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+        checkForOverflow(result)
+
+        return result.toString().toCalculatorFormat()
     }
 
     fun String.divide(divisor: String): String {
         val mathContext = MathContext(scale)
         val dividendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val divisorBigDecimal = BigDecimalMath.toBigDecimal(divisor.toStandardFormat())
+        val result = dividendBigDecimal.divide(divisorBigDecimal, mathContext).stripTrailingZeros()
 
-        return dividendBigDecimal.divide(divisorBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+        checkForOverflow(result)
+
+        return result.toString().toCalculatorFormat()
     }
 
     fun String.negate(): String = BigDecimalMath.toBigDecimal(this.toStandardFormat()).negate().stripTrailingZeros().toString().toCalculatorFormat()
@@ -147,4 +159,27 @@ interface CalculatorState {
         }
     }
 
+    fun String.sqrt(): String {
+        val mathContext = MathContext(scale)
+        val numberBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+
+        return BigDecimalMath.sqrt(numberBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+    }
+
+    private fun checkForOverflow(result: BigDecimal) {
+        val maxValueString = "1E+10000"
+        val minValueString = "-1E+10000"
+        val minFractionValueString = "1E-9999"
+        val maxFractionValueString = "-1E-9999"
+
+        val maxValueBigDecimal = BigDecimalMath.toBigDecimal(maxValueString)
+        val minValueBigDecimal = BigDecimalMath.toBigDecimal(minValueString)
+        val minFractionValueBigDecimal = BigDecimalMath.toBigDecimal(minFractionValueString)
+        val maxFractionValueBigDecimal = BigDecimalMath.toBigDecimal(maxFractionValueString)
+
+        if ((result.compareTo(maxValueBigDecimal) != -1) ||
+            (result.compareTo(minValueBigDecimal) != 1) ||
+            ((result.compareTo(minFractionValueBigDecimal) == -1) && (result.compareTo(maxFractionValueBigDecimal) == 1)))
+            throw ArithmeticException("Overflow of calculated number.")
+    }
 }

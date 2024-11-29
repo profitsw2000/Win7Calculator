@@ -124,9 +124,7 @@ class ScientificCalculatorInitialState(
         } else {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        scientificCalculatorDataEntity.memoryNumber
-                    )
+                    mainString = scientificCalculatorDataEntity.memoryNumber
                 )
             )
         }
@@ -141,7 +139,7 @@ class ScientificCalculatorInitialState(
         return ScientificCalculatorInitialState(
             scientificCalculatorDataEntity.copy(
                 memoryNumber = if (scientificCalculatorDataEntity.mainString == "0") null
-                else calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+                else scientificCalculatorDataEntity.mainString
             )
         )
     }
@@ -156,12 +154,12 @@ class ScientificCalculatorInitialState(
             if (scientificCalculatorDataEntity.mainString == "0") this
             else ScientificCalculatorInitialState(
                 scientificCalculatorDataEntity.copy(
-                    memoryNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+                    memoryNumber = scientificCalculatorDataEntity.mainString
                 )
             )
         } else {
             ScientificCalculatorInitialState(
-                scientificCalculatorDataEntity.copy(memoryNumber = (scientificCalculatorDataEntity.memoryNumber + calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+                scientificCalculatorDataEntity.copy(memoryNumber = (scientificCalculatorDataEntity.memoryNumber.add(scientificCalculatorDataEntity.mainString)))
             )
         }
     }
@@ -176,12 +174,12 @@ class ScientificCalculatorInitialState(
             if (scientificCalculatorDataEntity.mainString == "0") this
             else ScientificCalculatorInitialState(
                 scientificCalculatorDataEntity.copy(
-                    memoryNumber = 0 - calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+                    memoryNumber = "0".subtract(scientificCalculatorDataEntity.mainString)
                 )
             )
         } else {
             ScientificCalculatorInitialState(
-                scientificCalculatorDataEntity.copy(memoryNumber = (scientificCalculatorDataEntity.memoryNumber - calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+                scientificCalculatorDataEntity.copy(memoryNumber = scientificCalculatorDataEntity.memoryNumber.subtract(scientificCalculatorDataEntity.mainString))
             )
         }
     }
@@ -213,17 +211,14 @@ class ScientificCalculatorInitialState(
      */
     override fun calculateSquareRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return try {
-            val sqrtDouble = sqrt(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-            val sqrtString = doubleToCalculatorString(sqrtDouble)
-
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = sqrtString,
+                    mainString = scientificCalculatorDataEntity.mainString.sqrt(),
                     historyString = if (scientificCalculatorDataEntity.historyString == "") "sqrt(${scientificCalculatorDataEntity.mainString})"
                     else "sqrt(${scientificCalculatorDataEntity.historyString})"
                 )
             )
-        } catch (numberFormatException: NumberFormatException) {
+        } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
                     historyString = "sqrt(${scientificCalculatorDataEntity.mainString})",
@@ -276,7 +271,7 @@ class ScientificCalculatorInitialState(
             scientificCalculatorDataEntity.copy(
                 historyString = historyString,
                 scientificOperationType = scientificOperationType,
-                operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+                operand = scientificCalculatorDataEntity.mainString
             )
         )
     }
@@ -292,11 +287,11 @@ class ScientificCalculatorInitialState(
         return try {
             ScientificCalculatorOperationResultState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(1/(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                    mainString = "1".divide(scientificCalculatorDataEntity.mainString),
                     historyString = "reciproc(${scientificCalculatorDataEntity.mainString})"
                 )
             )
-        } catch (numberFormatException: NumberFormatException) {
+        } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
                     historyString = "reciproc(${scientificCalculatorDataEntity.mainString})",
                     errorCode = DIVIDE_ON_ZERO_ERROR_CODE
@@ -896,7 +891,7 @@ class ScientificCalculatorInitialState(
             scientificCalculatorDataEntity.copy(
                 historyString = historyString,
                 scientificOperationType = scientificOperationType,
-                operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+                operand = scientificCalculatorDataEntity.mainString
             )
         )
     }
