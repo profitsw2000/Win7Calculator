@@ -1,16 +1,8 @@
 package ru.profitsw2000.data.statemachine.domain
 
-import ch.obermuhlner.math.big.BigDecimalMath
-import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
-import ru.profitsw2000.data.entity.OperationType
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
-import ru.profitsw2000.data.utils.toCalculatorFormat
-import ru.profitsw2000.data.utils.toStandardFormat
 import ru.profitsw2000.utils.dropCalculationError
-import java.math.MathContext
-import java.math.RoundingMode
-import java.util.concurrent.atomic.LongAdder
 import kotlin.math.PI
 
 interface ScientificCalculatorBaseState : ScientificCalculatorState {

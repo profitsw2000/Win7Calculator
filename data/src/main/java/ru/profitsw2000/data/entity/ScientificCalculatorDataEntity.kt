@@ -6,9 +6,9 @@ import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 data class ScientificCalculatorDataEntity(
     val mainString: String = "0",
     val historyString: String = "",
-    val operand: Double = 0.0,
+    val operand: String = "0",
     val scientificOperationType: ScientificOperationType = ScientificOperationType.NO_OPERATION,
-    val memoryNumber: Double? = null,
+    val memoryNumber: String? = null,
     val errorCode: Int = NO_ERROR_CODE,
     val prevState: ScientificCalculatorBaseState? = null,
     val isScientificNotation: Boolean = false
