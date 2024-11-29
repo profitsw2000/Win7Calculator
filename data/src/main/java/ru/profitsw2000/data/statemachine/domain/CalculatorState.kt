@@ -4,7 +4,6 @@ import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_N
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.utils.commaTruncate
-import ru.profitsw2000.utils.squareNumber
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -93,9 +92,5 @@ interface CalculatorState {
         } else {
             this.commaTruncate()
         }
-    }
-
-    fun calcul(): String {
-        return "2".squareNumber()
     }
 }

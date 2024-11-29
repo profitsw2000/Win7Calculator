@@ -1,7 +1,6 @@
 package ru.profitsw2000.utils
 
 import ch.obermuhlner.math.big.BigDecimalMath
-import kotlinx.coroutines.yield
 import java.math.BigDecimal
 import java.math.MathContext
 import kotlin.math.PI
@@ -103,9 +102,4 @@ private fun gamma(x: Double): Double {
                     sterling_koef_4/n.pow(4) +
                     sterling_koef_5/n.pow(5) +
                     sterling_koef_6/n.pow(6))
-}
-
-fun String.squareNumber(): String {
-    val mathContext = MathContext(32)
-    return BigDecimalMath.pow(BigDecimal("99999999999999999999999999999999"), this.toLong(), mathContext).toString()
 }
