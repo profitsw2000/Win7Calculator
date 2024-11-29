@@ -7,6 +7,7 @@ import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
+import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
@@ -40,6 +41,9 @@ import kotlin.math.truncate
 class ScientificCalculatorInitialState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
 ) : ScientificCalculatorBaseState {
+
+    override val scale: Int
+        get() = SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {

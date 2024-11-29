@@ -1,16 +1,20 @@
 package ru.profitsw2000.data.statemachine.domain
 
+import ch.obermuhlner.math.big.BigDecimalMath
 import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.utils.commaTruncate
 import java.math.BigDecimal
+import java.math.MathContext
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 interface CalculatorState {
+
+    val scale: Int
 
     fun consumeAction(action: CalculatorAction): CalculatorState
 
@@ -93,4 +97,54 @@ interface CalculatorState {
             this.commaTruncate()
         }
     }
+
+    fun String.add(augend: String): String {
+        val mathContext = MathContext(scale)
+        val addendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val augendBigDecimal = BigDecimalMath.toBigDecimal(augend.toStandardFormat())
+
+        return addendBigDecimal.add(augendBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+    }
+
+    fun String.subtract(subtrahend: String): String {
+        val mathContext = MathContext(scale)
+        val minuendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val subtrahendBigDecimal = BigDecimalMath.toBigDecimal(subtrahend.toStandardFormat())
+
+        return minuendBigDecimal.subtract(subtrahendBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+    }
+
+    fun String.multiply(multiplicand: String): String {
+        val mathContext = MathContext(scale)
+        val multiplierBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val multiplicandBigDecimal = BigDecimalMath.toBigDecimal(multiplicand.toStandardFormat())
+
+        return multiplierBigDecimal.multiply(multiplicandBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+    }
+
+    fun String.divide(divisor: String): String {
+        val mathContext = MathContext(scale)
+        val dividendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val divisorBigDecimal = BigDecimalMath.toBigDecimal(divisor.toStandardFormat())
+
+        return dividendBigDecimal.divide(divisorBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+    }
+
+    fun String.negate(): String = BigDecimalMath.toBigDecimal(this.toStandardFormat()).negate().stripTrailingZeros().toString().toCalculatorFormat()
+
+    fun String.toCalculatorFormat(): String {
+        return when {
+            this.contains("E") && this.contains(".") -> this.replace(".", ",").replace("E", "e")
+            this.contains("E") -> this.replace("E", ",e")
+            else -> this.replace(".",",")
+        }
+    }
+
+    fun String.toStandardFormat(): String {
+        return when {
+            this.contains(",e") -> this.replace(",e", "E")
+            else -> this.replace(",", ".").replace("e", "E")
+        }
+    }
+
 }

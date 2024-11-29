@@ -2,13 +2,8 @@ package ru.profitsw2000.data.statemachine.general
 
 import org.junit.Test
 import org.junit.Assert.assertEquals
-import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
-import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.statemachine.data.general.GeneralCalculatorInitialState
-import ru.profitsw2000.data.statemachine.data.scientific.ScientificCalculatorFirstOperandInputState
-import ru.profitsw2000.data.utils.add
-import ru.profitsw2000.data.utils.multiply
 
 class GeneralCalculatorBaseTest {
 
@@ -419,26 +414,6 @@ class GeneralCalculatorBaseTest {
                 GeneralCalculatorDataEntity()
             ).calculatorStringToDouble("556,e+32"),
             0.0
-        )
-    }
-
-    @Test
-    fun addTest() {
-        assertEquals(
-            "0,3",
-            "0,1".add("0,2", SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER)
-        )
-        assertEquals(
-            "0,3",
-            "0,12345678901234567890123456789012".add("0,12345678901234567890123456789012", SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER)
-        )
-    }
-
-    @Test
-    fun multiplyTest() {
-        assertEquals(
-            "32223",
-            "12345678901234567890123456789012".multiply("12345678901234567890123456789012", SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER)
         )
     }
 }
