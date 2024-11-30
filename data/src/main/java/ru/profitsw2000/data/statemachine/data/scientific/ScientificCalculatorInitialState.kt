@@ -369,12 +369,12 @@ class ScientificCalculatorInitialState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(ln(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))),
+                    mainString = scientificCalculatorDataEntity.mainString.ln(),
                     historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )
             )
-        } catch (numberFormatException: NumberFormatException) {
+        } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}ln(" +

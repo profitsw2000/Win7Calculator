@@ -98,7 +98,12 @@ interface CalculatorState {
         }
     }
 
-    fun String.add(augend: String): String {
+    /**
+     * Calculates sum of two numbers represented in String type and return result in BigDecimal type.
+     * @param augend - second member of expression
+     * @return result of calculation in BigDecimal format
+     */
+    private fun String.calculateAdd(augend: String): BigDecimal {
         val mathContext = MathContext(scale)
         val addendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val augendBigDecimal = BigDecimalMath.toBigDecimal(augend.toStandardFormat())
@@ -106,10 +111,38 @@ interface CalculatorState {
 
         checkForOverflow(result)
 
-        return result.toString().toCalculatorFormat()
+        return result
     }
 
-    fun String.subtract(subtrahend: String): String {
+    /**
+     * Calculates sum of two numbers represented in String type and return result in String type.
+     * @param augend - second member of expression
+     * @return result of calculation in String format
+     */
+    fun String.add(augend: String): String {
+        return this.calculateAdd(augend).toString().toCalculatorFormat()
+    }
+
+    /**
+     * Calculates sum of two numbers represented in String type and return result in String type
+     * in plain or engineering format depending on second parameter of function.
+     * @param augend - second member of expression
+     * @param isScientificNotation - define format of returned String
+     * @return result of calculation in String format
+     */
+    fun String.add(augend: String, isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculateAdd(augend).toEngineeringString().toCalculatorFormat()
+        else
+            this.add(augend)
+    }
+
+    /**
+     * Subtract subtrahend from @this and return result in BigDecimal type.
+     * @param subtrahend - number to subtract from @this
+     * @return result of calculation in BigDecimal format
+     */
+    private fun String.calculateSubtract(subtrahend: String): BigDecimal {
         val mathContext = MathContext(scale)
         val minuendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val subtrahendBigDecimal = BigDecimalMath.toBigDecimal(subtrahend.toStandardFormat())
@@ -117,10 +150,37 @@ interface CalculatorState {
 
         checkForOverflow(result)
 
-        return result.toString().toCalculatorFormat()
+        return result
     }
 
-    fun String.multiply(multiplicand: String): String {
+    /**
+     * Subtract subtrahend from @this and return result in String type.
+     * @param subtrahend - number to subtract from @this
+     * @return result of calculation in String format
+     */
+    fun String.subtract(subtrahend: String): String {
+        return this.calculateSubtract(subtrahend).toString().toCalculatorFormat()
+    }
+
+    /**
+     * Subtract subtrahend from @this and return result in String type
+     * in plain or engineering format depending on second parameter of function.
+     * @param subtrahend - number to subtract from @this
+     * @param isScientificNotation - define format of returned String
+     * @return result of calculation in String type
+     */
+    fun String.subtract(subtrahend: String, isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculateSubtract(subtrahend).toEngineeringString().toCalculatorFormat()
+        else
+            this.add(subtrahend)
+    }
+
+    /** Calculates multiplication of @this and multiplicand and return result in BigDecimal type.
+     * @param multiplicand
+     * @return result of calculation in BigDecimal type
+     */
+    private fun String.calculateMultiply(multiplicand: String): BigDecimal {
         val mathContext = MathContext(scale)
         val multiplierBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val multiplicandBigDecimal = BigDecimalMath.toBigDecimal(multiplicand.toStandardFormat())
@@ -128,10 +188,34 @@ interface CalculatorState {
 
         checkForOverflow(result)
 
-        return result.toString().toCalculatorFormat()
+        return result
     }
 
-    fun String.divide(divisor: String): String {
+    /** Calculates multiplication of @this and multiplicand and return result in String type.
+     * @param multiplicand
+     * @return result of calculation in String type
+     */
+    fun String.multiply(multiplicand: String): String {
+        return this.calculateMultiply(multiplicand).toString().toCalculatorFormat()
+    }
+
+    /** Calculates multiplication of @this and multiplicand and return result in String type
+     * in plain or engineering format depending on second parameter of function.
+     * @param multiplicand
+     * @return result of calculation in String type
+     */
+    fun String.multiply(multiplicand: String, isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculateMultiply(multiplicand).toEngineeringString().toCalculatorFormat()
+        else
+            this.multiply(multiplicand)
+    }
+
+    /** Divide @this to divisor and return result in BigDecimal type.
+     * @param divisor
+     * @return result of calculation in BigDecimal type
+     */
+    private fun String.calculateDivide(divisor: String): BigDecimal {
         val mathContext = MathContext(scale)
         val dividendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val divisorBigDecimal = BigDecimalMath.toBigDecimal(divisor.toStandardFormat())
@@ -139,34 +223,66 @@ interface CalculatorState {
 
         checkForOverflow(result)
 
-        return result.toString().toCalculatorFormat()
+        return result
     }
 
+    /** Divide @this to divisor and return result in String type.
+     * @param divisor
+     * @return result of calculation in String type
+     */
+    fun String.divide(divisor: String): String {
+        return this.calculateDivide(divisor).toString().toCalculatorFormat()
+    }
+
+    /** Divide @this to divisor and return result in String type
+     * in plain or engineering format depending on second parameter of function.
+     * @param divisor
+     * @return result of calculation in String type with appropriate format
+     */
+    fun String.divide(divisor: String, isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculateDivide(divisor).toEngineeringString().toCalculatorFormat()
+        else
+            this.divide(divisor)
+    }
+
+    /** Change sign of number in @this
+     * @return string that contains number with changed sign
+     */
     fun String.negate(): String = BigDecimalMath.toBigDecimal(this.toStandardFormat()).negate().stripTrailingZeros().toString().toCalculatorFormat()
 
-    fun String.toCalculatorFormat(): String {
-        return when {
-            this.contains("E") && this.contains(".") -> this.replace(".", ",").replace("E", "e")
-            this.contains("E") -> this.replace("E", ",e")
-            else -> this.replace(".",",")
-        }
-    }
-
-    fun String.toStandardFormat(): String {
-        return when {
-            this.contains(",e") -> this.replace(",e", "E")
-            else -> this.replace(",", ".").replace("e", "E")
-        }
-    }
-
-    fun String.sqrt(): String {
+    /** Calculates square root of @this and return result in BigDecimal type.
+     * @return result of calculation in BigDecimal type
+     */
+    private fun String.calculateSQRT(): BigDecimal {
         val mathContext = MathContext(scale)
         val numberBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
 
-        return BigDecimalMath.sqrt(numberBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+        return BigDecimalMath.sqrt(numberBigDecimal, mathContext).stripTrailingZeros()
     }
 
-    private fun checkForOverflow(result: BigDecimal) {
+    /** Calculates square root of @this and return result in String type.
+     * @return result of calculation in String type
+     */
+    fun String.sqrt(): String {
+        return this.calculateSQRT().toString().toCalculatorFormat()
+    }
+
+    /** Calculates square root of @this and return result in String type
+     * in plain or engineering format depending on second parameter of function.
+     * @return result of calculation in String type with appropriate format
+     */
+    fun String.sqrt(isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculateSQRT().toEngineeringString().toCalculatorFormat()
+        else
+            this.sqrt()
+    }
+
+    /** Check if BigDecimal number is in certain range and throw exception if not.
+     * @param number being checked
+      */
+    fun checkForOverflow(result: BigDecimal) {
         val maxValueString = "1E+10000"
         val minValueString = "-1E+10000"
         val minFractionValueString = "1E-9999"
@@ -181,5 +297,41 @@ interface CalculatorState {
             (result.compareTo(minValueBigDecimal) != 1) ||
             ((result.compareTo(minFractionValueBigDecimal) == -1) && (result.compareTo(maxFractionValueBigDecimal) == 1)))
             throw ArithmeticException("Overflow of calculated number.")
+    }
+
+    /**
+     * Changes @this string, contained number, to appropriate format to display it on calculator.
+     * Format of @this:         212.02      2E+12   3.34E-13
+     * Format of calculator:    212,02      2,e+12  3,34e-13
+     * @return calculator string
+     */
+    fun String.toCalculatorFormat(): String {
+        return when {
+            this.contains("E") && this.contains(".") -> this.replace(".", ",").replace("E", "e")
+            this.contains("E") -> this.replace("E", ",e")
+            else -> this.replace(".",",")
+        }
+    }
+
+    /**
+     * Changes @this string, contained number in format to display it on calculator
+     * to format, appropriate to convert it to BigDecimal type.
+     * Format of @this:         212.02      2E+12   3.34E-13
+     * Format of calculator:    212,02      2,e+12  3,34e-13
+     * @return calculator string
+     */
+    fun String.toStandardFormat(): String {
+        return when {
+            this.contains(",e") -> this.replace(",e", "E")
+            else -> this.commaTruncate().replace(",", ".").replace("e", "E")
+        }
+    }
+
+    /**
+     * Deletes last character if it is comma.
+     */
+    fun String.commaTruncate(): String {
+        return if (this.last() == ',') this.dropLast(1)
+        else this
     }
 }

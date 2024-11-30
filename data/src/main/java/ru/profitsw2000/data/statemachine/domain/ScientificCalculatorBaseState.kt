@@ -130,4 +130,22 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
     fun gradsFromRadians(angleInRadians: Double): Double {
         return ((angleInRadians*200.0)/PI).dropCalculationError()
     }
+
+    fun String.ln(): String {
+        val mathContext = MathContext(scale)
+        val numberBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+
+        return BigDecimalMath.log(numberBigDecimal, mathContext).stripTrailingZeros().toString().toCalculatorFormat()
+    }
+
+    fun String.exp(): String {
+        val mathContext = MathContext(scale)
+        val numberBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val result = BigDecimalMath.exp(numberBigDecimal, mathContext).stripTrailingZeros()
+
+        checkForOverflow(result)
+
+        return result.toString().toCalculatorFormat()
+    }
+
 }
