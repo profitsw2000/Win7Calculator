@@ -316,8 +316,8 @@ interface CalculatorState {
     /**
      * Changes @this string, contained number in format to display it on calculator
      * to format, appropriate to convert it to BigDecimal type.
-     * Format of @this:         212.02      2E+12   3.34E-13
-     * Format of calculator:    212,02      2,e+12  3,34e-13
+     * Format of calculator:        212.02      2E+12   3.34E-13
+     * Format of @this:             212,02      2,e+12  3,34e-13
      * @return calculator string
      */
     fun String.toStandardFormat(): String {
