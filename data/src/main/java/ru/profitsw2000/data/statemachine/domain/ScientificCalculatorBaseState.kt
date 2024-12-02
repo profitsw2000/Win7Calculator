@@ -6,6 +6,8 @@ import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ARC_TANGENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEGREES_TO_RADIANS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
+import ru.profitsw2000.data.constants.DMS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.GRADS_TO_RADIANS_FUNCTION_CODE
@@ -351,6 +353,59 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             this.convertAngleUnits(functionCode).toEngineeringString().toCalculatorFormat()
         else
             this.convertAngleUnits(functionCode).toString().toCalculatorFormat()
+    }
+
+    /** Converts number in @this with fractional part in minutes to
+     * number with decimal fractional part or otherwise(depending on functionCode param)
+     * @param functionCode - contain code of function, that need to be done
+     * @return result of calculation in BigDecimal type
+     */
+    fun String.calculateDegreesFractionPart(functionCode: Int): BigDecimal {
+        val mathContext = MathContext(scale)
+        val fraction = this.numberPart(FRACTIONAL_PART_FUNCTION_CODE)
+        val integral = this.numberPart(INTEGRAL_PART_FUNCTION_CODE)
+        val result = when(functionCode) {
+            DMS_FUNCTION_CODE -> BigDecimalMath.toBigDecimal(
+                integral.add(
+                    (fraction.multiply("60")).divide("100")
+                ),
+                mathContext
+            )
+            DEG_FUNCTION_CODE -> BigDecimalMath.toBigDecimal(
+                integral.add(
+                    (fraction.multiply("60")).divide("100")
+                ),
+                mathContext
+            )
+            else -> BigDecimalMath.toBigDecimal(this)
+        }
+
+        checkForOverflow(result)
+
+        return result
+    }
+
+    /** Converts number in @this with fractional part in minutes to
+     * number with decimal fractional part or otherwise(depending on functionCode param)
+     * @param functionCode - contain code of function, that need to be done
+     * @return result of calculation in String type
+     */
+    fun String.decimalMinutes(functionCode: Int): String {
+        return this.calculateDegreesFractionPart(functionCode).toString().toCalculatorFormat()
+    }
+
+
+    /** Converts number in @this with fractional part in minutes to
+     * number with decimal fractional part or otherwise(depending on functionCode param)
+     * @param functionCode - contain code of function, that need to be done
+     * @param isScientificNotation - define result string format
+     * @return result of calculation in String type with engineering
+     * or plain format depending on function parameter     */
+    fun String.decimalMinutes(functionCode: Int, isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculateDegreesFractionPart(functionCode).toEngineeringString().toCalculatorFormat()
+        else
+            this.decimalMinutes(functionCode)
     }
 
 }
