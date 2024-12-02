@@ -408,4 +408,29 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             this.decimalMinutes(functionCode)
     }
 
+    fun piNumber(): String {
+        val mathContext = MathContext(scale)
+        return BigDecimalMath.pi(mathContext).toString().toCalculatorFormat()
+    }
+
+    fun piNumber(isScientificNotation: Boolean): String {
+        val mathContext = MathContext(scale)
+        return if (isScientificNotation)
+            BigDecimalMath.pi(mathContext).toEngineeringString().toCalculatorFormat()
+        else
+            piNumber()
+    }
+
+    fun doublePiNumber(): String {
+        val mathContext = MathContext(scale)
+        return BigDecimalMath.pi(mathContext).toString().toCalculatorFormat().multiply("2")
+    }
+
+    fun doublePiNumber(isScientificNotation: Boolean): String {
+        val mathContext = MathContext(scale)
+        return if (isScientificNotation)
+            BigDecimalMath.pi(mathContext).toEngineeringString().toCalculatorFormat().multiply("2")
+        else
+            piNumber()
+    }
 }
