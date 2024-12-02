@@ -5,8 +5,10 @@ import ru.profitsw2000.data.constants.ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ARC_TANGENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.COSINE_FUNCTION_CODE
+import ru.profitsw2000.data.constants.DEGREES_TO_RADIANS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
+import ru.profitsw2000.data.constants.GRADS_TO_RADIANS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_TANGENT_FUNCTION_CODE
@@ -17,6 +19,8 @@ import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.LOGARITHM_BASE_10_FUNCTION_CODE
 import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
 import ru.profitsw2000.data.constants.POWER_OF_FUNCTION_CODE
+import ru.profitsw2000.data.constants.RADIANS_TO_DEGREES_FUNCTION_CODE
+import ru.profitsw2000.data.constants.RADIANS_TO_GRADS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ROOT_OF_FUNCTION_CODE
 import ru.profitsw2000.data.constants.SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.TANGENT_FUNCTION_CODE
@@ -26,6 +30,8 @@ import ru.profitsw2000.utils.dropCalculationError
 import java.math.BigDecimal
 import java.math.MathContext
 import kotlin.math.PI
+
+const val GRADS_TO_DEGREES_COEF = "1.11111111111111111111111111111111"
 
 interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
@@ -234,7 +240,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
     }
 
     /**
-     * Сalculates the result of the function of the number contained in the @this string.
+     * Calculates the result of the function of the number contained in the @this string.
      * @param functionCode - contain code of function, that need to be done
      * @return result of calculation in String type
      */
@@ -298,6 +304,53 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             this.calculatePowerOfNumber(exponent, functionCode).toEngineeringString().toCalculatorFormat()
         else
             this.powerOfNumber(exponent, functionCode)
+    }
+
+    /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
+     * @param functionCode - contain code of function, that need to be done
+     * @return result of calculation in BigDecimal type
+     */
+    fun String.convertAngleUnits(functionCode: Int): BigDecimal {
+        val mathContext = MathContext(scale)
+        val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val result = when(functionCode) {
+            DEGREES_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(number, mathContext)
+            RADIANS_TO_DEGREES_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext)
+            GRADS_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(
+                number.divide(BigDecimalMath.toBigDecimal(GRADS_TO_DEGREES_COEF, mathContext)),
+                mathContext
+            )
+            RADIANS_TO_GRADS_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext).multiply(
+                BigDecimalMath.toBigDecimal(GRADS_TO_DEGREES_COEF, mathContext),
+                mathContext
+            )
+            else -> number
+        }
+
+        checkForOverflow(result)
+
+        return result
+    }
+
+    /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
+     * @param functionCode - contain code of function, that need to be done
+     * @return result of calculation in String type
+     */
+    fun String.convert(functionCode: Int): String {
+        return this.convertAngleUnits(functionCode).toString().toCalculatorFormat()
+    }
+
+    /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
+     * @param functionCode - contain code of function, that need to be done
+     * @param isScientificNotation - define result string format
+     * @return result of calculation in String type with engineering
+     * or plain format depending on function isScientificNotation parameter
+     */
+    fun String.convert(functionCode: Int, isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.convertAngleUnits(functionCode).toEngineeringString().toCalculatorFormat()
+        else
+            this.convertAngleUnits(functionCode).toString().toCalculatorFormat()
     }
 
 }

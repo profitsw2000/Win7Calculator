@@ -5,6 +5,7 @@ import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
 import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
@@ -369,7 +370,8 @@ class ScientificCalculatorInitialState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = scientificCalculatorDataEntity.mainString.ln(),
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        NATURAL_LOGARITHM_FUNCTION_CODE),
                     historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )
