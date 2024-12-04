@@ -878,7 +878,7 @@ class ScientificCalculatorInitialState(
             }
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(result),
+                    mainString = result,
                     historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )
