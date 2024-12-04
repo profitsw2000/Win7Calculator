@@ -1,6 +1,8 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
 import ru.profitsw2000.data.constants.DEGREES_TO_RADIANS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
@@ -11,9 +13,11 @@ import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.GRADS_TO_RADIANS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_TANGENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
@@ -777,8 +781,15 @@ class ScientificCalculatorInitialState(
      * result of implemented operation placed in mainString field
      */
     override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val number = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-        return if (number < 1)
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(HYPERBOLIC_ARC_COSINE_FUNCTION_CODE),
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
@@ -786,15 +797,15 @@ class ScientificCalculatorInitialState(
                     errorCode = INVALID_INPUT_ERROR_CODE
                 )
             )
-        else ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    acosh(number)
-                ),
-                historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
-                        "${scientificCalculatorDataEntity.mainString})"
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
             )
-        )
+        }
     }
 
     /**
@@ -811,10 +822,10 @@ class ScientificCalculatorInitialState(
         angleUnitCode: Int
     ): CalculatorState {
         val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> cos(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-            RADIANS_ANGLE_CODE -> cos(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-            GRADS_ANGLE_CODE -> cos(radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-            else -> cos(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
+            DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.convert(DEGREES_TO_RADIANS_FUNCTION_CODE).mathFunction(COSINE_FUNCTION_CODE)
+            RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.mathFunction(COSINE_FUNCTION_CODE)
+            GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.convert(RADIANS_TO_GRADS_FUNCTION_CODE).mathFunction(COSINE_FUNCTION_CODE)
+            else -> scientificCalculatorDataEntity.mainString.convert(DEGREES_TO_RADIANS_FUNCTION_CODE).mathFunction(COSINE_FUNCTION_CODE)
         }
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "cosd"
@@ -825,7 +836,7 @@ class ScientificCalculatorInitialState(
 
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(result),
+                mainString = result,
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString})"
             )
@@ -846,34 +857,49 @@ class ScientificCalculatorInitialState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-
-        val enteredNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-        val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> degreesFromRadians(acos(enteredNumber))
-            RADIANS_ANGLE_CODE -> acos(enteredNumber)
-            GRADS_ANGLE_CODE -> gradsFromRadians(acos(enteredNumber))
-            else -> degreesFromRadians(acos(enteredNumber))
-        }
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "acosd"
             RADIANS_ANGLE_CODE -> "acosr"
             GRADS_ANGLE_CODE -> "acosg"
             else -> "acosd"
         }
-
-        return if (abs(enteredNumber) > 1) ScientificCalculatorErrorState(
-            scientificCalculatorDataEntity.copy(
-                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
-                        "${scientificCalculatorDataEntity.mainString})",
-                errorCode = INVALID_INPUT_ERROR_CODE
+        return try {
+            val result = when(angleUnitCode) {
+                DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
+                    .convert(DEGREES_TO_RADIANS_FUNCTION_CODE)
+                    .mathFunction(ARC_COSINE_FUNCTION_CODE)
+                RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.mathFunction(ARC_COSINE_FUNCTION_CODE)
+                GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
+                    .convert(RADIANS_TO_GRADS_FUNCTION_CODE)
+                    .mathFunction(ARC_COSINE_FUNCTION_CODE)
+                else -> scientificCalculatorDataEntity.mainString
+                    .convert(DEGREES_TO_RADIANS_FUNCTION_CODE)
+                    .mathFunction(ARC_COSINE_FUNCTION_CODE)
+            }
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = doubleToCalculatorString(result),
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString})"
+                )
             )
-        ) else ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(result),
-                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
-                        "${scientificCalculatorDataEntity.mainString})"
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
             )
-        )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     /**
@@ -890,10 +916,10 @@ class ScientificCalculatorInitialState(
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
-        val historyString = "${scientificCalculatorDataEntity.historyString}" +
-                "${scientificCalculatorDataEntity.mainString.commaTruncate()}" +
-                "$HISTORY_STRING_SPACE_LETTER" +
-                "$operationString"
+        val historyString = scientificCalculatorDataEntity.historyString +
+                scientificCalculatorDataEntity.mainString.commaTruncate() +
+                HISTORY_STRING_SPACE_LETTER +
+                operationString
 
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
@@ -913,7 +939,7 @@ class ScientificCalculatorInitialState(
     override fun piNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(PI)
+                mainString = piNumber()
             )
         )
     }
@@ -927,7 +953,7 @@ class ScientificCalculatorInitialState(
     override fun doublePiNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(2*PI)
+                mainString = doublePiNumber()
             )
         )
     }
@@ -943,9 +969,7 @@ class ScientificCalculatorInitialState(
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    tanh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-                ),
+                mainString = scientificCalculatorDataEntity.mainString.mathFunction(HYPERBOLIC_TANGENT_FUNCTION_CODE),
                 historyString = "${scientificCalculatorDataEntity.historyString}tanh(" +
                         "${scientificCalculatorDataEntity.mainString})"
             )
@@ -965,7 +989,7 @@ class ScientificCalculatorInitialState(
      * Error code then recorded in appropriate field.
      */
     override fun hyperbolicArcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return if (abs(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)) < 1)
+        return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
                     mainString = doubleToCalculatorString(
@@ -975,13 +999,23 @@ class ScientificCalculatorInitialState(
                             "${scientificCalculatorDataEntity.mainString})"
                 )
             )
-        else ScientificCalculatorErrorState(
-            ScientificCalculatorDataEntity(
-                historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
-                        "${scientificCalculatorDataEntity.mainString})",
-                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+                )
             )
-        )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                            "${scientificCalculatorDataEntity.mainString})",
+                    errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+                )
+            )
+        }
     }
 
     /**
