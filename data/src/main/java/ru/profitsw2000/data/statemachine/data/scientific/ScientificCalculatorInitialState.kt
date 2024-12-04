@@ -3,18 +3,22 @@ package ru.profitsw2000.data.statemachine.data.scientific
 import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
 import ru.profitsw2000.data.constants.DEGREES_TO_RADIANS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.DMS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.GRADS_TO_RADIANS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
 import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
+import ru.profitsw2000.data.constants.POWER_OF_FUNCTION_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.RADIANS_TO_DEGREES_FUNCTION_CODE
 import ru.profitsw2000.data.constants.RADIANS_TO_GRADS_FUNCTION_CODE
@@ -629,8 +633,9 @@ class ScientificCalculatorInitialState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(2.0)
+                    mainString = scientificCalculatorDataEntity.mainString.powerOfNumber(
+                        "2",
+                        POWER_OF_FUNCTION_CODE
                     ),
                     historyString = "${scientificCalculatorDataEntity.historyString}sqr(" +
                             "${scientificCalculatorDataEntity.mainString})"
@@ -668,9 +673,7 @@ class ScientificCalculatorInitialState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).factorial()
-                    ),
+                    mainString = scientificCalculatorDataEntity.mainString.factorial(),
                     historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )
@@ -680,7 +683,7 @@ class ScientificCalculatorInitialState(
                 scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
                             "${scientificCalculatorDataEntity.mainString})",
-                    errorCode = OVERFLOW_ERROR_CODE
+                    errorCode = INVALID_INPUT_ERROR_CODE
                 )
             )
         } catch (exception: Exception) {
@@ -703,14 +706,9 @@ class ScientificCalculatorInitialState(
      * result of implemented operation placed in mainString field.
      */
     override fun decimalToMinutes(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val fraction = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)%1
-        val integer = truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-        val convertedFraction = (fraction*60)/100
-        val convertedValue = integer + convertedFraction
-
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(convertedValue),
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(DMS_FUNCTION_CODE),
                 historyString = "${scientificCalculatorDataEntity.historyString}dms(" +
                         "${scientificCalculatorDataEntity.mainString})"
             )
@@ -726,14 +724,9 @@ class ScientificCalculatorInitialState(
      * result of implemented operation placed in mainString field.
      */
     override fun minutesToDecimal(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val fraction = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)%1
-        val integer = truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-        val convertedFraction = (fraction*100)/60
-        val convertedValue = integer + convertedFraction
-
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(convertedValue),
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(DEG_FUNCTION_CODE),
                 historyString = "${scientificCalculatorDataEntity.historyString}deg(" +
                         "${scientificCalculatorDataEntity.mainString})"
             )
@@ -752,9 +745,7 @@ class ScientificCalculatorInitialState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).calcCosh()
-                    ),
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(HYPERBOLIC_COSINE_FUNCTION_CODE),
                     historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )

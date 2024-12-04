@@ -433,4 +433,36 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         else
             piNumber()
     }
+
+    /**Calculates factorial of @this number and return result in BigDecimal type.
+     * @return  result of calculation in String type
+     */
+    fun String.calculateFactorial(): BigDecimal {
+        val mathContext = MathContext(scale)
+        val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+
+        val result = BigDecimalMath.factorial(number, mathContext)
+
+        checkForOverflow(result)
+        return result
+    }
+
+    /**Calculates factorial of @this number and return result in String type.
+     * @return  result of calculation in String type
+     */
+    fun String.factorial(): String {
+        return this.calculateFactorial().toString().toCalculatorFormat()
+    }
+
+    /**Calculates factorial of @this number and return result in String type
+     * @param isScientificNotation - define result string format
+     * @return  result of calculation in String type with engineering
+     * or plain format depending on function parameter
+     */
+    fun String.factorial(isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculateFactorial().toEngineeringString().toCalculatorFormat()
+        else
+            this.calculateFactorial().toString().toCalculatorFormat()
+    }
 }
