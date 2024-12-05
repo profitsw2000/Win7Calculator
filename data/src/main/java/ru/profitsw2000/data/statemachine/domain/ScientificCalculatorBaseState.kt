@@ -342,7 +342,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             DEGREES_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(number, mathContext)
             RADIANS_TO_DEGREES_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext)
             GRADS_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(
-                number.divide(BigDecimalMath.toBigDecimal(GRADS_TO_DEGREES_COEF, mathContext)),
+                number.divide(BigDecimalMath.toBigDecimal(GRADS_TO_DEGREES_COEF, mathContext), mathContext),
                 mathContext
             )
             RADIANS_TO_GRADS_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext).multiply(

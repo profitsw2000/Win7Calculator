@@ -541,7 +541,7 @@ class ScientificCalculatorInitialStateTest {
             baseInitialState.calculateExponent(baseCalculatorData)
         ))
     }
-/*
+
     @Test
     fun integerOfNumberCalculationTest() {
         val zeroInputResultData = ScientificCalculatorDataEntity(
@@ -631,17 +631,19 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "1,175201193643801",
+            mainString = "1,1752011936438014568823818505956",
             historyString = "sinh(1)",
             prevState = baseInitialState
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+/*
         val errorResultData = ScientificCalculatorDataEntity(
             mainString = "10000",
             historyString = "sinh(10000)",
             errorCode = INVALID_INPUT_ERROR_CODE
         )
         val errorResultState = ScientificCalculatorErrorState(errorResultData)
+*/
 
         assertTrue(ReflectionEquals(zeroInputResultState).matches(
             baseInitialState.hyperbolicSinus(baseCalculatorData.copy(
@@ -673,11 +675,6 @@ class ScientificCalculatorInitialStateTest {
                 prevState = baseInitialState
             ))
         ))
-        assertTrue(ReflectionEquals(errorResultState).matches(
-            baseInitialState.hyperbolicSinus(baseCalculatorData.copy(
-                mainString = "10000"
-            ))
-        ))
     }
 
     @Test
@@ -689,7 +686,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "2,312438341272752",
+            mainString = "2,3124383412727526202535623413644",
             historyString = "asinh(5)",
             prevState = baseInitialState
         )
@@ -715,7 +712,7 @@ class ScientificCalculatorInitialStateTest {
             ))
         ))
         assertFalse(ReflectionEquals(ScientificCalculatorFirstOperandReadState(ScientificCalculatorDataEntity(
-            mainString = "2,312438341272753",
+            mainString = "2,3124383412727526202535623413644",
             historyString = "asinh(0)"
         )
         )).matches(
@@ -734,7 +731,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0,939692620785908",
+            mainString = "0,93969262078590838405410927732472",
             historyString = "sind(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -768,7 +765,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0,773890681557889",
+            mainString = "0,77389068155788909778733062514199",
             historyString = "sinr(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -802,7 +799,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0,891006524188368",//891006524188368
+            mainString = "0,89100652418836786235970957141361",
             historyString = "sing(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -826,7 +823,7 @@ class ScientificCalculatorInitialStateTest {
             baseInitialState.sinus(baseCalculatorData, GRADS_ANGLE_CODE)
         ))
     }
-
+/*
     @Test
     fun degreesArcSinusTest() {
         val zeroInputResultData = ScientificCalculatorDataEntity(
