@@ -285,13 +285,36 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         return result
     }
 
+    /** Calculates power of number contained in @this (depending on functionCode param).
+     * @param functionCode - contain code of function, that need to be done
+     * @param exponent - exponent or root number
+     * @return result of calculation in String type
+     */
+    fun String.powerOfNumber(exponent: String): String {
+        return this.calculatePowerOfNumber(exponent, POWER_OF_FUNCTION_CODE).toString().toCalculatorFormat()
+    }
+
+    /** Calculates power of number contained in @this (depending on functionCode param).
+     * @param functionCode - contain code of function, that need to be done
+     * @param exponent - exponent or root number
+     * @param isScientificNotation - define result string format
+     * @return result of calculation in String type with engineering
+     * or plain format depending on function parameter
+     */
+    fun String.powerOfNumber(exponent: String, isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculatePowerOfNumber(exponent, POWER_OF_FUNCTION_CODE).toEngineeringString().toCalculatorFormat()
+        else
+            this.powerOfNumber(exponent)
+    }
+
     /** Calculates power or root of number contained in @this (depending on functionCode param).
      * @param functionCode - contain code of function, that need to be done
      * @param exponent - exponent or root number
      * @return result of calculation in String type
      */
-    fun String.powerOfNumber(exponent: String, functionCode: Int): String {
-        return this.calculatePowerOfNumber(exponent, functionCode).toString().toCalculatorFormat()
+    fun String.rootOfNumber(exponent: String): String {
+        return this.calculatePowerOfNumber(exponent, ROOT_OF_FUNCTION_CODE).toString().toCalculatorFormat()
     }
 
     /** Calculates power or root of number contained in @this (depending on functionCode param).
@@ -301,11 +324,11 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in String type with engineering
      * or plain format depending on function parameter
      */
-    fun String.powerOfNumber(exponent: String, functionCode: Int, isScientificNotation: Boolean): String {
+    fun String.rootOfNumber(exponent: String, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculatePowerOfNumber(exponent, functionCode).toEngineeringString().toCalculatorFormat()
+            this.calculatePowerOfNumber(exponent, ROOT_OF_FUNCTION_CODE).toEngineeringString().toCalculatorFormat()
         else
-            this.powerOfNumber(exponent, functionCode)
+            this.rootOfNumber(exponent)
     }
 
     /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
@@ -464,5 +487,19 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             this.calculateFactorial().toEngineeringString().toCalculatorFormat()
         else
             this.calculateFactorial().toString().toCalculatorFormat()
+    }
+
+    /**
+     * Format number in the String to conventional or scientific(engineering) form
+     * according to function parameter.
+     * @param isScientificNotation if true then format string with number to engineering format (1,234e+2),
+     * if it is false, then format to conventional form (123,4).
+     * @return formatted String
+     */
+    fun String.formatStringNumber(isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            BigDecimalMath.toBigDecimal(this.toStandardFormat()).toEngineeringString().toCalculatorFormat()
+        else
+            BigDecimalMath.toBigDecimal(this.toStandardFormat()).toString().toCalculatorFormat()
     }
 }
