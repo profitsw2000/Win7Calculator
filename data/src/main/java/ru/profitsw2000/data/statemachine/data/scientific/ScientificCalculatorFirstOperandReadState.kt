@@ -37,6 +37,9 @@ class ScientificCalculatorFirstOperandReadState(
         TODO("Not yet implemented")
     }
 
+    override val scale: Int
+        get() = TODO("Not yet implemented")
+
     override fun negateOperand(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }

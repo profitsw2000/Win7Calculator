@@ -14,6 +14,9 @@ class ScientificCalculatorErrorState(
         TODO("Not yet implemented")
     }
 
+    override val scale: Int
+        get() = TODO("Not yet implemented")
+
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         TODO("Not yet implemented")
     }

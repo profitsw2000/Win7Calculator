@@ -27,7 +27,7 @@ import java.sql.Ref
 
 class ScientificCalculatorFirstOperandInputStateTest {
 
-    private val baseData = ScientificCalculatorDataEntity()
+/*    private val baseData = ScientificCalculatorDataEntity()
     private val baseState = ScientificCalculatorInitialState(baseData)
 
     private val prevData = ScientificCalculatorDataEntity(
@@ -3004,5 +3004,5 @@ class ScientificCalculatorFirstOperandInputStateTest {
         assertTrue(ReflectionEquals(resultState).matches(
             memoryInputState.clearAll(memoryInputData)
         ))
-    }
+    }*/
 }

@@ -287,15 +287,19 @@ interface CalculatorState {
         val minValueString = "-1E+10000"
         val minFractionValueString = "1E-9999"
         val maxFractionValueString = "-1E-9999"
+        val zeroString = "0"
 
         val maxValueBigDecimal = BigDecimalMath.toBigDecimal(maxValueString)
         val minValueBigDecimal = BigDecimalMath.toBigDecimal(minValueString)
         val minFractionValueBigDecimal = BigDecimalMath.toBigDecimal(minFractionValueString)
         val maxFractionValueBigDecimal = BigDecimalMath.toBigDecimal(maxFractionValueString)
+        val zeroBigDecimal = BigDecimalMath.toBigDecimal(zeroString)
 
         if ((result.compareTo(maxValueBigDecimal) != -1) ||
             (result.compareTo(minValueBigDecimal) != 1) ||
-            ((result.compareTo(minFractionValueBigDecimal) == -1) && (result.compareTo(maxFractionValueBigDecimal) == 1)))
+            ((result.compareTo(minFractionValueBigDecimal) == -1) &&
+                    (result.compareTo(maxFractionValueBigDecimal) == 1) &&
+                    (result.compareTo(zeroBigDecimal) != 0)))
             throw ArithmeticException("Overflow of calculated number.")
     }
 

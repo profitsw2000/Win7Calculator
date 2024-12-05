@@ -173,7 +173,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in BigDecimal type
      */
     fun String.getNumberPart(functionCode: Int): BigDecimal {
-        val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val number = BigDecimalMath.toBigDecimal(this.toStandardFormat()).stripTrailingZeros()
 
         return when(functionCode) {
             INTEGRAL_PART_FUNCTION_CODE -> BigDecimalMath.integralPart(number)
@@ -238,7 +238,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
         checkForOverflow(result)
 
-        return result
+        return result.stripTrailingZeros()
     }
 
     /**
@@ -282,7 +282,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
         checkForOverflow(result)
 
-        return result
+        return result.stripTrailingZeros()
     }
 
     /** Calculates power of number contained in @this (depending on functionCode param).
@@ -405,7 +405,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
         checkForOverflow(result)
 
-        return result
+        return result.stripTrailingZeros()
     }
 
     /** Converts number in @this with fractional part in minutes to
@@ -467,7 +467,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         val result = BigDecimalMath.factorial(number, mathContext)
 
         checkForOverflow(result)
-        return result
+        return result.stripTrailingZeros()
     }
 
     /**Calculates factorial of @this number and return result in String type.

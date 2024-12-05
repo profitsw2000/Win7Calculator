@@ -124,6 +124,9 @@ class GeneralCalculatorInitialState(
         return GeneralCalculatorInitialState(GeneralCalculatorDataEntity(memoryNumber = generalCalculatorDataEntity.memoryNumber))
     }
 
+    override val scale: Int
+        get() = TODO("Not yet implemented")
+
     /**
      * Changes inputs number sign to opposite and writes action to history.
      * @param generalCalculatorDataEntity - contains current calculator data

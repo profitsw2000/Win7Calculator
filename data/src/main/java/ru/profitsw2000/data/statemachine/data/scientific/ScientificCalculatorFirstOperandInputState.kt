@@ -56,7 +56,7 @@ class ScientificCalculatorFirstOperandInputState(
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {
             CalculatorAction.Add -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.PLUS, "+")
-            CalculatorAction.AddToMemory -> addNumberToMemory(scientificCalculatorDataEntity)
+            /*CalculatorAction.AddToMemory -> addNumberToMemory(scientificCalculatorDataEntity)
             is CalculatorAction.ArcCosine -> arcCosine(scientificCalculatorDataEntity, action.angleUnitCode)
             is CalculatorAction.ArcSinus -> arcSinus(scientificCalculatorDataEntity, action.angleUnitCode)
             is CalculatorAction.ArcTangent -> arcTangent(scientificCalculatorDataEntity, action.angleUnitCode)
@@ -106,7 +106,8 @@ class ScientificCalculatorFirstOperandInputState(
             CalculatorAction.ThirdRootOfX -> cubeRoot(scientificCalculatorDataEntity)
             CalculatorAction.XPowerThree -> cubeNumber(scientificCalculatorDataEntity)
             CalculatorAction.XPowerY -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.POWER_OF, "^")
-            CalculatorAction.YRootOfX -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.ROOT_OF, "yroot")
+            CalculatorAction.YRootOfX -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.ROOT_OF, "yroot")*/
+            else -> TODO()
         }
     }
 
@@ -174,9 +175,9 @@ class ScientificCalculatorFirstOperandInputState(
                 mainString = if (scientificCalculatorDataEntity.memoryNumber == null) "0".calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 )
-                else doubleToCalculatorString(
+                else TODO() /*doubleToCalculatorString(
                     scientificCalculatorDataEntity.memoryNumber, scientificCalculatorDataEntity.isScientificNotation
-                )
+                )*/
             )
         )
     }
@@ -193,8 +194,8 @@ class ScientificCalculatorFirstOperandInputState(
 
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                memoryNumber = if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) == 0.0) null
-                else calculatorStringToDouble(scientificCalculatorDataEntity.mainString),
+                memoryNumber = TODO() /*if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) == 0.0) null
+                else calculatorStringToDouble(scientificCalculatorDataEntity.mainString)*/,
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 )
@@ -223,10 +224,10 @@ class ScientificCalculatorFirstOperandInputState(
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
-                memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) addedNumber
+                memoryNumber = TODO() /*if (scientificCalculatorDataEntity.memoryNumber == null) addedNumber
                 else calculatorStringToDouble(
                     doubleToCalculatorString(scientificCalculatorDataEntity.memoryNumber + addedNumber)
-                )
+                )*/
             )
         }
 
@@ -251,10 +252,10 @@ class ScientificCalculatorFirstOperandInputState(
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
-                memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) 0 - subtractedNumber
+                memoryNumber = TODO() /*if (scientificCalculatorDataEntity.memoryNumber == null) 0 - subtractedNumber
                 else calculatorStringToDouble(
                     doubleToCalculatorString(scientificCalculatorDataEntity.memoryNumber - subtractedNumber)
-                )
+                )*/
             )
         }
 
@@ -366,7 +367,7 @@ class ScientificCalculatorFirstOperandInputState(
                         )}" +
                         "$HISTORY_STRING_SPACE_LETTER$operationString",
                 scientificOperationType = scientificOperationType,
-                operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+                operand = TODO() /*calculatorStringToDouble(scientificCalculatorDataEntity.mainString)*/
             )
         )
     }
@@ -1116,7 +1117,7 @@ class ScientificCalculatorFirstOperandInputState(
             scientificCalculatorDataEntity.copy(
                 historyString = historyString,
                 scientificOperationType = scientificOperationType,
-                operand = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
+                operand = TODO() /*calculatorStringToDouble(scientificCalculatorDataEntity.mainString)*/
             )
         )
     }

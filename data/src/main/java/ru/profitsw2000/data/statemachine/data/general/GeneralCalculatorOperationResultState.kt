@@ -120,6 +120,9 @@ class GeneralCalculatorOperationResultState(
         ))
     }
 
+    override val scale: Int
+        get() = TODO("Not yet implemented")
+
     /**
      * Changes sign of the result number. It's contained in mainString field of calculator data. History string
      * field of calculator data appended with action name string.

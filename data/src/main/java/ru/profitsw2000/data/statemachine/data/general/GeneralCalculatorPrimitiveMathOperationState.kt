@@ -122,6 +122,9 @@ class GeneralCalculatorPrimitiveMathOperationState (
         ))
     }
 
+    override val scale: Int
+        get() = TODO("Not yet implemented")
+
     /**
      * Changes sign of the entered number. It's contained in mainString field of calculator data.
      * @param generalCalculatorDataEntity - contains current calculator data

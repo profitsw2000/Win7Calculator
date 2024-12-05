@@ -29,4 +29,7 @@ class GeneralCalculatorErrorState(
             )
         )
     }
+
+    override val scale: Int
+        get() = TODO("Not yet implemented")
 }
