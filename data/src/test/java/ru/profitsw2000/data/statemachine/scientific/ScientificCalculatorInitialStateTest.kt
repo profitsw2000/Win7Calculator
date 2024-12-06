@@ -823,7 +823,7 @@ class ScientificCalculatorInitialStateTest {
             baseInitialState.sinus(baseCalculatorData, GRADS_ANGLE_CODE)
         ))
     }
-/*
+
     @Test
     fun degreesArcSinusTest() {
         val zeroInputResultData = ScientificCalculatorDataEntity(
@@ -878,7 +878,7 @@ class ScientificCalculatorInitialStateTest {
             ), DEGREES_ANGLE_CODE)
         ))
     }
-
+/*
     @Test
     fun radiansArcSinusTest() {
         val zeroInputResultData = ScientificCalculatorDataEntity(

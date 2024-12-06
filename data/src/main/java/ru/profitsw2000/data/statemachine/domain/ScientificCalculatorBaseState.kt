@@ -34,6 +34,15 @@ import java.math.MathContext
 import kotlin.math.PI
 
 const val GRADS_TO_DEGREES_COEF = "1.11111111111111111111111111111111"
+const val ZERO_STRING_NUMBER = "0"
+const val ONE_STRING_NUMBER = "1"
+const val NINE_STRING_NUMBER = "9"
+const val TEN_STRING_NUMBER = "10"
+const val PI_DEGREES = "180"
+const val PI_2_DEGREES = "90"
+const val PI_GRADS = "200"
+const val PI_2_GRADS = "100"
+
 
 interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
@@ -336,25 +345,25 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in BigDecimal type
      */
     fun String.convertAngleUnits(functionCode: Int): BigDecimal {
-        val mathContext = MathContext(scale)
+        val mathContext = MathContext(scale - 1)
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val nineNumber = BigDecimalMath.toBigDecimal(NINE_STRING_NUMBER)
+        val tenNumber = BigDecimalMath.toBigDecimal(TEN_STRING_NUMBER)
+
         val result = when(functionCode) {
             DEGREES_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(number, mathContext)
             RADIANS_TO_DEGREES_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext)
             GRADS_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(
-                number.divide(BigDecimalMath.toBigDecimal(GRADS_TO_DEGREES_COEF, mathContext), mathContext),
+                number.multiply(tenNumber).divide(nineNumber,mathContext),
                 mathContext
             )
-            RADIANS_TO_GRADS_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext).multiply(
-                BigDecimalMath.toBigDecimal(GRADS_TO_DEGREES_COEF, mathContext),
-                mathContext
-            )
+            RADIANS_TO_GRADS_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext)
+                .multiply(tenNumber).divide(nineNumber, mathContext)
             else -> number
         }
-
         checkForOverflow(result)
 
-        return result
+        return result.stripTrailingZeros()
     }
 
     /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
@@ -362,7 +371,10 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in String type
      */
     fun String.convert(functionCode: Int): String {
-        return this.convertAngleUnits(functionCode).toString().toCalculatorFormat()
+        return this
+            .convertAngleUnits(functionCode)
+            .toPlainString()
+            .toCalculatorFormat()
     }
 
     /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
@@ -375,7 +387,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         return if (isScientificNotation)
             this.convertAngleUnits(functionCode).toEngineeringString().toCalculatorFormat()
         else
-            this.convertAngleUnits(functionCode).toString().toCalculatorFormat()
+            this.convert(functionCode)
     }
 
     /** Converts number in @this with fractional part in minutes to
