@@ -354,7 +354,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             DEGREES_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(number, mathContext)
             RADIANS_TO_DEGREES_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext)
             GRADS_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(
-                number.multiply(tenNumber).divide(nineNumber,mathContext),
+                number.multiply(nineNumber).divide(tenNumber,mathContext),
                 mathContext
             )
             RADIANS_TO_GRADS_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext)

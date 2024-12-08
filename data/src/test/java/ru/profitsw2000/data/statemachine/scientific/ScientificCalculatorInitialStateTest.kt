@@ -799,7 +799,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0,89100652418836786235970957141361",
+            mainString = "0,89100652418836786235970957141371",
             historyString = "sing(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
