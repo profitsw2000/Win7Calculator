@@ -806,7 +806,7 @@ class ScientificCalculatorInitialState(
             RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
                 .mathFunction(COSINE_FUNCTION_CODE)
             GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .convert(RADIANS_TO_GRADS_FUNCTION_CODE)
+                .convert(GRADS_TO_RADIANS_FUNCTION_CODE)
                 .mathFunction(COSINE_FUNCTION_CODE)
             else -> scientificCalculatorDataEntity.mainString
                 .convert(DEGREES_TO_RADIANS_FUNCTION_CODE)
@@ -851,15 +851,15 @@ class ScientificCalculatorInitialState(
         return try {
             val result = when(angleUnitCode) {
                 DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .convert(DEGREES_TO_RADIANS_FUNCTION_CODE)
-                    .mathFunction(ARC_COSINE_FUNCTION_CODE)
+                    .highPrecisionMathFunction(ARC_COSINE_FUNCTION_CODE)
+                    .convert(RADIANS_TO_DEGREES_FUNCTION_CODE)
                 RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.mathFunction(ARC_COSINE_FUNCTION_CODE)
                 GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
+                    .highPrecisionMathFunction(ARC_COSINE_FUNCTION_CODE)
                     .convert(RADIANS_TO_GRADS_FUNCTION_CODE)
-                    .mathFunction(ARC_COSINE_FUNCTION_CODE)
                 else -> scientificCalculatorDataEntity.mainString
-                    .convert(DEGREES_TO_RADIANS_FUNCTION_CODE)
-                    .mathFunction(ARC_COSINE_FUNCTION_CODE)
+                    .highPrecisionMathFunction(ARC_COSINE_FUNCTION_CODE)
+                    .convert(RADIANS_TO_DEGREES_FUNCTION_CODE)
             }
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
