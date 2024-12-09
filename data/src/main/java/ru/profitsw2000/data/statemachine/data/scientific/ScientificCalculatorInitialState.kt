@@ -578,11 +578,11 @@ class ScientificCalculatorInitialState(
         return try {
             val result = when(angleUnitCode) {
                 DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .mathFunction(ARC_SINUS_FUNCTION_CODE)
+                    .highPrecisionMathFunction(ARC_SINUS_FUNCTION_CODE)
                     .convert(RADIANS_TO_DEGREES_FUNCTION_CODE)
                 RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.mathFunction(ARC_SINUS_FUNCTION_CODE)
                 GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .mathFunction(ARC_SINUS_FUNCTION_CODE)
+                    .highPrecisionMathFunction(ARC_SINUS_FUNCTION_CODE)
                     .convert(RADIANS_TO_GRADS_FUNCTION_CODE)
                 else -> scientificCalculatorDataEntity.mainString.mathFunction(ARC_SINUS_FUNCTION_CODE)
             }
@@ -665,7 +665,7 @@ class ScientificCalculatorInitialState(
                 scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
                             "${scientificCalculatorDataEntity.mainString})",
-                    errorCode = INVALID_INPUT_ERROR_CODE
+                    errorCode = OVERFLOW_ERROR_CODE
                 )
             )
         } catch (exception: Exception) {

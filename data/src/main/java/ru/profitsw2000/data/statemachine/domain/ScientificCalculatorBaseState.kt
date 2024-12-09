@@ -198,7 +198,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in String type
      */
     fun String.numberPart(functionCode: Int): String {
-        return this.getNumberPart(functionCode).toString().toCalculatorFormat()
+        return this.getNumberPart(functionCode).toResultString().toCalculatorFormat()
     }
 
     /**
@@ -223,7 +223,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in BigDecimal type
      */
     fun String.calculateMathFunction(functionCode: Int): BigDecimal {
-        val mathContext = MathContext(scale)
+        val mathContext = MathContext(scale + 2)
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
 
         val result = when (functionCode) {
@@ -247,7 +247,19 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
         checkForOverflow(result)
 
-        return result.stripTrailingZeros()
+        return result
+    }
+
+    /**
+     * Calculates the result of the function of the number contained in the @this string
+     * with high precision(scale + 2).
+     * @param functionCode - contain code of function, that need to be done
+     * @return result of calculation in String type with high precision
+     */
+    fun String.highPrecisionMathFunction(functionCode: Int): String {
+        return this.calculateMathFunction(functionCode)
+            .toResultString()
+            .toCalculatorFormat()
     }
 
     /**
@@ -256,7 +268,12 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in String type
      */
     fun String.mathFunction(functionCode: Int): String {
-        return this.calculateMathFunction(functionCode).toString().toCalculatorFormat()
+        val mathContext = MathContext(scale)
+        return this.calculateMathFunction(functionCode)
+            .round(mathContext)
+            .stripTrailingZeros()
+            .toResultString()
+            .toCalculatorFormat()
     }
 
     /**
@@ -267,8 +284,13 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * or plain format depending on function parameter
      */
     fun String.mathFunction(functionCode: Int, isScientificNotation: Boolean): String {
+        val mathContext = MathContext(scale)
         return if (isScientificNotation)
-            this.calculateMathFunction(functionCode).toEngineeringString().toCalculatorFormat()
+            this.calculateMathFunction(functionCode)
+                .round(mathContext)
+                .stripTrailingZeros()
+                .toEngineeringString()
+                .toCalculatorFormat()
         else
             this.mathFunction(functionCode)
     }
@@ -300,7 +322,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in String type
      */
     fun String.powerOfNumber(exponent: String): String {
-        return this.calculatePowerOfNumber(exponent, POWER_OF_FUNCTION_CODE).toString().toCalculatorFormat()
+        return this.calculatePowerOfNumber(exponent, POWER_OF_FUNCTION_CODE).toResultString().toCalculatorFormat()
     }
 
     /** Calculates power of number contained in @this (depending on functionCode param).
@@ -323,7 +345,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in String type
      */
     fun String.rootOfNumber(exponent: String): String {
-        return this.calculatePowerOfNumber(exponent, ROOT_OF_FUNCTION_CODE).toString().toCalculatorFormat()
+        return this.calculatePowerOfNumber(exponent, ROOT_OF_FUNCTION_CODE).toResultString().toCalculatorFormat()
     }
 
     /** Calculates power or root of number contained in @this (depending on functionCode param).
@@ -345,7 +367,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in BigDecimal type
      */
     fun String.convertAngleUnits(functionCode: Int): BigDecimal {
-        val mathContext = MathContext(scale - 1)
+        val mathContext = MathContext(scale)
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val nineNumber = BigDecimalMath.toBigDecimal(NINE_STRING_NUMBER)
         val tenNumber = BigDecimalMath.toBigDecimal(TEN_STRING_NUMBER)
@@ -373,7 +395,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
     fun String.convert(functionCode: Int): String {
         return this
             .convertAngleUnits(functionCode)
-            .toPlainString()
+            .toResultString()
             .toCalculatorFormat()
     }
 
@@ -402,17 +424,17 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         val result = when(functionCode) {
             DMS_FUNCTION_CODE -> BigDecimalMath.toBigDecimal(
                 integral.add(
-                    (fraction.multiply("60")).divide("100")
-                ),
+                    (fraction.toStandardFormat().multiply("60")).divide("100")
+                ).toStandardFormat(),
                 mathContext
             )
             DEG_FUNCTION_CODE -> BigDecimalMath.toBigDecimal(
                 integral.add(
-                    (fraction.multiply("60")).divide("100")
-                ),
+                    (fraction.multiply("100")).divide("60")
+                ).toStandardFormat(),
                 mathContext
             )
-            else -> BigDecimalMath.toBigDecimal(this)
+            else -> BigDecimalMath.toBigDecimal(this.toStandardFormat())
         }
 
         checkForOverflow(result)
@@ -426,7 +448,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in String type
      */
     fun String.decimalMinutes(functionCode: Int): String {
-        return this.calculateDegreesFractionPart(functionCode).toString().toCalculatorFormat()
+        return this.calculateDegreesFractionPart(functionCode).toResultString().toCalculatorFormat()
     }
 
 
@@ -445,7 +467,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
     fun piNumber(): String {
         val mathContext = MathContext(scale)
-        return BigDecimalMath.pi(mathContext).toString().toCalculatorFormat()
+        return BigDecimalMath.pi(mathContext).toResultString().toCalculatorFormat()
     }
 
     fun piNumber(isScientificNotation: Boolean): String {
@@ -458,7 +480,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
     fun doublePiNumber(): String {
         val mathContext = MathContext(scale)
-        return BigDecimalMath.pi(mathContext).toString().toCalculatorFormat().multiply("2")
+        return BigDecimalMath.pi(mathContext).toResultString().toCalculatorFormat().multiply("2")
     }
 
     fun doublePiNumber(isScientificNotation: Boolean): String {
@@ -486,7 +508,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return  result of calculation in String type
      */
     fun String.factorial(): String {
-        return this.calculateFactorial().toString().toCalculatorFormat()
+        return this.calculateFactorial().toResultString().toCalculatorFormat()
     }
 
     /**Calculates factorial of @this number and return result in String type
@@ -498,7 +520,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         return if (isScientificNotation)
             this.calculateFactorial().toEngineeringString().toCalculatorFormat()
         else
-            this.calculateFactorial().toString().toCalculatorFormat()
+            this.factorial()
     }
 
     /**

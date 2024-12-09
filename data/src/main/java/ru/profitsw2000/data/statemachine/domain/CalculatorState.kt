@@ -338,4 +338,27 @@ interface CalculatorState {
         return if (this.last() == ',') this.dropLast(1)
         else this
     }
+
+    fun BigDecimal.toResultString(): String {
+        val maxValueString = "1E+${SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER}"
+        val minValueString = "-1E+${SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER}"
+        val minFractionValueString = "1E-${SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER}"
+        val maxFractionValueString = "-1E-${SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER}"
+        val zeroString = "0"
+
+        val maxValueBigDecimal = BigDecimalMath.toBigDecimal(maxValueString)
+        val minValueBigDecimal = BigDecimalMath.toBigDecimal(minValueString)
+        val minFractionValueBigDecimal = BigDecimalMath.toBigDecimal(minFractionValueString)
+        val maxFractionValueBigDecimal = BigDecimalMath.toBigDecimal(maxFractionValueString)
+        val zeroBigDecimal = BigDecimalMath.toBigDecimal(zeroString)
+
+        return if ((this.compareTo(maxValueBigDecimal) != -1) ||
+            (this.compareTo(minValueBigDecimal) != 1) ||
+            ((this.compareTo(minFractionValueBigDecimal) == -1) &&
+                    (this.compareTo(maxFractionValueBigDecimal) == 1) &&
+                    (this.compareTo(zeroBigDecimal) != 0)))
+            this.toEngineeringString()
+        else
+            this.toPlainString()
+    }
 }

@@ -799,7 +799,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0,89100652418836786235970957141371",
+            mainString = "0,89100652418836786235970957141361",
             historyString = "sing(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -878,7 +878,7 @@ class ScientificCalculatorInitialStateTest {
             ), DEGREES_ANGLE_CODE)
         ))
     }
-/*
+
     @Test
     fun radiansArcSinusTest() {
         val zeroInputResultData = ScientificCalculatorDataEntity(
@@ -888,12 +888,12 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0,523598775598299",
+            mainString = "0,52359877559829887307710723054658",
             historyString = "asinr(0,5)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
         val oneInputResultData = ScientificCalculatorDataEntity(
-            mainString = "1,570796326794897",
+            mainString = "1,5707963267948966192313216916398",
             historyString = "asinr(1)"
         )
         val oneInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
@@ -943,7 +943,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "33,33333333333334",
+            mainString = "33,333333333333333333333333333333",
             historyString = "asing(0,5)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -1004,13 +1004,13 @@ class ScientificCalculatorInitialStateTest {
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
         val bigInputResultData = ScientificCalculatorDataEntity(
-            mainString = "1,e+32",
+            mainString = "99999999999999980000000000000001",
             historyString = "sqr(9999999999999999)"
         )
         val bigInputResultState = ScientificCalculatorFirstOperandReadState(bigInputResultData)
         val errorResultData = ScientificCalculatorDataEntity(
-            mainString = "9,e+300",
-            historyString = "sqr(9,e+300)",
+            mainString = "9,e+5000",
+            historyString = "sqr(9,e+5000)",
             errorCode = OVERFLOW_ERROR_CODE
         )
         val errorState = ScientificCalculatorErrorState(errorResultData)
@@ -1041,7 +1041,7 @@ class ScientificCalculatorInitialStateTest {
         ))
         assertTrue(ReflectionEquals(errorState).matches(
             baseInitialState.squareNumber(baseCalculatorData.copy(
-                mainString = "9,e+300"
+                mainString = "9,e+5000"
             ))
         ))
     }
@@ -1061,13 +1061,13 @@ class ScientificCalculatorInitialStateTest {
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
         val fractionInputResultData = ScientificCalculatorDataEntity(
-            mainString = "220,4148244515194",
+            mainString = "220,41492110473621160003136255321",
             historyString = "fact(5,35)"
         )
         val fractionInputResultState = ScientificCalculatorFirstOperandReadState(fractionInputResultData)
         val errorResultData = ScientificCalculatorDataEntity(
-            mainString = "2000",
-            historyString = "fact(2000)",
+            mainString = "20000",
+            historyString = "fact(20000)",
             errorCode = OVERFLOW_ERROR_CODE
         )
         val errorState = ScientificCalculatorErrorState(errorResultData)
@@ -1098,7 +1098,7 @@ class ScientificCalculatorInitialStateTest {
         ))
         assertTrue(ReflectionEquals(errorState).matches(
             baseInitialState.factorial(baseCalculatorData.copy(
-                mainString = "2000"
+                mainString = "20000"
             ))
         ))
     }
@@ -1197,7 +1197,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "1,543080634815244",
+            mainString = "1,5430806348152437784779056207571",
             historyString = "cosh(1)",
             prevState = baseInitialState
         )
@@ -1245,7 +1245,7 @@ class ScientificCalculatorInitialStateTest {
             ))
         ))
     }
-
+/*
     @Test
     fun hyperbolicArcCosineTest() {
         val oneInputResultData = ScientificCalculatorDataEntity(
