@@ -1064,7 +1064,7 @@ class ScientificCalculatorInitialState(
                     historyString = scientificCalculatorDataEntity.historyString +
                             "$operationString(" +
                             "${scientificCalculatorDataEntity.mainString})",
-                    errorCode = INVALID_INPUT_ERROR_CODE
+                    errorCode = UNKNOWN_ERROR_CODE
                 )
             )
         }

@@ -1560,12 +1560,12 @@ class ScientificCalculatorInitialStateTest {
             ), GRADS_ANGLE_CODE)
         ))
     }
-/*
+
     @Test
     fun piNumberTest() {
 
         val piResultData = baseCalculatorData.copy(
-            mainString = "3,141592653589793"
+            mainString = "3,1415926535897932384626433832795"
         )
         val piResultState = ScientificCalculatorFirstOperandReadState(piResultData)
         val falseResultData = baseCalculatorData.copy(
@@ -1585,7 +1585,7 @@ class ScientificCalculatorInitialStateTest {
     fun doublePiNumberTest() {
 
         val doublePiResultData = baseCalculatorData.copy(
-            mainString = "6,283185307179586"
+            mainString = "6,283185307179586476925286766559"
         )
         val doublePiResultState = ScientificCalculatorFirstOperandReadState(doublePiResultData)
         val falseResultData = baseCalculatorData.copy(
@@ -1611,14 +1611,14 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(oneInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0,761594155955765",
+            mainString = "0,76159415595576488811945828260479",
             historyString = "tanh(1)",
             prevState = baseInitialState
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
         val negativeResultData = ScientificCalculatorDataEntity(
             mainString = "-1",
-            historyString = "tanh(-10000)"
+            historyString = "tanh(-1000)"
         )
         val negativeResultState = ScientificCalculatorFirstOperandReadState(negativeResultData)
 
@@ -1654,7 +1654,7 @@ class ScientificCalculatorInitialStateTest {
         ))
         assertTrue(ReflectionEquals(negativeResultState).matches(
             baseInitialState.hyperbolicTangent(baseCalculatorData.copy(
-                mainString = "-10000"
+                mainString = "-1000"
             ))
         ))
     }
@@ -1668,14 +1668,14 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0,549306144334055",
+            mainString = "0,54930614433405484569762261846126",
             historyString = "atanh(0,5)",
             prevState = baseInitialState
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
         val errorResultData = ScientificCalculatorDataEntity(
             historyString = "atanh(1)",
-            errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+            errorCode = INVALID_INPUT_ERROR_CODE
         )
         val errorResultState = ScientificCalculatorErrorState(errorResultData)
 
@@ -1718,7 +1718,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "2,747477419454622",
+            mainString = "2,7474774194546222787616640264974",
             historyString = "tand(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -1772,17 +1772,17 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "1,221959918136943",
+            mainString = "1,2219599181369432780892227563596",
             historyString = "tanr(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
         val errorResultData = ScientificCalculatorDataEntity(
-            historyString = "tanr(1,5707963267948965)",
+            historyString = "tanr(1,5707963267948966192313216916398)",
             errorCode = INVALID_INPUT_ERROR_CODE
         )
         val errorResultState = ScientificCalculatorErrorState(errorResultData)
         val additionalErrorResultData = ScientificCalculatorDataEntity(
-            historyString = "tanr(4,7123889803846895)",
+            historyString = "tanr(4,7123889803846898576939650749193)",
             errorCode = INVALID_INPUT_ERROR_CODE
         )
         val additionalErrorResultState = ScientificCalculatorErrorState(additionalErrorResultData)
@@ -1807,16 +1807,16 @@ class ScientificCalculatorInitialStateTest {
         ))
         assertTrue(ReflectionEquals(errorResultState).matches(
             baseInitialState.tangent(
-                baseCalculatorData.copy(mainString = "1,5707963267948965"),
+                baseCalculatorData.copy(mainString = "1,5707963267948966192313216916398"),
                 RADIANS_ANGLE_CODE)
         ))
         assertTrue(ReflectionEquals(additionalErrorResultState).matches(
             baseInitialState.tangent(
-                baseCalculatorData.copy(mainString = "4,7123889803846895"),
+                baseCalculatorData.copy(mainString = "4,7123889803846898576939650749193"),
                 RADIANS_ANGLE_CODE)
         ))
     }
-
+/*
     @Test
     fun gradsTangentTest() {
         val zeroInputResultData = ScientificCalculatorDataEntity(
