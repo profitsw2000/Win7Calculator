@@ -735,6 +735,11 @@ class ScientificCalculatorInitialStateTest {
             historyString = "sind(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val angleInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "sind(90)"
+        )
+        val angleInputResultState = ScientificCalculatorFirstOperandReadState(angleInputResultData)
 
         assertTrue(ReflectionEquals(zeroInputResultState).matches(
             baseInitialState.sinus(baseCalculatorData.copy(
@@ -744,6 +749,11 @@ class ScientificCalculatorInitialStateTest {
         assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
             baseInitialState.sinus(baseCalculatorData.copy(
                 mainString = "70"
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(angleInputResultState).matches(
+            baseInitialState.sinus(baseCalculatorData.copy(
+                mainString = "90"
             ), DEGREES_ANGLE_CODE)
         ))
         assertFalse(ReflectionEquals(nonZeroInputResultState).matches(
@@ -1307,10 +1317,20 @@ class ScientificCalculatorInitialStateTest {
             historyString = "cosd(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val angleInputResultData = ScientificCalculatorDataEntity(
+            mainString = "1",
+            historyString = "cosd(90)"
+        )
+        val angleInputResultState = ScientificCalculatorFirstOperandReadState(angleInputResultData)
 
         assertTrue(ReflectionEquals(zeroInputResultState).matches(
             baseInitialState.cosine(baseCalculatorData.copy(
                 prevState = baseInitialState
+            ), DEGREES_ANGLE_CODE)
+        ))
+        assertTrue(ReflectionEquals(angleInputResultState).matches(
+            baseInitialState.cosine(baseCalculatorData.copy(
+                mainString = "90"
             ), DEGREES_ANGLE_CODE)
         ))
         assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
@@ -1733,6 +1753,11 @@ class ScientificCalculatorInitialStateTest {
         )
         val additionalErrorResultState = ScientificCalculatorErrorState(additionalErrorResultData)
 
+        assertTrue(ReflectionEquals(errorResultState).matches(
+            baseInitialState.tangent(
+                baseCalculatorData.copy(mainString = "90"),
+                DEGREES_ANGLE_CODE)
+        ))
         assertTrue(ReflectionEquals(zeroInputResultState).matches(
             baseInitialState.tangent(baseCalculatorData.copy(
                 prevState = baseInitialState

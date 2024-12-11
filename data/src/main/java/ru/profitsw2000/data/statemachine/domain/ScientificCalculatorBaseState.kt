@@ -367,7 +367,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in BigDecimal type
      */
     fun String.convertAngleUnits(functionCode: Int): BigDecimal {
-        val mathContext = MathContext(scale)
+        val mathContext = MathContext(scale + 2)
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val nineNumber = BigDecimalMath.toBigDecimal(NINE_STRING_NUMBER)
         val tenNumber = BigDecimalMath.toBigDecimal(TEN_STRING_NUMBER)
@@ -393,6 +393,19 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @return result of calculation in String type
      */
     fun String.convert(functionCode: Int): String {
+        val mathContext = MathContext(scale)
+        return this
+            .convertAngleUnits(functionCode)
+            .round(mathContext)
+            .toResultString()
+            .toCalculatorFormat()
+    }
+
+    /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
+     * @param functionCode - contain code of function, that need to be done
+     * @return result of calculation in String type
+     */
+    fun String.highPrecisionConvert(functionCode: Int): String {
         return this
             .convertAngleUnits(functionCode)
             .toResultString()
@@ -406,8 +419,12 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * or plain format depending on function isScientificNotation parameter
      */
     fun String.convert(functionCode: Int, isScientificNotation: Boolean): String {
+        val mathContext = MathContext(scale)
         return if (isScientificNotation)
-            this.convertAngleUnits(functionCode).toEngineeringString().toCalculatorFormat()
+            this.convertAngleUnits(functionCode)
+                .round(mathContext)
+                .toResultString()
+                .toCalculatorFormat()
         else
             this.convert(functionCode)
     }
