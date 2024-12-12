@@ -1034,19 +1034,6 @@ class ScientificCalculatorInitialState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-
-        val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .convert(DEGREES_TO_RADIANS_FUNCTION_CODE)
-                .mathFunction(ARC_TANGENT_FUNCTION_CODE)
-            RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .mathFunction(ARC_TANGENT_FUNCTION_CODE)
-            GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .convert(GRADS_TO_RADIANS_FUNCTION_CODE)
-                .mathFunction(ARC_TANGENT_FUNCTION_CODE)
-            else -> scientificCalculatorDataEntity.mainString
-                .mathFunction(ARC_TANGENT_FUNCTION_CODE)
-        }
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "atand"
             RADIANS_ANGLE_CODE -> "atanr"
@@ -1056,7 +1043,8 @@ class ScientificCalculatorInitialState(
 
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = result,
+                mainString = scientificCalculatorDataEntity.mainString
+                    .inverseTrigonometricFunction(ARC_TANGENT_FUNCTION_CODE, angleUnitCode),
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString})"
             )
