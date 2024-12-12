@@ -357,8 +357,18 @@ interface CalculatorState {
             ((this.compareTo(minFractionValueBigDecimal) == -1) &&
                     (this.compareTo(maxFractionValueBigDecimal) == 1) &&
                     (this.compareTo(zeroBigDecimal) != 0)))
-            this.toEngineeringString()
+            this.toString()
         else
             this.toPlainString()
+    }
+
+    fun BigDecimal.toScientificNotationString(): String {
+        val mantissa = BigDecimalMath.mantissa(this)
+        val exponent = BigDecimalMath.exponent(this)
+
+        return if (exponent.compareTo(0) != -1)
+            "${mantissa}E+$exponent"
+        else
+            "${mantissa}E$exponent"
     }
 }

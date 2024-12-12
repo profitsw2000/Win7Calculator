@@ -530,8 +530,6 @@ class ScientificCalculatorInitialState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        val result = scientificCalculatorDataEntity.mainString
-            .trigonometricFunction(SINUS_FUNCTION_CODE, angleUnitCode)
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "sind"
             RADIANS_ANGLE_CODE -> "sinr"
@@ -541,7 +539,8 @@ class ScientificCalculatorInitialState(
 
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = result,
+                mainString = scientificCalculatorDataEntity.mainString
+                    .trigonometricFunction(SINUS_FUNCTION_CODE, angleUnitCode),
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString})"
             )

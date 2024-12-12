@@ -215,7 +215,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      */
     fun String.numberPart(functionCode: Int, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.getNumberPart(functionCode).toEngineeringString().toCalculatorFormat()
+            this.getNumberPart(functionCode).toScientificNotationString().toCalculatorFormat()
         else
             this.numberPart(functionCode)
     }
@@ -287,7 +287,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             this.calculateMathFunction(functionCode)
                 .round(mathContext)
                 .stripTrailingZeros()
-                .toEngineeringString()
+                .toScientificNotationString()
                 .toCalculatorFormat()
         else
             this.mathFunction(functionCode)
@@ -359,7 +359,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             this.calculateTrigonometricFunction(functionCode, angleUnitCode)
                 .round(mathContext)
                 .stripTrailingZeros()
-                .toEngineeringString()
+                .toScientificNotationString()
                 .toCalculatorFormat()
         else
             this.trigonometricFunction(functionCode, angleUnitCode)
@@ -390,9 +390,9 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             )
             GRADS_ANGLE_CODE -> convertAngle(
                 result,
-                RADIANS_TO_DEGREES_FUNCTION_CODE
+                RADIANS_TO_GRADS_FUNCTION_CODE
             )
-            else -> number
+            else -> result
         }
 
         return angle
@@ -433,7 +433,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             this.calculateInverseTrigonometricFunction(functionCode, angleUnitCode)
                 .round(mathContext)
                 .stripTrailingZeros()
-                .toEngineeringString()
+                .toScientificNotationString()
                 .toCalculatorFormat()
         else
             this.trigonometricFunction(functionCode, angleUnitCode)
@@ -505,7 +505,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      */
     fun String.powerOfNumber(exponent: String, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculatePowerOfNumber(exponent, POWER_OF_FUNCTION_CODE).toEngineeringString().toCalculatorFormat()
+            this.calculatePowerOfNumber(exponent, POWER_OF_FUNCTION_CODE).toScientificNotationString().toCalculatorFormat()
         else
             this.powerOfNumber(exponent)
     }
@@ -528,7 +528,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      */
     fun String.rootOfNumber(exponent: String, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculatePowerOfNumber(exponent, ROOT_OF_FUNCTION_CODE).toEngineeringString().toCalculatorFormat()
+            this.calculatePowerOfNumber(exponent, ROOT_OF_FUNCTION_CODE).toScientificNotationString().toCalculatorFormat()
         else
             this.rootOfNumber(exponent)
     }
@@ -648,7 +648,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * or plain format depending on function parameter     */
     fun String.decimalMinutes(functionCode: Int, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculateDegreesFractionPart(functionCode).toEngineeringString().toCalculatorFormat()
+            this.calculateDegreesFractionPart(functionCode).toScientificNotationString().toCalculatorFormat()
         else
             this.decimalMinutes(functionCode)
     }
@@ -661,7 +661,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
     fun piNumber(isScientificNotation: Boolean): String {
         val mathContext = MathContext(scale)
         return if (isScientificNotation)
-            BigDecimalMath.pi(mathContext).toEngineeringString().toCalculatorFormat()
+            BigDecimalMath.pi(mathContext).toScientificNotationString().toCalculatorFormat()
         else
             piNumber()
     }
@@ -674,7 +674,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
     fun doublePiNumber(isScientificNotation: Boolean): String {
         val mathContext = MathContext(scale)
         return if (isScientificNotation)
-            BigDecimalMath.pi(mathContext).toEngineeringString().toCalculatorFormat().multiply("2")
+            BigDecimalMath.pi(mathContext).toScientificNotationString().toCalculatorFormat().multiply("2")
         else
             piNumber()
     }
@@ -706,7 +706,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      */
     fun String.factorial(isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculateFactorial().toEngineeringString().toCalculatorFormat()
+            this.calculateFactorial().toScientificNotationString().toCalculatorFormat()
         else
             this.factorial()
     }
@@ -720,9 +720,9 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      */
     fun String.formatStringNumber(isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            BigDecimalMath.toBigDecimal(this.toStandardFormat()).toEngineeringString().toCalculatorFormat()
+            BigDecimalMath.toBigDecimal(this.toStandardFormat()).toScientificNotationString().toCalculatorFormat()
         else
-            BigDecimalMath.toBigDecimal(this.toStandardFormat()).toString().toCalculatorFormat()
+            BigDecimalMath.toBigDecimal(this.toStandardFormat()).toResultString().toCalculatorFormat()
     }
 
     private fun checkAngle(angle: BigDecimal): BigDecimal {
