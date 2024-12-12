@@ -1836,7 +1836,7 @@ class ScientificCalculatorInitialStateTest {
                 RADIANS_ANGLE_CODE)
         ))
     }
-/*
+
     @Test
     fun gradsTangentTest() {
         val zeroInputResultData = ScientificCalculatorDataEntity(
@@ -1846,7 +1846,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "1,96261050550515",
+            mainString = "1,9626105055051505823046404262119",
             historyString = "tang(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -1891,6 +1891,7 @@ class ScientificCalculatorInitialStateTest {
         ))
     }
 
+/*
     @Test
     fun degreesArcTangentTest() {
         val zeroInputResultData = ScientificCalculatorDataEntity(
