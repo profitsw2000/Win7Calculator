@@ -5,11 +5,13 @@ import ru.profitsw2000.data.constants.ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ARC_TANGENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.COSINE_FUNCTION_CODE
+import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
 import ru.profitsw2000.data.constants.DEGREES_TO_RADIANS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DMS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
+import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.GRADS_TO_RADIANS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
@@ -24,6 +26,7 @@ import ru.profitsw2000.data.constants.POWER_OF_FUNCTION_CODE
 import ru.profitsw2000.data.constants.RADIANS_TO_DEGREES_FUNCTION_CODE
 import ru.profitsw2000.data.constants.RADIANS_TO_GRADS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ROOT_OF_FUNCTION_CODE
+import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.TANGENT_FUNCTION_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
@@ -231,16 +234,10 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             EXPONENT_FUNCTION_CODE -> BigDecimalMath.exp(number, mathContext)
             HYPERBOLIC_SINUS_FUNCTION_CODE -> BigDecimalMath.sinh(number, mathContext)
             HYPERBOLIC_ARC_SINUS_FUNCTION_CODE -> BigDecimalMath.asinh(number, mathContext)
-            SINUS_FUNCTION_CODE -> BigDecimalMath.sin(number, mathContext)
-            ARC_SINUS_FUNCTION_CODE -> BigDecimalMath.asin(number, mathContext)
             HYPERBOLIC_COSINE_FUNCTION_CODE -> BigDecimalMath.cosh(number, mathContext)
             HYPERBOLIC_ARC_COSINE_FUNCTION_CODE -> BigDecimalMath.acosh(number, mathContext)
-            COSINE_FUNCTION_CODE -> BigDecimalMath.cos(number, mathContext)
-            ARC_COSINE_FUNCTION_CODE -> BigDecimalMath.acos(number, mathContext)
             HYPERBOLIC_TANGENT_FUNCTION_CODE -> BigDecimalMath.tanh(number, mathContext)
             HYPERBOLIC_ARC_TANGENT_FUNCTION_CODE -> BigDecimalMath.atanh(number, mathContext)
-            TANGENT_FUNCTION_CODE -> BigDecimalMath.tan(number, mathContext)
-            ARC_TANGENT_FUNCTION_CODE -> BigDecimalMath.atan(number, mathContext)
             LOGARITHM_BASE_10_FUNCTION_CODE -> BigDecimalMath.log10(number, mathContext)
             else -> number
         }
@@ -293,6 +290,179 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
                 .toCalculatorFormat()
         else
             this.mathFunction(functionCode)
+    }
+
+    /**
+     * Сalculates the result of the trigonometric function
+     * of the number contained in the @this string,
+     * Function selected depending on the value of functionCode parameter.
+     * @param functionCode - contain code of function, that need to be done
+     * @param angleUnitCode - defines what type of angle unit contains in @this number -
+     * degrees, radians or grads
+     * @return result of calculation in BigDecimal type
+     */
+    fun String.calculateTrigonometricFunction(functionCode: Int, angleUnitCode: Int): BigDecimal {
+        val mathContext = MathContext(scale + 2)
+        val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val angle = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> convertAngle(
+                number,
+                DEGREES_TO_RADIANS_FUNCTION_CODE
+            )
+            GRADS_ANGLE_CODE -> convertAngle(
+                number,
+                GRADS_TO_RADIANS_FUNCTION_CODE
+            )
+            else -> number
+        }
+        val result = when(functionCode) {
+            SINUS_FUNCTION_CODE -> BigDecimalMath.sin(angle, mathContext)
+            COSINE_FUNCTION_CODE -> BigDecimalMath.cos(angle, mathContext)
+            TANGENT_FUNCTION_CODE -> BigDecimalMath.tan(angle, mathContext)
+            else -> number
+        }
+
+        return checkAngle(result)
+    }
+
+    /**
+     * Calculates the result of the trigonometric function of the number contained in the @this string.
+     * @param functionCode - contain code of function, that need to be done
+     * @param angleUnitCode - defines what type of angle unit contains in @this number -
+     * degrees, radians or grads
+     * @return result of calculation in String type
+     */
+    fun String.trigonometricFunction(functionCode: Int, angleUnitCode: Int): String {
+        val mathContext = MathContext(scale)
+        return this.calculateTrigonometricFunction(functionCode, angleUnitCode)
+            .round(mathContext)
+            .stripTrailingZeros()
+            .toResultString()
+            .toCalculatorFormat()
+    }
+
+    /**
+     * Сalculates the result of the trigonometric function of the number contained in the @this string.
+     * @param functionCode - contain code of function, that need to be done
+     * @param angleUnitCode - defines what type of angle unit contains in @this number -
+     * degrees, radians or grads
+     * @param isScientificNotation - define result string format
+     * @return result of calculation in String type with engineering
+     * or plain format depending on function parameter
+     */
+    fun String.trigonometricFunction(functionCode: Int,
+                                     angleUnitCode: Int,
+                                     isScientificNotation: Boolean): String {
+        val mathContext = MathContext(scale)
+        return if (isScientificNotation)
+            this.calculateTrigonometricFunction(functionCode, angleUnitCode)
+                .round(mathContext)
+                .stripTrailingZeros()
+                .toEngineeringString()
+                .toCalculatorFormat()
+        else
+            this.trigonometricFunction(functionCode, angleUnitCode)
+    }
+
+    /**
+     * Сalculates the result of the inverse trigonometric function
+     * of the number contained in the @this string,
+     * Function selected depending on the value of functionCode parameter.
+     * @param functionCode - contain code of function, that need to be done
+     * @param angleUnitCode - defines what type of angle unit contains in @this number -
+     * degrees, radians or grads
+     * @return result of calculation in BigDecimal type
+     */
+    fun String.calculateInverseTrigonometricFunction(functionCode: Int, angleUnitCode: Int): BigDecimal {
+        val mathContext = MathContext(scale + 2)
+        val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val result = when(functionCode) {
+            ARC_SINUS_FUNCTION_CODE -> BigDecimalMath.asin(number, mathContext)
+            ARC_COSINE_FUNCTION_CODE -> BigDecimalMath.acos(number, mathContext)
+            ARC_TANGENT_FUNCTION_CODE -> BigDecimalMath.atan(number, mathContext)
+            else -> number
+        }
+        val angle = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> convertAngle(
+                result,
+                RADIANS_TO_DEGREES_FUNCTION_CODE
+            )
+            GRADS_ANGLE_CODE -> convertAngle(
+                result,
+                RADIANS_TO_DEGREES_FUNCTION_CODE
+            )
+            else -> number
+        }
+
+        return angle
+    }
+
+    /**
+     * Calculates the result of the inverse trigonometric function
+     * of the number contained in the @this string.
+     * @param functionCode - contain code of function, that need to be done
+     * @param angleUnitCode - defines what type of angle unit contains in @this number -
+     * degrees, radians or grads
+     * @return result of calculation in String type
+     */
+    fun String.inverseTrigonometricFunction(functionCode: Int, angleUnitCode: Int): String {
+        val mathContext = MathContext(scale)
+        return this.calculateInverseTrigonometricFunction(functionCode, angleUnitCode)
+            .round(mathContext)
+            .stripTrailingZeros()
+            .toResultString()
+            .toCalculatorFormat()
+    }
+
+    /**
+     * Сalculates the result of the inverse trigonometric function
+     * of the number contained in the @this string.
+     * @param functionCode - contain code of function, that need to be done
+     * @param angleUnitCode - defines what type of angle unit contains in @this number -
+     * degrees, radians or grads
+     * @param isScientificNotation - define result string format
+     * @return result of calculation in String type with engineering
+     * or plain format depending on function parameter
+     */
+    fun String.inverseTrigonometricFunction(functionCode: Int,
+                                     angleUnitCode: Int,
+                                     isScientificNotation: Boolean): String {
+        val mathContext = MathContext(scale)
+        return if (isScientificNotation)
+            this.calculateInverseTrigonometricFunction(functionCode, angleUnitCode)
+                .round(mathContext)
+                .stripTrailingZeros()
+                .toEngineeringString()
+                .toCalculatorFormat()
+        else
+            this.trigonometricFunction(functionCode, angleUnitCode)
+    }
+
+    /** Converts number in @this to radians/degrees/grads
+     * from radians/degrees/grads (depending on functionCode param).
+     * @param angle - number to convert
+     * @param functionCode - contain code of function, that need to be done
+     * @return result of calculation in BigDecimal type
+     */
+    fun convertAngle(angle: BigDecimal, functionCode: Int): BigDecimal {
+        val mathContext = MathContext(scale + 2)
+        val nineNumber = BigDecimalMath.toBigDecimal(NINE_STRING_NUMBER)
+        val tenNumber = BigDecimalMath.toBigDecimal(TEN_STRING_NUMBER)
+
+        val result = when(functionCode) {
+            DEGREES_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(angle, mathContext)
+            RADIANS_TO_DEGREES_FUNCTION_CODE -> BigDecimalMath.toDegrees(angle, mathContext)
+            GRADS_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(
+                angle.multiply(nineNumber).divide(tenNumber,mathContext),
+                mathContext
+            )
+            RADIANS_TO_GRADS_FUNCTION_CODE -> BigDecimalMath.toDegrees(angle, mathContext)
+                .multiply(tenNumber).divide(nineNumber, mathContext)
+            else -> angle
+        }
+        checkForOverflow(result)
+
+        return result.stripTrailingZeros()
     }
 
     /** Calculates power or root of number contained in @this (depending on functionCode param).
@@ -552,5 +722,20 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             BigDecimalMath.toBigDecimal(this.toStandardFormat()).toEngineeringString().toCalculatorFormat()
         else
             BigDecimalMath.toBigDecimal(this.toStandardFormat()).toString().toCalculatorFormat()
+    }
+
+    private fun checkAngle(angle: BigDecimal): BigDecimal {
+        val maxValueString = "1E+31"
+        val minValueString = "1.75E-32"
+        val maxValueBigDecimal = BigDecimalMath.toBigDecimal(maxValueString)
+        val minValueBigDecimal = BigDecimalMath.toBigDecimal(minValueString)
+        val zeroString = "0"
+        val zeroBigDecimal = BigDecimalMath.toBigDecimal(zeroString)
+
+        return when{
+            angle.abs().compareTo(minValueBigDecimal) == -1 -> zeroBigDecimal
+            angle.compareTo(maxValueBigDecimal) == 1 -> throw ArithmeticException("Overflow number exception")
+            else -> angle
+        }
     }
 }
