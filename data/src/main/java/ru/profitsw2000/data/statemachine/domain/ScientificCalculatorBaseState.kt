@@ -35,6 +35,7 @@ import ru.profitsw2000.utils.dropCalculationError
 import java.math.BigDecimal
 import java.math.MathContext
 import kotlin.math.PI
+import kotlin.math.abs
 
 const val GRADS_TO_DEGREES_COEF = "1.11111111111111111111111111111111"
 const val ZERO_STRING_NUMBER = "0"
@@ -734,7 +735,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
 
         return when{
             angle.abs().compareTo(minValueBigDecimal) == -1 -> zeroBigDecimal
-            angle.compareTo(maxValueBigDecimal) == 1 -> throw ArithmeticException("Overflow number exception")
+            angle.abs().compareTo(maxValueBigDecimal) == 1 -> throw ArithmeticException("Overflow number exception")
             else -> angle
         }
     }

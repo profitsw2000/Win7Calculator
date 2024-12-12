@@ -530,16 +530,8 @@ class ScientificCalculatorInitialState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .convert(DEGREES_TO_RADIANS_FUNCTION_CODE)
-                .mathFunction(SINUS_FUNCTION_CODE)
-            RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.mathFunction(SINUS_FUNCTION_CODE)
-            GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .convert(GRADS_TO_RADIANS_FUNCTION_CODE)
-                .mathFunction(SINUS_FUNCTION_CODE)
-            else -> scientificCalculatorDataEntity.mainString.mathFunction(SINUS_FUNCTION_CODE)
-        }
+        val result = scientificCalculatorDataEntity.mainString
+            .trigonometricFunction(SINUS_FUNCTION_CODE, angleUnitCode)
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "sind"
             RADIANS_ANGLE_CODE -> "sinr"
@@ -576,20 +568,10 @@ class ScientificCalculatorInitialState(
             else -> "asind"
         }
         return try {
-            val result = when(angleUnitCode) {
-                DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .highPrecisionMathFunction(ARC_SINUS_FUNCTION_CODE)
-                    .convert(RADIANS_TO_DEGREES_FUNCTION_CODE)
-                RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.mathFunction(ARC_SINUS_FUNCTION_CODE)
-                GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .highPrecisionMathFunction(ARC_SINUS_FUNCTION_CODE)
-                    .convert(RADIANS_TO_GRADS_FUNCTION_CODE)
-                else -> scientificCalculatorDataEntity.mainString.mathFunction(ARC_SINUS_FUNCTION_CODE)
-            }
-
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = result,
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .inverseTrigonometricFunction(ARC_SINUS_FUNCTION_CODE, angleUnitCode),
                     historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )
@@ -799,18 +781,6 @@ class ScientificCalculatorInitialState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .highPrecisionConvert(DEGREES_TO_RADIANS_FUNCTION_CODE)
-                .mathFunction(COSINE_FUNCTION_CODE)
-            RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .mathFunction(COSINE_FUNCTION_CODE)
-            GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                .highPrecisionConvert(GRADS_TO_RADIANS_FUNCTION_CODE)
-                .mathFunction(COSINE_FUNCTION_CODE)
-            else -> scientificCalculatorDataEntity.mainString
-                .mathFunction(COSINE_FUNCTION_CODE)
-        }
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "cosd"
             RADIANS_ANGLE_CODE -> "cosr"
@@ -820,7 +790,8 @@ class ScientificCalculatorInitialState(
 
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = result,
+                mainString = scientificCalculatorDataEntity.mainString
+                    .trigonometricFunction(COSINE_FUNCTION_CODE, angleUnitCode),
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString})"
             )
@@ -848,21 +819,10 @@ class ScientificCalculatorInitialState(
             else -> "acosd"
         }
         return try {
-            val result = when(angleUnitCode) {
-                DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .highPrecisionMathFunction(ARC_COSINE_FUNCTION_CODE)
-                    .convert(RADIANS_TO_DEGREES_FUNCTION_CODE)
-                RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString.mathFunction(ARC_COSINE_FUNCTION_CODE)
-                GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .highPrecisionMathFunction(ARC_COSINE_FUNCTION_CODE)
-                    .convert(RADIANS_TO_GRADS_FUNCTION_CODE)
-                else -> scientificCalculatorDataEntity.mainString
-                    .highPrecisionMathFunction(ARC_COSINE_FUNCTION_CODE)
-                    .convert(RADIANS_TO_DEGREES_FUNCTION_CODE)
-            }
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = result,
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .inverseTrigonometricFunction(ARC_COSINE_FUNCTION_CODE, angleUnitCode),
                     historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                             "${scientificCalculatorDataEntity.mainString})"
                 )
@@ -1027,25 +987,10 @@ class ScientificCalculatorInitialState(
         }
 
         return try {
-            val angleInRadians = when(angleUnitCode) {
-                DEGREES_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .convert(DEGREES_TO_RADIANS_FUNCTION_CODE)
-                    //.highPrecisionMathFunction(TANGENT_FUNCTION_CODE)
-/*                RADIANS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .mathFunction(TANGENT_FUNCTION_CODE)*/
-                GRADS_ANGLE_CODE -> scientificCalculatorDataEntity.mainString
-                    .convert(GRADS_TO_RADIANS_FUNCTION_CODE)
-                    //.mathFunction(TANGENT_FUNCTION_CODE)
-                else -> scientificCalculatorDataEntity.mainString
-                    //.mathFunction(TANGENT_FUNCTION_CODE)
-            }
-            val sin = angleInRadians.mathFunction(SINUS_FUNCTION_CODE)
-            val cos = angleInRadians.mathFunction(COSINE_FUNCTION_CODE)
-            val result = sin.divide(cos)
-
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = result,
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .trigonometricFunction(TANGENT_FUNCTION_CODE, angleUnitCode),
                     historyString = scientificCalculatorDataEntity.historyString +
                             "$operationString(" +
                             "${scientificCalculatorDataEntity.mainString})"

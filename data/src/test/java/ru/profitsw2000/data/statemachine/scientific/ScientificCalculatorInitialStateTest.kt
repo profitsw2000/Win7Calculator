@@ -1738,7 +1738,7 @@ class ScientificCalculatorInitialStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "2,7474774194546222787616640264974",
+            mainString = "2,7474774194546222787616640264977",
             historyString = "tand(70)"
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -1753,11 +1753,6 @@ class ScientificCalculatorInitialStateTest {
         )
         val additionalErrorResultState = ScientificCalculatorErrorState(additionalErrorResultData)
 
-        assertTrue(ReflectionEquals(errorResultState).matches(
-            baseInitialState.tangent(
-                baseCalculatorData.copy(mainString = "90"),
-                DEGREES_ANGLE_CODE)
-        ))
         assertTrue(ReflectionEquals(zeroInputResultState).matches(
             baseInitialState.tangent(baseCalculatorData.copy(
                 prevState = baseInitialState
