@@ -185,7 +185,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @param functionCode - contain code of function, that need to be done
      * @return result of calculation in BigDecimal type
      */
-    fun String.getNumberPart(functionCode: Int): BigDecimal {
+    private fun String.getNumberPart(functionCode: Int): BigDecimal {
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat()).stripTrailingZeros()
 
         return when(functionCode) {
@@ -226,7 +226,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @param functionCode - contain code of function, that need to be done
      * @return result of calculation in BigDecimal type
      */
-    fun String.calculateMathFunction(functionCode: Int): BigDecimal {
+    private fun String.calculateMathFunction(functionCode: Int): BigDecimal {
         val mathContext = MathContext(scale + 2)
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
 
@@ -246,18 +246,6 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         checkForOverflow(result)
 
         return result
-    }
-
-    /**
-     * Calculates the result of the function of the number contained in the @this string
-     * with high precision(scale + 2).
-     * @param functionCode - contain code of function, that need to be done
-     * @return result of calculation in String type with high precision
-     */
-    fun String.highPrecisionMathFunction(functionCode: Int): String {
-        return this.calculateMathFunction(functionCode)
-            .toResultString()
-            .toCalculatorFormat()
     }
 
     /**
@@ -302,7 +290,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * degrees, radians or grads
      * @return result of calculation in BigDecimal type
      */
-    fun String.calculateTrigonometricFunction(functionCode: Int, angleUnitCode: Int): BigDecimal {
+    private fun String.calculateTrigonometricFunction(functionCode: Int, angleUnitCode: Int): BigDecimal {
         val mathContext = MathContext(scale + 2)
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val angle = when(angleUnitCode) {
@@ -374,7 +362,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * degrees, radians or grads
      * @return result of calculation in BigDecimal type
      */
-    fun String.calculateInverseTrigonometricFunction(functionCode: Int, angleUnitCode: Int): BigDecimal {
+    private fun String.calculateInverseTrigonometricFunction(functionCode: Int, angleUnitCode: Int): BigDecimal {
         val mathContext = MathContext(scale + 2)
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val result = when(functionCode) {
@@ -445,7 +433,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @param functionCode - contain code of function, that need to be done
      * @return result of calculation in BigDecimal type
      */
-    fun convertAngle(angle: BigDecimal, functionCode: Int): BigDecimal {
+    private fun convertAngle(angle: BigDecimal, functionCode: Int): BigDecimal {
         val mathContext = MathContext(scale + 2)
         val nineNumber = BigDecimalMath.toBigDecimal(NINE_STRING_NUMBER)
         val tenNumber = BigDecimalMath.toBigDecimal(TEN_STRING_NUMBER)
@@ -471,7 +459,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
      * @param exponent - exponent or root number
      * @return result of calculation in BigDecimal type
      */
-    fun String.calculatePowerOfNumber(exponent: String, functionCode: Int): BigDecimal {
+    private fun String.calculatePowerOfNumber(exponent: String, functionCode: Int): BigDecimal {
         val mathContext = MathContext(scale)
         val base = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val exponent = BigDecimalMath.toBigDecimal(exponent.toStandardFormat())
@@ -533,79 +521,12 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             this.rootOfNumber(exponent)
     }
 
-    /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
-     * @param functionCode - contain code of function, that need to be done
-     * @return result of calculation in BigDecimal type
-     */
-    fun String.convertAngleUnits(functionCode: Int): BigDecimal {
-        val mathContext = MathContext(scale + 2)
-        val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
-        val nineNumber = BigDecimalMath.toBigDecimal(NINE_STRING_NUMBER)
-        val tenNumber = BigDecimalMath.toBigDecimal(TEN_STRING_NUMBER)
-
-        val result = when(functionCode) {
-            DEGREES_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(number, mathContext)
-            RADIANS_TO_DEGREES_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext)
-            GRADS_TO_RADIANS_FUNCTION_CODE -> BigDecimalMath.toRadians(
-                number.multiply(nineNumber).divide(tenNumber,mathContext),
-                mathContext
-            )
-            RADIANS_TO_GRADS_FUNCTION_CODE -> BigDecimalMath.toDegrees(number, mathContext)
-                .multiply(tenNumber).divide(nineNumber, mathContext)
-            else -> number
-        }
-        checkForOverflow(result)
-
-        return result.stripTrailingZeros()
-    }
-
-    /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
-     * @param functionCode - contain code of function, that need to be done
-     * @return result of calculation in String type
-     */
-    fun String.convert(functionCode: Int): String {
-        val mathContext = MathContext(scale)
-        return this
-            .convertAngleUnits(functionCode)
-            .round(mathContext)
-            .toResultString()
-            .toCalculatorFormat()
-    }
-
-    /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
-     * @param functionCode - contain code of function, that need to be done
-     * @return result of calculation in String type
-     */
-    fun String.highPrecisionConvert(functionCode: Int): String {
-        return this
-            .convertAngleUnits(functionCode)
-            .toResultString()
-            .toCalculatorFormat()
-    }
-
-    /** Converts number in @this to radians/degrees/grads from radians/degrees/grads (depending on functionCode param).
-     * @param functionCode - contain code of function, that need to be done
-     * @param isScientificNotation - define result string format
-     * @return result of calculation in String type with engineering
-     * or plain format depending on function isScientificNotation parameter
-     */
-    fun String.convert(functionCode: Int, isScientificNotation: Boolean): String {
-        val mathContext = MathContext(scale)
-        return if (isScientificNotation)
-            this.convertAngleUnits(functionCode)
-                .round(mathContext)
-                .toResultString()
-                .toCalculatorFormat()
-        else
-            this.convert(functionCode)
-    }
-
     /** Converts number in @this with fractional part in minutes to
      * number with decimal fractional part or otherwise(depending on functionCode param)
      * @param functionCode - contain code of function, that need to be done
      * @return result of calculation in BigDecimal type
      */
-    fun String.calculateDegreesFractionPart(functionCode: Int): BigDecimal {
+    private fun String.calculateDegreesFractionPart(functionCode: Int): BigDecimal {
         val mathContext = MathContext(scale)
         val fraction = this.numberPart(FRACTIONAL_PART_FUNCTION_CODE)
         val integral = this.numberPart(INTEGRAL_PART_FUNCTION_CODE)
@@ -676,13 +597,13 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         return if (isScientificNotation)
             BigDecimalMath.pi(mathContext).toScientificNotationString().toCalculatorFormat().multiply("2")
         else
-            piNumber()
+            doublePiNumber()
     }
 
     /**Calculates factorial of @this number and return result in BigDecimal type.
      * @return  result of calculation in String type
      */
-    fun String.calculateFactorial(): BigDecimal {
+    private fun String.calculateFactorial(): BigDecimal {
         val mathContext = MathContext(scale)
         val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
 
@@ -725,6 +646,15 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
             BigDecimalMath.toBigDecimal(this.toStandardFormat()).toResultString().toCalculatorFormat()
     }
 
+    /**
+     * Checks if absolute value of function parameter is
+     * in certain range.
+     * @param angle - BigDecimal number to check
+     * @return same value if function parameter is in range
+     * zero if function parameter is less than lowest limit of the range
+     * throw ArithmeticException if function parameter is more
+     * than highes limit of the range
+     */
     private fun checkAngle(angle: BigDecimal): BigDecimal {
         val maxValueString = "1E+31"
         val minValueString = "1.75E-32"

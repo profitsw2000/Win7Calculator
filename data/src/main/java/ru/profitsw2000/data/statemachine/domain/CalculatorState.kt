@@ -339,6 +339,12 @@ interface CalculatorState {
         else this
     }
 
+    /**
+     * Returns string representation of @this BigDecimal in scientific or
+     * plain format depending on @this value - is it in certain range or
+     * out of range.
+     * @return number in string representation in scientific or plain format
+     */
     fun BigDecimal.toResultString(): String {
         val maxValueString = "1E+${SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER}"
         val minValueString = "-1E+${SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER}"
@@ -362,6 +368,10 @@ interface CalculatorState {
             this.toPlainString()
     }
 
+    /**
+     * Returns string representation of @this BigDecimal in scientific format.
+     * @return string representation of number in scientific format.
+     */
     fun BigDecimal.toScientificNotationString(): String {
         val mantissa = BigDecimalMath.mantissa(this)
         val exponent = BigDecimalMath.exponent(this)
