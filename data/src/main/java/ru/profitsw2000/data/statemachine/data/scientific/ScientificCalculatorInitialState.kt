@@ -837,7 +837,7 @@ class ScientificCalculatorInitialState(
         } catch (exception: Exception) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
-                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                             "${scientificCalculatorDataEntity.mainString})",
                     errorCode = UNKNOWN_ERROR_CODE
                 )

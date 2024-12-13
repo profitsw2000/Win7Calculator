@@ -91,8 +91,9 @@ interface CalculatorState {
      * with truncated comma at the end of it if has.
      */
     fun String.calcFormat(isScientificNotation: Boolean): String {
+        val number = BigDecimalMath.toBigDecimal(this)
         return if (isScientificNotation) {
-            getScientificFormattedString(calculatorStringToDouble(this))
+            number.toScientificNotationString().toCalculatorFormat()
         } else {
             this.commaTruncate()
         }

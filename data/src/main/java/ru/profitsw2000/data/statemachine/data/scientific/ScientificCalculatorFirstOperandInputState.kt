@@ -1,14 +1,30 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.ARC_COSINE_FUNCTION_CODE
+import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
+import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.DMS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
+import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_COSINE_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_TANGENT_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_COSINE_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_TANGENT_FUNCTION_CODE
+import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
 import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
@@ -56,7 +72,7 @@ class ScientificCalculatorFirstOperandInputState(
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         return when(action) {
             CalculatorAction.Add -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.PLUS, "+")
-            /*CalculatorAction.AddToMemory -> addNumberToMemory(scientificCalculatorDataEntity)
+            CalculatorAction.AddToMemory -> addNumberToMemory(scientificCalculatorDataEntity)
             is CalculatorAction.ArcCosine -> arcCosine(scientificCalculatorDataEntity, action.angleUnitCode)
             is CalculatorAction.ArcSinus -> arcSinus(scientificCalculatorDataEntity, action.angleUnitCode)
             is CalculatorAction.ArcTangent -> arcTangent(scientificCalculatorDataEntity, action.angleUnitCode)
@@ -106,7 +122,7 @@ class ScientificCalculatorFirstOperandInputState(
             CalculatorAction.ThirdRootOfX -> cubeRoot(scientificCalculatorDataEntity)
             CalculatorAction.XPowerThree -> cubeNumber(scientificCalculatorDataEntity)
             CalculatorAction.XPowerY -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.POWER_OF, "^")
-            CalculatorAction.YRootOfX -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.ROOT_OF, "yroot")*/
+            CalculatorAction.YRootOfX -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.ROOT_OF, "yroot")
             else -> TODO()
         }
     }
@@ -169,15 +185,12 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun readMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
                 mainString = if (scientificCalculatorDataEntity.memoryNumber == null) "0".calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 )
-                else TODO() /*doubleToCalculatorString(
-                    scientificCalculatorDataEntity.memoryNumber, scientificCalculatorDataEntity.isScientificNotation
-                )*/
+                else scientificCalculatorDataEntity.mainString
             )
         )
     }
@@ -191,11 +204,10 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun saveToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                memoryNumber = TODO() /*if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) == 0.0) null
-                else calculatorStringToDouble(scientificCalculatorDataEntity.mainString)*/,
+                memoryNumber = if (scientificCalculatorDataEntity.mainString == "0") null
+                else scientificCalculatorDataEntity.mainString,
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 )
@@ -212,8 +224,8 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun addNumberToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val addedNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-        val calculatorData = if (addedNumber == 0.0) {
+        val addedNumber = scientificCalculatorDataEntity.mainString
+        val calculatorData = if (addedNumber == "0") {
             scientificCalculatorDataEntity.copy(
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
@@ -224,10 +236,8 @@ class ScientificCalculatorFirstOperandInputState(
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
-                memoryNumber = TODO() /*if (scientificCalculatorDataEntity.memoryNumber == null) addedNumber
-                else calculatorStringToDouble(
-                    doubleToCalculatorString(scientificCalculatorDataEntity.memoryNumber + addedNumber)
-                )*/
+                memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) addedNumber
+                else scientificCalculatorDataEntity.memoryNumber.add(addedNumber, scientificCalculatorDataEntity.isScientificNotation)
             )
         }
 
@@ -240,8 +250,8 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun subtractNumberFromMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val subtractedNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-        val calculatorData = if (subtractedNumber == 0.0) {
+        val subtractedNumber = scientificCalculatorDataEntity.mainString
+        val calculatorData = if (subtractedNumber == "0") {
             scientificCalculatorDataEntity.copy(
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
@@ -252,10 +262,14 @@ class ScientificCalculatorFirstOperandInputState(
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
-                memoryNumber = TODO() /*if (scientificCalculatorDataEntity.memoryNumber == null) 0 - subtractedNumber
-                else calculatorStringToDouble(
-                    doubleToCalculatorString(scientificCalculatorDataEntity.memoryNumber - subtractedNumber)
-                )*/
+                memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) "0".subtract(
+                    subtractedNumber,
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
+                else scientificCalculatorDataEntity.memoryNumber.subtract(
+                    subtractedNumber,
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
             )
         }
 
@@ -270,9 +284,7 @@ class ScientificCalculatorFirstOperandInputState(
     override fun negateOperand(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandInputState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    0 - calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-                )
+                mainString = scientificCalculatorDataEntity.mainString.negate()
             )
         )
     }
@@ -286,9 +298,17 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState with appropriate code in errorCode field
      */
     override fun calculateSquareRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val number = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-
-        return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) < 0)
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.sqrt(scientificCalculatorDataEntity.isScientificNotation),
+                    historyString = "${scientificCalculatorDataEntity.historyString}" +
+                            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}" +
@@ -298,17 +318,14 @@ class ScientificCalculatorFirstOperandInputState(
                     errorCode = INVALID_INPUT_ERROR_CODE
                 )
             )
-        else {
-            val sqrtDouble = sqrt(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-            val sqrtString = doubleToCalculatorString(sqrtDouble, scientificCalculatorDataEntity.isScientificNotation)
-
-            ScientificCalculatorFirstOperandReadState(
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = sqrtString,
                     historyString = "${scientificCalculatorDataEntity.historyString}" +
                             "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
                                 scientificCalculatorDataEntity.isScientificNotation
-                            )})"
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
                 )
             )
         }
@@ -328,9 +345,9 @@ class ScientificCalculatorFirstOperandInputState(
 
         return when {
             mainString.contains(",") && digitToAppend == "," -> this
-            mainString.length >= GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER && !(mainString.contains(",")) -> this
-            mainString.length >= (GENERAL_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER + 1) -> this
-            mainString == "0" && mainString.length < 2 && digitToAppend != "," -> ScientificCalculatorFirstOperandInputState(
+            mainString.length >= SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER && !(mainString.contains(",")) -> this
+            mainString.length >= (SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER + 1) -> this
+            mainString == "0" && digitToAppend != "," -> ScientificCalculatorFirstOperandInputState(
                 scientificCalculatorDataEntity.copy(
                     mainString = digitToAppend
                 )
@@ -367,7 +384,7 @@ class ScientificCalculatorFirstOperandInputState(
                         )}" +
                         "$HISTORY_STRING_SPACE_LETTER$operationString",
                 scientificOperationType = scientificOperationType,
-                operand = TODO() /*calculatorStringToDouble(scientificCalculatorDataEntity.mainString)*/
+                operand = scientificCalculatorDataEntity.mainString
             )
         )
     }
@@ -384,8 +401,7 @@ class ScientificCalculatorFirstOperandInputState(
     override fun reciprocOperation(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return try {
             ScientificCalculatorFirstOperandReadState(scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    1/(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
+                mainString = "1".divide(scientificCalculatorDataEntity.mainString,
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 historyString = "${scientificCalculatorDataEntity.historyString}" +
@@ -496,24 +512,21 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState if error occurred.
      */
     override fun calculateNaturalLogarithm(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) > 0.0)
-                ScientificCalculatorFirstOperandReadState(
-                    scientificCalculatorDataEntity.copy(
-                        mainString = doubleToCalculatorString(
-                            ln(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
-                            scientificCalculatorDataEntity.isScientificNotation
-                            ),
-                        historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
-                                "${scientificCalculatorDataEntity.mainString.calcFormat(
-                                    scientificCalculatorDataEntity.isScientificNotation
-                                )})"
-                    )
-                )
-            else ScientificCalculatorErrorState(
+        return return try {
+            ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = scientificCalculatorDataEntity.mainString.calcFormat(
-                        scientificCalculatorDataEntity.isScientificNotation
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        NATURAL_LOGARITHM_FUNCTION_CODE
                     ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
                                 scientificCalculatorDataEntity.isScientificNotation
@@ -521,6 +534,17 @@ class ScientificCalculatorFirstOperandInputState(
                     errorCode = INVALID_INPUT_ERROR_CODE
                 )
             )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}ln(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     /**
@@ -532,12 +556,10 @@ class ScientificCalculatorFirstOperandInputState(
      */
     override fun calculateExponent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return try {
-            val result = calculatorStringToDouble(scientificCalculatorDataEntity.mainString).exponent()
-
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        result,
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        EXPONENT_FUNCTION_CODE,
                         scientificCalculatorDataEntity.isScientificNotation
                     ),
                     historyString = "${scientificCalculatorDataEntity.historyString}powe(" +
@@ -584,8 +606,8 @@ class ScientificCalculatorFirstOperandInputState(
     override fun integerOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
+                mainString = scientificCalculatorDataEntity.mainString.numberPart(
+                    INTEGRAL_PART_FUNCTION_CODE,
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 historyString = "${scientificCalculatorDataEntity.historyString}Int(" +
@@ -603,15 +625,12 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandInputState with updated calculator data
      */
     override fun fractionOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val number = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-        val result = number.subtract(truncate(number))
-
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                            result,
-                            scientificCalculatorDataEntity.isScientificNotation
-                    ),
+                mainString = scientificCalculatorDataEntity.mainString.numberPart(
+                    FRACTIONAL_PART_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
                 historyString = "${scientificCalculatorDataEntity.historyString}frac(" +
                         "${scientificCalculatorDataEntity.mainString.calcFormat(
                             scientificCalculatorDataEntity.isScientificNotation
@@ -633,8 +652,8 @@ class ScientificCalculatorFirstOperandInputState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).calcSinh(),
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_SINUS_FUNCTION_CODE,
                         scientificCalculatorDataEntity.isScientificNotation
                     ),
                     historyString = "${scientificCalculatorDataEntity.historyString}sinh(" +
@@ -675,8 +694,8 @@ class ScientificCalculatorFirstOperandInputState(
     override fun hyperbolicArcSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    asinh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
+                mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                    HYPERBOLIC_ARC_SINUS_FUNCTION_CODE,
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 historyString = "${scientificCalculatorDataEntity.historyString}asinh(" +
@@ -700,12 +719,6 @@ class ScientificCalculatorFirstOperandInputState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> sin(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-            RADIANS_ANGLE_CODE -> sin(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-            GRADS_ANGLE_CODE -> sin(radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-            else -> sin(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-        }
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "sind"
             RADIANS_ANGLE_CODE -> "sinr"
@@ -715,7 +728,11 @@ class ScientificCalculatorFirstOperandInputState(
 
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(result, scientificCalculatorDataEntity.isScientificNotation),
+                mainString = scientificCalculatorDataEntity.mainString.trigonometricFunction(
+                    SINUS_FUNCTION_CODE,
+                    angleUnitCode,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString.calcFormat(
                             scientificCalculatorDataEntity.isScientificNotation
@@ -740,13 +757,6 @@ class ScientificCalculatorFirstOperandInputState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        val enteredNumber = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-        val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> degreesFromRadians(asin(enteredNumber))
-            RADIANS_ANGLE_CODE -> asin(enteredNumber)
-            GRADS_ANGLE_CODE -> gradsFromRadians(asin(enteredNumber))
-            else -> degreesFromRadians(asin(enteredNumber))
-        }
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "asind"
             RADIANS_ANGLE_CODE -> "asinr"
@@ -754,23 +764,28 @@ class ScientificCalculatorFirstOperandInputState(
             else -> "asind"
         }
 
-        return if (abs(enteredNumber) > 1) ScientificCalculatorErrorState(
-            scientificCalculatorDataEntity.copy(
-                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})",
-                errorCode = INVALID_INPUT_ERROR_CODE
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .inverseTrigonometricFunction(ARC_SINUS_FUNCTION_CODE, angleUnitCode),
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
             )
-        ) else ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(result, scientificCalculatorDataEntity.isScientificNotation),
-                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})"
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
             )
-        )
+        }
     }
 
     /**
@@ -786,8 +801,8 @@ class ScientificCalculatorFirstOperandInputState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).powerTo(2.0),
+                    mainString = scientificCalculatorDataEntity.mainString.powerOfNumber(
+                        "2",
                         scientificCalculatorDataEntity.isScientificNotation
                     ),
                     historyString = "${scientificCalculatorDataEntity.historyString}sqr(" +
@@ -829,50 +844,39 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
      */
     override fun factorial(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) > -1.0) {
-            try {
-                ScientificCalculatorFirstOperandReadState(
-                    scientificCalculatorDataEntity.copy(
-                        mainString = doubleToCalculatorString(
-                            calculatorStringToDouble(scientificCalculatorDataEntity.mainString).factorial(),
-                            scientificCalculatorDataEntity.isScientificNotation
-                        ),
-                        historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
-                                "${scientificCalculatorDataEntity.mainString.calcFormat(
-                                    scientificCalculatorDataEntity.isScientificNotation
-                                )})"
-                    )
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.factorial(
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
                 )
-            } catch (arithmeticException: ArithmeticException) {
-                ScientificCalculatorErrorState(
-                    scientificCalculatorDataEntity.copy(
-                        historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
-                                "${scientificCalculatorDataEntity.mainString.calcFormat(
-                                    scientificCalculatorDataEntity.isScientificNotation
-                                )})",
-                        errorCode = OVERFLOW_ERROR_CODE
-                    )
-                )
-            } catch (exception: Exception) {
-                ScientificCalculatorErrorState(
-                    scientificCalculatorDataEntity.copy(
-                        historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
-                                "${scientificCalculatorDataEntity.mainString.calcFormat(
-                                    scientificCalculatorDataEntity.isScientificNotation
-                                )})",
-                        errorCode = UNKNOWN_ERROR_CODE
-                    )
-                )
-            }
-        } else ScientificCalculatorErrorState(
-            scientificCalculatorDataEntity.copy(
-                historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})",
-                errorCode = INVALID_INPUT_ERROR_CODE
             )
-        )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     /**
@@ -884,14 +888,12 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun decimalToMinutes(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val fraction = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)%1
-        val integer = truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-        val convertedFraction = (fraction*60)/100
-        val convertedValue = integer + convertedFraction
-
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(convertedValue, scientificCalculatorDataEntity.isScientificNotation),
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(
+                    DMS_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
                 historyString = "${scientificCalculatorDataEntity.historyString}dms(" +
                         "${scientificCalculatorDataEntity.mainString.calcFormat(
                             scientificCalculatorDataEntity.isScientificNotation
@@ -909,14 +911,12 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun minutesToDecimal(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val fraction = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)%1
-        val integer = truncate(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-        val convertedFraction = (fraction*100)/60
-        val convertedValue = integer + convertedFraction
-
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(convertedValue, scientificCalculatorDataEntity.isScientificNotation),
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(
+                    DEG_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
                 historyString = "${scientificCalculatorDataEntity.historyString}deg(" +
                         "${scientificCalculatorDataEntity.mainString.calcFormat(
                             scientificCalculatorDataEntity.isScientificNotation
@@ -938,8 +938,8 @@ class ScientificCalculatorFirstOperandInputState(
         return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        calculatorStringToDouble(scientificCalculatorDataEntity.mainString).calcCosh(),
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_COSINE_FUNCTION_CODE,
                         scientificCalculatorDataEntity.isScientificNotation
                     ),
                     historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
@@ -981,8 +981,19 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState with corresponding error code if error occurred.
      */
     override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val number = calculatorStringToDouble(scientificCalculatorDataEntity.mainString)
-        return if (number < 1)
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_ARC_COSINE_FUNCTION_CODE
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
                 scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
@@ -992,18 +1003,17 @@ class ScientificCalculatorFirstOperandInputState(
                     errorCode = INVALID_INPUT_ERROR_CODE
                 )
             )
-        else ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    acosh(number),
-                    scientificCalculatorDataEntity.isScientificNotation
-                ),
-                historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})"
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
             )
-        )
+        }
     }
 
     /**
@@ -1019,12 +1029,6 @@ class ScientificCalculatorFirstOperandInputState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        val result = when(angleUnitCode) {
-            DEGREES_ANGLE_CODE -> cos(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-            RADIANS_ANGLE_CODE -> cos(calculatorStringToDouble(scientificCalculatorDataEntity.mainString))
-            GRADS_ANGLE_CODE -> cos(radiansFromGrads(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-            else -> cos(radiansFromDegrees(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)))
-        }
         val operationString = when(angleUnitCode) {
             DEGREES_ANGLE_CODE -> "cosd"
             RADIANS_ANGLE_CODE -> "cosr"
@@ -1034,7 +1038,11 @@ class ScientificCalculatorFirstOperandInputState(
 
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(result, scientificCalculatorDataEntity.isScientificNotation),
+                mainString = scientificCalculatorDataEntity.mainString.trigonometricFunction(
+                    COSINE_FUNCTION_CODE,
+                    angleUnitCode,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
                 historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
                         "${scientificCalculatorDataEntity.mainString.calcFormat(
                             scientificCalculatorDataEntity.isScientificNotation
@@ -1073,23 +1081,38 @@ class ScientificCalculatorFirstOperandInputState(
             else -> "acosd"
         }
 
-        return if (abs(enteredNumber) > 1) ScientificCalculatorErrorState(
-            scientificCalculatorDataEntity.copy(
-                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})",
-                errorCode = INVALID_INPUT_ERROR_CODE
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .inverseTrigonometricFunction(ARC_COSINE_FUNCTION_CODE, angleUnitCode),
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
             )
-        ) else ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(result, scientificCalculatorDataEntity.isScientificNotation),
-                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})"
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
             )
-        )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     /**
@@ -1106,18 +1129,18 @@ class ScientificCalculatorFirstOperandInputState(
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
-        val historyString = "${scientificCalculatorDataEntity.historyString}" +
-                "${scientificCalculatorDataEntity.mainString.calcFormat(
+        val historyString = scientificCalculatorDataEntity.historyString +
+                scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
-                )}" +
-                "$HISTORY_STRING_SPACE_LETTER" +
-                "$operationString"
+                ) +
+                HISTORY_STRING_SPACE_LETTER +
+                operationString
 
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
                 historyString = historyString,
                 scientificOperationType = scientificOperationType,
-                operand = TODO() /*calculatorStringToDouble(scientificCalculatorDataEntity.mainString)*/
+                operand = scientificCalculatorDataEntity.mainString
             )
         )
     }
@@ -1130,7 +1153,9 @@ class ScientificCalculatorFirstOperandInputState(
     override fun piNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(PI, scientificCalculatorDataEntity.isScientificNotation)
+                mainString = piNumber(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
             )
         )
     }
@@ -1143,7 +1168,7 @@ class ScientificCalculatorFirstOperandInputState(
     override fun doublePiNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(2*PI, scientificCalculatorDataEntity.isScientificNotation)
+                mainString = doublePiNumber(scientificCalculatorDataEntity.isScientificNotation)
             )
         )
     }
@@ -1158,8 +1183,8 @@ class ScientificCalculatorFirstOperandInputState(
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doubleToCalculatorString(
-                    tanh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
+                mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                    HYPERBOLIC_TANGENT_FUNCTION_CODE,
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 historyString = "${scientificCalculatorDataEntity.historyString}tanh(" +
@@ -1180,11 +1205,11 @@ class ScientificCalculatorFirstOperandInputState(
      * ScientificCalculatorErrorState with corresponding error code otherwise.
      */
     override fun hyperbolicArcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return if (abs(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)) < 1.0)
+        return return try {
             ScientificCalculatorFirstOperandReadState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = doubleToCalculatorString(
-                        atanh(calculatorStringToDouble(scientificCalculatorDataEntity.mainString)),
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_ARC_TANGENT_FUNCTION_CODE,
                         scientificCalculatorDataEntity.isScientificNotation
                     ),
                     historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
@@ -1193,23 +1218,27 @@ class ScientificCalculatorFirstOperandInputState(
                             )})"
                 )
             )
-        else if (calculatorStringToDouble(scientificCalculatorDataEntity.mainString) == 1.0) ScientificCalculatorErrorState(
-            scientificCalculatorDataEntity.copy(
-                historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})",
-                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
             )
-        ) else ScientificCalculatorErrorState(
-            scientificCalculatorDataEntity.copy(
-                historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})",
-                errorCode = INVALID_INPUT_ERROR_CODE
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
             )
-        )
+        }
     }
 
     /**
