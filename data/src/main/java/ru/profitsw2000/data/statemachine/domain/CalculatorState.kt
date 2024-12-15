@@ -91,7 +91,7 @@ interface CalculatorState {
      * with truncated comma at the end of it if has.
      */
     fun String.calcFormat(isScientificNotation: Boolean): String {
-        val number = BigDecimalMath.toBigDecimal(this)
+        val number = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         return if (isScientificNotation) {
             number.toScientificNotationString().toCalculatorFormat()
         } else {
@@ -133,7 +133,7 @@ interface CalculatorState {
      */
     fun String.add(augend: String, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculateAdd(augend).toEngineeringString().toCalculatorFormat()
+            this.calculateAdd(augend).toScientificNotationString().toCalculatorFormat()
         else
             this.add(augend)
     }
@@ -172,7 +172,7 @@ interface CalculatorState {
      */
     fun String.subtract(subtrahend: String, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculateSubtract(subtrahend).toEngineeringString().toCalculatorFormat()
+            this.calculateSubtract(subtrahend).toScientificNotationString().toCalculatorFormat()
         else
             this.add(subtrahend)
     }
@@ -207,7 +207,7 @@ interface CalculatorState {
      */
     fun String.multiply(multiplicand: String, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculateMultiply(multiplicand).toEngineeringString().toCalculatorFormat()
+            this.calculateMultiply(multiplicand).toScientificNotationString().toCalculatorFormat()
         else
             this.multiply(multiplicand)
     }
@@ -242,7 +242,7 @@ interface CalculatorState {
      */
     fun String.divide(divisor: String, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
-            this.calculateDivide(divisor).toEngineeringString().toCalculatorFormat()
+            this.calculateDivide(divisor).toScientificNotationString().toCalculatorFormat()
         else
             this.divide(divisor)
     }
@@ -374,7 +374,7 @@ interface CalculatorState {
      * @return string representation of number in scientific format.
      */
     fun BigDecimal.toScientificNotationString(): String {
-        val mantissa = BigDecimalMath.mantissa(this)
+        val mantissa = BigDecimalMath.mantissa(this).stripTrailingZeros()
         val exponent = BigDecimalMath.exponent(this)
 
         return if (exponent.compareTo(0) != -1)

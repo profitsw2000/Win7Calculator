@@ -424,7 +424,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
                 .toScientificNotationString()
                 .toCalculatorFormat()
         else
-            this.trigonometricFunction(functionCode, angleUnitCode)
+            this.inverseTrigonometricFunction(functionCode, angleUnitCode)
     }
 
     /** Converts number in @this to radians/degrees/grads
@@ -595,7 +595,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
     fun doublePiNumber(isScientificNotation: Boolean): String {
         val mathContext = MathContext(scale)
         return if (isScientificNotation)
-            BigDecimalMath.pi(mathContext).toScientificNotationString().toCalculatorFormat().multiply("2")
+            BigDecimalMath.pi(mathContext).toString().toCalculatorFormat().multiply("2", isScientificNotation)
         else
             doublePiNumber()
     }

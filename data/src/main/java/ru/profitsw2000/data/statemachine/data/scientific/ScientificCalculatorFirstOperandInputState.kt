@@ -161,7 +161,9 @@ class ScientificCalculatorFirstOperandInputState(
                 mainString = if (scientificCalculatorDataEntity.memoryNumber == null) "0".calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 )
-                else scientificCalculatorDataEntity.mainString
+                else scientificCalculatorDataEntity.memoryNumber.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
             )
         )
     }
@@ -208,7 +210,7 @@ class ScientificCalculatorFirstOperandInputState(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) addedNumber
-                else scientificCalculatorDataEntity.memoryNumber.add(addedNumber, scientificCalculatorDataEntity.isScientificNotation)
+                else scientificCalculatorDataEntity.memoryNumber.add(addedNumber)
             )
         }
 
@@ -234,12 +236,10 @@ class ScientificCalculatorFirstOperandInputState(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) "0".subtract(
-                    subtractedNumber,
-                    scientificCalculatorDataEntity.isScientificNotation
+                    scientificCalculatorDataEntity.mainString
                 )
                 else scientificCalculatorDataEntity.memoryNumber.subtract(
-                    subtractedNumber,
-                    scientificCalculatorDataEntity.isScientificNotation
+                    scientificCalculatorDataEntity.mainString
                 )
             )
         }
@@ -355,7 +355,7 @@ class ScientificCalculatorFirstOperandInputState(
                         ) +
                         "$HISTORY_STRING_SPACE_LETTER$operationString",
                 scientificOperationType = scientificOperationType,
-                operand = scientificCalculatorDataEntity.mainString
+                operand = scientificCalculatorDataEntity.mainString.commaTruncate()
             )
         )
     }
@@ -380,7 +380,7 @@ class ScientificCalculatorFirstOperandInputState(
                             scientificCalculatorDataEntity.isScientificNotation
                         )})"
             ))
-        } catch (numberFormatException: NumberFormatException) {
+        } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
                 historyString = scientificCalculatorDataEntity.historyString +
                         "reciproc(${scientificCalculatorDataEntity.mainString.calcFormat(
@@ -839,7 +839,8 @@ class ScientificCalculatorFirstOperandInputState(
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
                                 scientificCalculatorDataEntity.isScientificNotation
                             )})",
-                    errorCode = OVERFLOW_ERROR_CODE
+                    errorCode = if (arithmeticException.message == "Overflow of calculated number.") OVERFLOW_ERROR_CODE
+                    else INVALID_INPUT_ERROR_CODE
                 )
             )
         } catch (exception: Exception) {
@@ -1114,7 +1115,7 @@ class ScientificCalculatorFirstOperandInputState(
             scientificCalculatorDataEntity.copy(
                 historyString = historyString,
                 scientificOperationType = scientificOperationType,
-                operand = scientificCalculatorDataEntity.mainString
+                operand = scientificCalculatorDataEntity.mainString.commaTruncate()
             )
         )
     }
@@ -1194,7 +1195,7 @@ class ScientificCalculatorFirstOperandInputState(
             )
         } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}atanh(" +
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
                                 scientificCalculatorDataEntity.isScientificNotation
@@ -1256,7 +1257,7 @@ class ScientificCalculatorFirstOperandInputState(
             )
         } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     historyString = scientificCalculatorDataEntity.historyString +
                             "$operationString(" +
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
@@ -1267,7 +1268,7 @@ class ScientificCalculatorFirstOperandInputState(
             )
         } catch (exception: Exception){
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     historyString = scientificCalculatorDataEntity.historyString +
                             "$operationString(" +
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
@@ -1369,19 +1370,41 @@ class ScientificCalculatorFirstOperandInputState(
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun cubeRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = scientificCalculatorDataEntity.mainString
-                    .rootOfNumber(
-                        "3",
-                        scientificCalculatorDataEntity.isScientificNotation
-                    ),
-                historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .rootOfNumber(
+                            "3",
                             scientificCalculatorDataEntity.isScientificNotation
-                        )})"
+                        ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
             )
-        )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cuberoot(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     /**
@@ -1432,9 +1455,10 @@ class ScientificCalculatorFirstOperandInputState(
     override fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return try {
             ScientificCalculatorFirstOperandReadState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     mainString = scientificCalculatorDataEntity.mainString.mathFunction(
-                        LOGARITHM_BASE_10_FUNCTION_CODE
+                        LOGARITHM_BASE_10_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
                     ),
                     historyString = "${scientificCalculatorDataEntity.historyString}log(" +
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
@@ -1444,7 +1468,7 @@ class ScientificCalculatorFirstOperandInputState(
             )
         } catch (arithmeticException: ArithmeticException) {
             ScientificCalculatorErrorState(
-                ScientificCalculatorDataEntity(
+                scientificCalculatorDataEntity.copy(
                     historyString = "${scientificCalculatorDataEntity.historyString}log(" +
                             "${scientificCalculatorDataEntity.mainString.calcFormat(
                                 scientificCalculatorDataEntity.isScientificNotation
