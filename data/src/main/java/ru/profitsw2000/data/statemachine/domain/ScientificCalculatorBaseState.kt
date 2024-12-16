@@ -463,10 +463,12 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         val mathContext = MathContext(scale)
         val base = BigDecimalMath.toBigDecimal(this.toStandardFormat())
         val exponent = BigDecimalMath.toBigDecimal(exponent.toStandardFormat())
+        val coef = if (base.signum() == -1) BigDecimalMath.toBigDecimal("-1")
+        else BigDecimalMath.toBigDecimal("1")
 
         val result = when(functionCode) {
             POWER_OF_FUNCTION_CODE -> BigDecimalMath.pow(base, exponent, mathContext)
-            ROOT_OF_FUNCTION_CODE -> BigDecimalMath.root(base, exponent, mathContext)
+            ROOT_OF_FUNCTION_CODE -> BigDecimalMath.root(base.multiply(coef), exponent, mathContext).multiply(coef)
             else -> base
         }
 
