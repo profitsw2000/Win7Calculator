@@ -1,15 +1,18 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
+import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorInputState
 
 class ScientificCalculatorFirstOperandPowerNumberInputState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
-) : ScientificCalculatorBaseState {
+) : ScientificCalculatorInputState {
 
     override val scale: Int
         get() = SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
@@ -133,18 +136,95 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
         return ScientificCalculatorFirstOperandReadState(calculatorData)
     }
 
+    /**
+     * Changes sign of exponent of entered number in mainString field of
+     * calculator data
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandPowerNumberInputState with updated calculator data
+     */
     override fun negateOperand(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandPowerNumberInputState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.negateExponent()
+            )
+        )
     }
 
+    /**
+     * Calculate square root of entered to mainString number and write result number back to mainString.
+     * Completed operation writes to historyString, current state changed.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if
+     * number in mainString is equal or more than zero
+     * ScientificCalculatorErrorState with appropriate code in errorCode field
+     */
     override fun calculateSquareRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.sqrt(scientificCalculatorDataEntity.isScientificNotation),
+                    historyString = scientificCalculatorDataEntity.historyString +
+                            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = scientificCalculatorDataEntity.historyString +
+                            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = scientificCalculatorDataEntity.historyString +
+                            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Append digit, that is in second parameter of fun to exponent of mainString of calculator data if it
+     * satisfy to a certain condition.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandPowerNumberInputState with updated calculator data
+     */
     override fun inputDigit(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         digitToAppend: String
     ): CalculatorState {
+        return if (scientificCalculatorDataEntity.mainString.length > 4 ||
+            digitToAppend == ",") this
+        else
+            ScientificCalculatorFirstOperandPowerNumberInputState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = "${scientificCalculatorDataEntity.mainString}$digitToAppend"
+                )
+            )
+    }
+
+    /**
+     * Deletes last character in exponent number of mainString field. If last
+     * character of exponent is zero, then changes state to ScientificCalculatorFirstOperandInputState
+     * with mantissa in mainString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandPowerNumberInputState or
+     * ScientificCalculatorFirstOperandInputState with updated calculator data if exponent equal 0.
+     */
+    override fun clearDigit(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        TODO("Not yet implemented")
+    }
+
+    override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 

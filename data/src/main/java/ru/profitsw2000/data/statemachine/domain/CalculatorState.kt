@@ -252,6 +252,14 @@ interface CalculatorState {
      */
     fun String.negate(): String = BigDecimalMath.toBigDecimal(this.toStandardFormat()).negate().stripTrailingZeros().toString().toCalculatorFormat()
 
+    fun String.negateExponent(): String {
+        return when {
+            this.contains("e+") -> this.replace("e+", "e-")
+            this.contains("e-") -> this.replace("e-", "e+")
+            else -> this
+        }
+    }
+
     /** Calculates square root of @this and return result in BigDecimal type.
      * @return result of calculation in BigDecimal type
      */
