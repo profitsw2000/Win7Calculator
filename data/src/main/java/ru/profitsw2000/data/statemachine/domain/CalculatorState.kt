@@ -95,7 +95,7 @@ interface CalculatorState {
         return if (isScientificNotation) {
             number.toScientificNotationString().toCalculatorFormat()
         } else {
-            this.commaTruncate()
+            number.toResultString().toCalculatorFormat()
         }
     }
 
