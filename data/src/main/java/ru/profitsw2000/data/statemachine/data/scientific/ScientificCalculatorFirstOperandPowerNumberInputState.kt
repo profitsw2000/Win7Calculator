@@ -202,14 +202,20 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         digitToAppend: String
     ): CalculatorState {
-        return if (scientificCalculatorDataEntity.mainString.length > 4 ||
-            digitToAppend == ",") this
-        else
-            ScientificCalculatorFirstOperandPowerNumberInputState(
+        val lastThreeDigits = scientificCalculatorDataEntity.mainString.takeLast(3)
+        return when {
+            scientificCalculatorDataEntity.mainString.length > 4 || digitToAppend == "," -> this
+            lastThreeDigits == "e+0" || lastThreeDigits == "e-0" -> ScientificCalculatorSecondOperandPowerNumberInputState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = "${scientificCalculatorDataEntity.mainString.dropLast(1)}$digitToAppend"
+                )
+            )
+            else -> ScientificCalculatorFirstOperandPowerNumberInputState(
                 scientificCalculatorDataEntity.copy(
                     mainString = "${scientificCalculatorDataEntity.mainString}$digitToAppend"
                 )
             )
+        }
     }
 
     /**
@@ -221,7 +227,25 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
      * ScientificCalculatorFirstOperandInputState with updated calculator data if exponent equal 0.
      */
     override fun clearDigit(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val lastThreeChars = scientificCalculatorDataEntity.mainString.takeLast(3)
+
+        return when {
+            lastThreeChars == "e+0" || lastThreeChars == "e-0" -> ScientificCalculatorFirstOperandInputState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.dropLast(3)
+                )
+            )
+            lastThreeChars.contains("e+") || lastThreeChars.contains("e-") -> ScientificCalculatorSecondOperandPowerNumberInputState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = "${scientificCalculatorDataEntity.mainString.dropLast(3)}e+0"
+                )
+            )
+            else -> ScientificCalculatorSecondOperandPowerNumberInputState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.dropLast(1)
+                )
+            )
+        }
     }
 
     override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
