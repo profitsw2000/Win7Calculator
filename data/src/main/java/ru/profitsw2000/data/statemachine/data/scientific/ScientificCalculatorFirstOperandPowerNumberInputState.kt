@@ -343,12 +343,65 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
         )
     }
 
+    /**
+     * Changes current state to ScientificCalculatorFirstOperandReadState while current
+     * state recorded to prevState field of new state. Calculator data of new state remains
+     * the same, except historyString field to which character '(' is appended.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     */
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}(",
+                prevState = this
+            )
+        )
     }
 
+    /**
+     * If bracket was not opened before, then do nothing. Otherwise changes state, depending on state
+     * that was before opening bracket(contains in prevState field of calculator data). Operation
+     * recorded in historyString. prevState field of calculator data of state preceded to opening
+     * bracket recorded to calculator data of newly created state.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return this - if bracket was not opened,
+     * otherwise - ScientificCalculatorFirstOperandReadState or
+     * ScientificCalculatorSecondOperandReadState
+     * (depending on state preceded bracket opening)with updated calculator data
+     */
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return if (scientificCalculatorDataEntity.prevState == null)
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                        scientificCalculatorDataEntity.isScientificNotation
+                    )
+                )
+            )
+        else {
+            val returnData = scientificCalculatorDataEntity.prevState.scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+                historyString = scientificCalculatorDataEntity.historyString +
+                        "${scientificCalculatorDataEntity.mainString.calcFormat(
+                            scientificCalculatorDataEntity.isScientificNotation
+                        )})",
+                isScientificNotation = scientificCalculatorDataEntity.isScientificNotation
+            )
+            when(scientificCalculatorDataEntity.prevState){
+                is ScientificCalculatorMathOperationState -> ScientificCalculatorSecondOperandReadState(returnData)
+                is ScientificCalculatorSecondOperandInputState -> ScientificCalculatorSecondOperandReadState(returnData)
+                is ScientificCalculatorSecondOperandReadState -> ScientificCalculatorSecondOperandReadState(returnData)
+                is ScientificCalculatorSecondOperandPowerNumberInputState -> ScientificCalculatorSecondOperandReadState(returnData)
+                else -> ScientificCalculatorFirstOperandReadState(returnData)
+            }
+        }
     }
 
     override fun calculateNaturalLogarithm(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {

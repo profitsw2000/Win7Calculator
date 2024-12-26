@@ -417,7 +417,7 @@ class ScientificCalculatorFirstOperandInputState(
      * state recorded to prevState field of new state. Calculator data of new state remains
      * the same, except historyString field to which character '(' is appended.
      * @param scientificCalculatorDataEntity - contains calculator data
-     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
