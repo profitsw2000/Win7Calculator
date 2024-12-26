@@ -1047,12 +1047,32 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
         TODO("Not yet implemented")
     }
 
+    /**
+     * Placed PI number to mainString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun piNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = piNumber(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
+            )
+        )
     }
 
+    /**
+     * Placed double PI number to mainString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun doublePiNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doublePiNumber(scientificCalculatorDataEntity.isScientificNotation)
+            )
+        )
     }
 
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
