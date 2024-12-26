@@ -260,12 +260,12 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
                     mainString = scientificCalculatorDataEntity.mainString.dropLast(3)
                 )
             )
-            lastThreeChars.contains("e+") || lastThreeChars.contains("e-") -> ScientificCalculatorSecondOperandPowerNumberInputState(
+            lastThreeChars.contains("e+") || lastThreeChars.contains("e-") -> ScientificCalculatorFirstOperandPowerNumberInputState(
                 scientificCalculatorDataEntity.copy(
                     mainString = "${scientificCalculatorDataEntity.mainString.dropLast(3)}e+0"
                 )
             )
-            else -> ScientificCalculatorSecondOperandPowerNumberInputState(
+            else -> ScientificCalculatorFirstOperandPowerNumberInputState(
                 scientificCalculatorDataEntity.copy(
                     mainString = scientificCalculatorDataEntity.mainString.dropLast(1)
                 )
