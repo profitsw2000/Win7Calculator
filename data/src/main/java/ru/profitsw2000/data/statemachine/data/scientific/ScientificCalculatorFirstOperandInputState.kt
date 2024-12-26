@@ -594,7 +594,7 @@ class ScientificCalculatorFirstOperandInputState(
      * Discards whole part of entered to the mainString number of calculator data. Operation recorded to
      * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState.
      * @param scientificCalculatorDataEntity - contains calculator data
-     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun fractionOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
