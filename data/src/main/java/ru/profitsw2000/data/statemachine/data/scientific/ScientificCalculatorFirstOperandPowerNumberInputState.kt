@@ -1,6 +1,8 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
 import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
@@ -9,7 +11,9 @@ import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
@@ -847,26 +851,192 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
         )
     }
 
+    /**
+     * Calculates hyperbolic cosine of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState with corresponding error code.
+     */
     override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_COSINE_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates hyperbolic arccosine of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState with corresponding error code if error occurred.
+     */
     override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_ARC_COSINE_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}acosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculate cosine of entered to mainString number. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads. Changes calculator state.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data.
+     */
     override fun cosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "cosd"
+            RADIANS_ANGLE_CODE -> "cosr"
+            GRADS_ANGLE_CODE -> "cosg"
+            else -> "cosd"
+        }
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.trigonometricFunction(
+                    COSINE_FUNCTION_CODE,
+                    angleUnitCode,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                        "${scientificCalculatorDataEntity.mainString.calcFormat(
+                            scientificCalculatorDataEntity.isScientificNotation
+                        )})"
+            )
+        )
     }
 
+    /**
+     * Calculate arccosine of entered to mainString number. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads. Changes calculator state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun arcCosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "acosd"
+            RADIANS_ANGLE_CODE -> "acosr"
+            GRADS_ANGLE_CODE -> "acosg"
+            else -> "acosd"
+        }
+
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .inverseTrigonometricFunction(
+                            ARC_COSINE_FUNCTION_CODE,
+                            angleUnitCode,
+                            scientificCalculatorDataEntity.isScientificNotation
+                        ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}$operationString(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun mathOperation(
