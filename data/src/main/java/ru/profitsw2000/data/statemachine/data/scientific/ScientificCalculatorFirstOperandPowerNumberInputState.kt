@@ -2,7 +2,9 @@ package ru.profitsw2000.data.statemachine.data.scientific
 
 import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
+import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.DMS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
@@ -12,6 +14,7 @@ import ru.profitsw2000.data.constants.HYPERBOLIC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
+import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.SINUS_FUNCTION_CODE
@@ -706,20 +709,142 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
         }
     }
 
+    /**
+     * Calculates number, entered to mainString of calculator data, to the power of 2. Operation
+     * recorded to historyString of calculator data. Changes calculator state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState if number is too big and overflow occurred.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun squareNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.powerOfNumber(
+                        "2",
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}sqr(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sqr(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sqr(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates factorial of number, entered to mainString of calculator data. Operation
+     * recorded to historyString of calculator data. Changes calculator state to ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState if number is too big and overflow occurred.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun factorial(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.factorial(
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = if (arithmeticException.message == "Overflow of calculated number.") OVERFLOW_ERROR_CODE
+                    else INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}fact(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Converts number, entered to mainString field of calculator data, from degrees unit
+     * with decimal fractional part to degrees unit with fractional part presented in minutes.
+     * Operation recorded to historyString of calculator data. Changes calculator state
+     * to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun decimalToMinutes(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(
+                    DMS_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}dms(" +
+                        "${scientificCalculatorDataEntity.mainString.calcFormat(
+                            scientificCalculatorDataEntity.isScientificNotation
+                        )})"
+            )
+        )
     }
 
+    /**
+     * Converts number, entered to mainString field of calculator data, from degrees
+     * with fractional part presented in minutes to degrees with decimal fractional part.
+     * Operation recorded to historyString of calculator data. Changes calculator state
+     * to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun minutesToDecimal(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(
+                    DEG_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = "${scientificCalculatorDataEntity.historyString}deg(" +
+                        "${scientificCalculatorDataEntity.mainString.calcFormat(
+                            scientificCalculatorDataEntity.isScientificNotation
+                        )})"
+            )
+        )
     }
 
     override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
