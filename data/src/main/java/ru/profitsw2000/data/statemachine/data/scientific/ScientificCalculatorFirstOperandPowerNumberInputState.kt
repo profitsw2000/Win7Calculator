@@ -1044,12 +1044,34 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
         }
     }
 
+    /**
+     * Changes current state to ScientificCalculatorMathOperationState,
+     * input number and operation sign writes to history string of calculator data,
+     * same as operation type.
+     * @param1 scientificCalculatorDataEntity - contains current calculator data,
+     * @param2 scientificOperationType - type of math operation
+     * @param3 operationString - operation sign, need to be added in history string
+     * @return GeneralCalculatorPrimitiveMathOperationState with changed historyString and operationType fields of calculator data
+     */
     override fun mathOperation(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = scientificCalculatorDataEntity.historyString +
+                scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ) +
+                HISTORY_STRING_SPACE_LETTER +
+                operationString
+
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                historyString = historyString,
+                scientificOperationType = scientificOperationType,
+                operand = scientificCalculatorDataEntity.mainString.commaTruncate()
+            )
+        )
     }
 
     /**

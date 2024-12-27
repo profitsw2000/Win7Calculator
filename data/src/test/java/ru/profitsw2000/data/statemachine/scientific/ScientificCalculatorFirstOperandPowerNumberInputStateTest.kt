@@ -128,22 +128,22 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             zeroMinusInputState.clearDigit(zeroMinusInputData)
         ))
     }
-/*
+
     @Test
     fun clearEnteredNumberTest() {
-        val zeroResultData = ScientificCalculatorDataEntity(
-            mainString = "0"
+        val nonZeroData = ScientificCalculatorDataEntity(
+            mainString = "-3,3e+23"
         )
-        val zeroResultState = ScientificCalculatorFirstOperandInputState(zeroResultData)
+        val nonZeroState = ScientificCalculatorFirstOperandPowerNumberInputState(nonZeroData)
         val nonZeroResultData = ScientificCalculatorDataEntity(
-            mainString = "-333333"
+            mainString = "0"
         )
         val nonZeroResultState = ScientificCalculatorFirstOperandInputState(nonZeroResultData)
         val historyData = ScientificCalculatorDataEntity(
-            mainString = "22,33",
+            mainString = "1,e+3",
             historyString = "43 + ("
         )
-        val historyState = ScientificCalculatorFirstOperandInputState(historyData)
+        val historyState = ScientificCalculatorFirstOperandPowerNumberInputState(historyData)
         val historyResultData = ScientificCalculatorDataEntity(
             mainString = "0",
             historyString = "43 + ("
@@ -151,26 +151,23 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val historyResultState = ScientificCalculatorFirstOperandInputState(historyResultData)
 
         assertTrue(
-            ReflectionEquals(zeroResultState).matches(
-            nonZeroResultState.clearEntered(nonZeroResultData)
+            ReflectionEquals(nonZeroResultState).matches(
+                nonZeroState.clearEntered(nonZeroData)
         ))
         assertTrue(
             ReflectionEquals(historyResultState).matches(
-            historyState.clearEntered(historyData)
-        ))
-        assertFalse(
-            ReflectionEquals(zeroResultState).matches(
-            historyState.clearEntered(historyData)
+                historyState.clearEntered(historyData)
         ))
     }
 
     @Test
     fun readMemoryTest() {
         val zeroInputData = ScientificCalculatorDataEntity(
+            mainString = "1,e+23",
             memoryNumber = "3,99",
             prevState = baseState
         )
-        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputState = ScientificCalculatorFirstOperandPowerNumberInputState(zeroInputData)
         val zeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "3,99",
             memoryNumber = "3,99",
@@ -178,11 +175,11 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputData = ScientificCalculatorDataEntity(
-            mainString = "12,54",
+            mainString = "1,e+23",
             memoryNumber = "3,99",
             isScientificNotation = true
         )
-        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputState = ScientificCalculatorFirstOperandPowerNumberInputState(nonZeroInputData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "3,99e+0",
             memoryNumber = "3,99",
@@ -202,58 +199,52 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
 
     @Test
     fun saveToMemoryTest() {
-        val zeroInputData = ScientificCalculatorDataEntity(
-            prevState = baseState
-        )
-        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
-        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputData)
         val zeroInputMemoryData = ScientificCalculatorDataEntity(
+            mainString = "2,e+0",
             memoryNumber = "2,35"
         )
-        val zeroInputMemoryState = ScientificCalculatorFirstOperandInputState(zeroInputMemoryData)
-        val zeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(
-            ScientificCalculatorDataEntity()
+        val zeroInputMemoryState = ScientificCalculatorFirstOperandPowerNumberInputState(zeroInputMemoryData)
+        val zeroInputMemoryResultData = ScientificCalculatorDataEntity(
+            mainString = "2",
+            memoryNumber = "2,e+0"
         )
+        val zeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(zeroInputMemoryResultData)
         val nonZeroInputData = ScientificCalculatorDataEntity(
-            mainString = "35,23",
+            mainString = "35,23e+2",
             isScientificNotation = true
         )
-        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputState = ScientificCalculatorFirstOperandPowerNumberInputState(nonZeroInputData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "3,523e+1",
-            memoryNumber = "35,23",
+            mainString = "3,523e+3",
+            memoryNumber = "35,23e+2",
             isScientificNotation = true
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
         val nonZeroInputMemoryData = ScientificCalculatorDataEntity(
-            mainString = "7,68",
-            memoryNumber = "35,23"
+            mainString = "7,68e+3",
+            memoryNumber = "5,35"
         )
-        val nonZeroInputMemoryState = ScientificCalculatorFirstOperandInputState(nonZeroInputMemoryData)
+        val nonZeroInputMemoryState = ScientificCalculatorFirstOperandPowerNumberInputState(nonZeroInputMemoryData)
         val nonZeroInputMemoryResultData = ScientificCalculatorDataEntity(
-            mainString = "7,68",
-            memoryNumber = "7,68"
+            mainString = "7680",
+            memoryNumber = "7,68e+3"
         )
         val nonZeroInputMemoryResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputMemoryResultData)
 
         assertTrue(
-            ReflectionEquals(zeroInputResultState).matches(
-            zeroInputState.saveToMemory(zeroInputData)
-        ))
-        assertTrue(
             ReflectionEquals(zeroInputMemoryResultState).matches(
-            zeroInputMemoryState.saveToMemory(zeroInputMemoryData)
+                zeroInputMemoryState.saveToMemory(zeroInputMemoryData)
         ))
         assertTrue(
             ReflectionEquals(nonZeroInputResultState).matches(
-            nonZeroInputState.saveToMemory(nonZeroInputData)
+                nonZeroInputState.saveToMemory(nonZeroInputData)
         ))
         assertTrue(
             ReflectionEquals(nonZeroInputMemoryResultState).matches(
-            nonZeroInputMemoryState.saveToMemory(nonZeroInputMemoryData)
+                nonZeroInputMemoryState.saveToMemory(nonZeroInputMemoryData)
         ))
     }
-
+/*
     @Test
     fun addToMemoryTest() {
         val zeroInputData = ScientificCalculatorDataEntity(
