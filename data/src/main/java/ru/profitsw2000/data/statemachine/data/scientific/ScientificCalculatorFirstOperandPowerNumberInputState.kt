@@ -229,8 +229,8 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
     ): CalculatorState {
         val lastThreeDigits = scientificCalculatorDataEntity.mainString.takeLast(3)
         return when {
-            scientificCalculatorDataEntity.mainString.length > 4 || digitToAppend == "," -> this
-            lastThreeDigits == "e+0" || lastThreeDigits == "e-0" -> ScientificCalculatorSecondOperandPowerNumberInputState(
+            scientificCalculatorDataEntity.mainString.substringAfter("e").length > 4 || digitToAppend == "," -> this
+            lastThreeDigits == "e+0" || lastThreeDigits == "e-0" -> ScientificCalculatorFirstOperandPowerNumberInputState(
                 scientificCalculatorDataEntity.copy(
                     mainString = "${scientificCalculatorDataEntity.mainString.dropLast(1)}$digitToAppend"
                 )

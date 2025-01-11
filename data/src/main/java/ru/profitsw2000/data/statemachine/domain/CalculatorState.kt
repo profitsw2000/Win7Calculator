@@ -121,7 +121,7 @@ interface CalculatorState {
      * @return result of calculation in String format
      */
     fun String.add(augend: String): String {
-        return this.calculateAdd(augend).toString().toCalculatorFormat()
+        return this.calculateAdd(augend).toResultString().toCalculatorFormat()
     }
 
     /**
@@ -160,7 +160,7 @@ interface CalculatorState {
      * @return result of calculation in String format
      */
     fun String.subtract(subtrahend: String): String {
-        return this.calculateSubtract(subtrahend).toString().toCalculatorFormat()
+        return this.calculateSubtract(subtrahend).toResultString().toCalculatorFormat()
     }
 
     /**
@@ -197,7 +197,7 @@ interface CalculatorState {
      * @return result of calculation in String type
      */
     fun String.multiply(multiplicand: String): String {
-        return this.calculateMultiply(multiplicand).toString().toCalculatorFormat()
+        return this.calculateMultiply(multiplicand).toResultString().toCalculatorFormat()
     }
 
     /** Calculates multiplication of @this and multiplicand and return result in String type
@@ -232,7 +232,10 @@ interface CalculatorState {
      * @return result of calculation in String type
      */
     fun String.divide(divisor: String): String {
-        return this.calculateDivide(divisor).toString().toCalculatorFormat()
+        return this
+            .calculateDivide(divisor)
+            .toResultString()
+            .toCalculatorFormat()
     }
 
     /** Divide @this to divisor and return result in String type
@@ -274,7 +277,7 @@ interface CalculatorState {
      * @return result of calculation in String type
      */
     fun String.sqrt(): String {
-        return this.calculateSQRT().toString().toCalculatorFormat()
+        return this.calculateSQRT().toResultString().toCalculatorFormat()
     }
 
     /** Calculates square root of @this and return result in String type
