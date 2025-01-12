@@ -342,7 +342,7 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val nonZeroInputState = ScientificCalculatorFirstOperandPowerNumberInputState(nonZeroInputData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "3,523e+4",
-            memoryNumber = "-3,523e+4",
+            memoryNumber = "-35230",
             isScientificNotation = true
         )
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
@@ -900,18 +900,18 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             currentSCSORSState.closeBracket(currentSCSORSData)
         ))
     }
-/*
+
     @Test
     fun naturalLogarithmTest() {
         val negativeNumberData = ScientificCalculatorDataEntity(
-            mainString = "-12,",
+            mainString = "-12,e-2",
             memoryNumber = "2,3",
             isScientificNotation = true
         )
-        val negativeNumberState = ScientificCalculatorFirstOperandInputState(negativeNumberData)
+        val negativeNumberState = ScientificCalculatorFirstOperandPowerNumberInputState(negativeNumberData)
         val negativeNumberResultData = ScientificCalculatorDataEntity(
-            mainString = "-12,",
-            historyString = "ln(-1,2e+1)",
+            mainString = "-12,e-2",
+            historyString = "ln(-1,2e-1)",
             memoryNumber = "2,3",
             errorCode = INVALID_INPUT_ERROR_CODE,
             isScientificNotation = true
@@ -919,12 +919,12 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val negativeNumberResultState = ScientificCalculatorErrorState(negativeNumberResultData)
 
         val zeroNumberData = ScientificCalculatorDataEntity(
-            mainString = "0,",
+            mainString = "0,e+0",
             memoryNumber = "2,3"
         )
-        val zeroNumberState = ScientificCalculatorFirstOperandInputState(zeroNumberData)
+        val zeroNumberState = ScientificCalculatorFirstOperandPowerNumberInputState(zeroNumberData)
         val zeroNumberResultData = ScientificCalculatorDataEntity(
-            mainString = "0,",
+            mainString = "0,e+0",
             historyString = "ln(0)",
             memoryNumber = "2,3",
             errorCode = INVALID_INPUT_ERROR_CODE
@@ -932,14 +932,14 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val zeroNumberResultState = ScientificCalculatorErrorState(zeroNumberResultData)
 
         val positiveNumberData = ScientificCalculatorDataEntity(
-            mainString = "6",
+            mainString = "65,e+2",
             memoryNumber = "2,3",
             isScientificNotation = true
         )
-        val positiveNumberState = ScientificCalculatorFirstOperandInputState(positiveNumberData)
+        val positiveNumberState = ScientificCalculatorFirstOperandPowerNumberInputState(positiveNumberData)
         val positiveNumberResultData = ScientificCalculatorDataEntity(
-            mainString = "1,7917594692280550008124773583807e+0",
-            historyString = "ln(6,e+0)",
+            mainString = "8,7795574558837284786902296841602e+0",
+            historyString = "ln(6,5e+3)",
             memoryNumber = "2,3",
             isScientificNotation = true
         )
@@ -947,32 +947,28 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
 
         val firstState = ScientificCalculatorMathOperationState(baseData)
         val prevData = ScientificCalculatorDataEntity(
-            mainString = "13",
+            mainString = "12,3e+4",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = firstState
         )
-        val prevState = ScientificCalculatorFirstOperandInputState(prevData)
+        val prevState = ScientificCalculatorFirstOperandPowerNumberInputState(prevData)
         val prevResultData = ScientificCalculatorDataEntity(
-            mainString = "2,5649493574615367360534874415653",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(ln(13)",
+            mainString = "11,719939634354554547315982974013",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(ln(123000)",
             prevState = firstState
         )
         val prevResultState = ScientificCalculatorFirstOperandReadState(prevResultData)
 
-        assertTrue(
-            ReflectionEquals(negativeNumberResultState).matches(
+        assertTrue(ReflectionEquals(negativeNumberResultState).matches(
             negativeNumberState.calculateNaturalLogarithm(negativeNumberData)
         ))
-        assertTrue(
-            ReflectionEquals(zeroNumberResultState).matches(
+        assertTrue(ReflectionEquals(zeroNumberResultState).matches(
             zeroNumberState.calculateNaturalLogarithm(zeroNumberData)
         ))
-        assertTrue(
-            ReflectionEquals(positiveNumberResultState).matches(
+        assertTrue(ReflectionEquals(positiveNumberResultState).matches(
             positiveNumberState.calculateNaturalLogarithm(positiveNumberData)
         ))
-        assertTrue(
-            ReflectionEquals(prevResultState).matches(
+        assertTrue(ReflectionEquals(prevResultState).matches(
             prevState.calculateNaturalLogarithm(prevData)
         ))
     }
@@ -980,11 +976,11 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
     @Test
     fun exponentTest() {
         val zeroInputData = ScientificCalculatorDataEntity(
-            mainString = "0,",
+            mainString = "0,e+0",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState
         )
-        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputState = ScientificCalculatorFirstOperandPowerNumberInputState(zeroInputData)
         val zeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "1",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(powe(0)",
@@ -993,30 +989,30 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
 
         val positiveInputData = ScientificCalculatorDataEntity(
-            mainString = "3,",
+            mainString = "3,33e+1",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputState = ScientificCalculatorFirstOperandPowerNumberInputState(positiveInputData)
         val positiveInputResultData = ScientificCalculatorDataEntity(
-            mainString = "2,0085536923187667740928529654582e+1",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(powe(3,e+0)",
+            mainString = "2,8973852666366134260275960952126e+14",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(powe(3,33e+1)",
             prevState = prevState,
             isScientificNotation = true
         )
         val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
 
         val bigPositiveInputData = ScientificCalculatorDataEntity(
-            mainString = "99999,",
+            mainString = "99999,e+2",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val bigPositiveInputState = ScientificCalculatorFirstOperandInputState(bigPositiveInputData)
+        val bigPositiveInputState = ScientificCalculatorFirstOperandPowerNumberInputState(bigPositiveInputData)
         val bigPositiveInputResultData = ScientificCalculatorDataEntity(
-            mainString = "9,9999e+4",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(powe(9,9999e+4)",
+            mainString = "9,9999e+6",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(powe(9,9999e+6)",
             errorCode = INVALID_INPUT_ERROR_CODE,
             prevState = prevState,
             isScientificNotation = true
@@ -1024,39 +1020,35 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val bigPositiveInputResultState = ScientificCalculatorErrorState(bigPositiveInputResultData)
 
         val bigNegativeInputData = ScientificCalculatorDataEntity(
-            mainString = "-99999,",
+            mainString = "-99999,e+2",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val bigNegativeInputState = ScientificCalculatorFirstOperandInputState(bigNegativeInputData)
+        val bigNegativeInputState = ScientificCalculatorFirstOperandPowerNumberInputState(bigNegativeInputData)
         val bigNegativeInputResultData = ScientificCalculatorDataEntity(
-            mainString = "-9,9999e+4",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(powe(-9,9999e+4)",
+            mainString = "-9,9999e+6",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(powe(-9,9999e+6)",
             errorCode = INVALID_INPUT_ERROR_CODE,
             prevState = prevState,
             isScientificNotation = true
         )
         val bigNegativeInputResultState = ScientificCalculatorErrorState(bigNegativeInputResultData)
 
-        assertTrue(
-            ReflectionEquals(zeroInputResultState).matches(
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
             zeroInputState.calculateExponent(zeroInputData)
         ))
-        assertTrue(
-            ReflectionEquals(positiveInputResultState).matches(
+        assertTrue(ReflectionEquals(positiveInputResultState).matches(
             positiveInputState.calculateExponent(positiveInputData)
         ))
-        assertTrue(
-            ReflectionEquals(bigPositiveInputResultState).matches(
+        assertTrue(ReflectionEquals(bigPositiveInputResultState).matches(
             bigPositiveInputState.calculateExponent(bigPositiveInputData)
         ))
-        assertTrue(
-            ReflectionEquals(bigNegativeInputResultState).matches(
+        assertTrue(ReflectionEquals(bigNegativeInputResultState).matches(
             bigNegativeInputState.calculateExponent(bigNegativeInputData)
         ))
     }
-
+/*
     @Test
     fun integerOfNumberTest() {
         val negativeInputData = ScientificCalculatorDataEntity(
