@@ -680,29 +680,30 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             negativeInputState.reciprocOperation(negativeInputData)
         ))
     }
-/*
+
     @Test
     fun openBracketTest() {
         val zeroInputData = ScientificCalculatorDataEntity(
+            mainString = "44,e+0",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState
         )
-        val zeroInputState = ScientificCalculatorFirstOperandInputState(zeroInputData)
+        val zeroInputState = ScientificCalculatorFirstOperandPowerNumberInputState(zeroInputData)
         val zeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "0",
+            mainString = "44",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER((",
             prevState = zeroInputState
         )
         val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
         val nonZeroInputData = ScientificCalculatorDataEntity(
-            mainString = "23,",
+            mainString = "23,e+3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val nonZeroInputState = ScientificCalculatorFirstOperandInputState(nonZeroInputData)
+        val nonZeroInputState = ScientificCalculatorFirstOperandPowerNumberInputState(nonZeroInputData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
-            mainString = "2,3e+1",
+            mainString = "2,3e+4",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER((",
             prevState = nonZeroInputState,
             isScientificNotation = true
@@ -710,26 +711,23 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
 
         val commaInputData = ScientificCalculatorDataEntity(
-            mainString = "6,35"
+            mainString = "6,35e+4"
         )
-        val commaInputState = ScientificCalculatorFirstOperandInputState(commaInputData)
+        val commaInputState = ScientificCalculatorFirstOperandPowerNumberInputState(commaInputData)
         val commaInputResultData = ScientificCalculatorDataEntity(
-            mainString = "6,35",
+            mainString = "63500",
             historyString = "(",
             prevState = commaInputState
         )
         val commaInputResultState = ScientificCalculatorFirstOperandReadState(commaInputResultData)
 
-        assertTrue(
-            ReflectionEquals(zeroInputResultState).matches(
+        assertTrue(ReflectionEquals(zeroInputResultState).matches(
             zeroInputState.openBracket(zeroInputData)
         ))
-        assertTrue(
-            ReflectionEquals(nonZeroInputResultState).matches(
+        assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
             nonZeroInputState.openBracket(nonZeroInputData)
         ))
-        assertTrue(
-            ReflectionEquals(commaInputResultState).matches(
+        assertTrue(ReflectionEquals(commaInputResultState).matches(
             commaInputState.openBracket(commaInputData)
         ))
     }
@@ -737,23 +735,22 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
     @Test
     fun closeBracketTest() {
         val nullPrevData = ScientificCalculatorDataEntity(
-            mainString = "33,",
+            mainString = "33,e+4",
             isScientificNotation = true
         )
-        val nullPrevState = ScientificCalculatorFirstOperandInputState(nullPrevData)
+        val nullPrevState = ScientificCalculatorFirstOperandPowerNumberInputState(nullPrevData)
         val nullPrevResultData = ScientificCalculatorDataEntity(
-            mainString = "3,3e+1",
+            mainString = "3,3e+5",
             isScientificNotation = true
         )
         val nullPrevResultState = ScientificCalculatorFirstOperandReadState(nullPrevResultData)
-
 
         val prevSCFOISData = ScientificCalculatorDataEntity(
             mainString = "5,"
         )
         val prevSCFOISState = ScientificCalculatorFirstOperandInputState(prevSCFOISData)
         val currentSCFOISData = ScientificCalculatorDataEntity(
-            mainString = "33,",
+            mainString = "33,4e+3",
             historyString = "(",
             memoryNumber = "21,564",
             prevState = prevSCFOISState,
@@ -761,8 +758,8 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         )
         val currentSCFOISState = ScientificCalculatorFirstOperandInputState(currentSCFOISData)
         val resultSCFOISData = ScientificCalculatorDataEntity(
-            mainString = "3,3e+1",
-            historyString = "(3,3e+1)",
+            mainString = "3,34e+4",
+            historyString = "(3,34e+4)",
             memoryNumber = "21,564",
             isScientificNotation = true
         )
@@ -776,7 +773,7 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val currentSCFOPNISData = currentSCFOISData.copy(
             prevState = prevSCFOPNISState
         )
-        val currentSCFOPNISState = ScientificCalculatorFirstOperandInputState(currentSCFOPNISData)
+        val currentSCFOPNISState = ScientificCalculatorFirstOperandPowerNumberInputState(currentSCFOPNISData)
         val resultSCFOPNISState = ScientificCalculatorFirstOperandReadState(resultSCFOISData)
 
 
@@ -787,7 +784,7 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val currentSCFORSData = currentSCFOISData.copy(
             prevState = prevSCFORSState
         )
-        val currentSCFORSState = ScientificCalculatorFirstOperandInputState(currentSCFOPNISData)
+        val currentSCFORSState = ScientificCalculatorFirstOperandPowerNumberInputState(currentSCFOPNISData)
         val resultSCFORSState = ScientificCalculatorFirstOperandReadState(resultSCFOISData)
 
         val prevSCISData = ScientificCalculatorDataEntity(
@@ -797,7 +794,7 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val currentSCISData = currentSCFOISData.copy(
             prevState = prevSCISState
         )
-        val currentSCISState = ScientificCalculatorFirstOperandInputState(currentSCISData)
+        val currentSCISState = ScientificCalculatorFirstOperandPowerNumberInputState(currentSCISData)
         val resultSCISState = ScientificCalculatorFirstOperandReadState(resultSCFOISData)
 
 
@@ -808,7 +805,7 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val currentSCORSData = currentSCFOISData.copy(
             prevState = prevSCORSState
         )
-        val currentSCORSState = ScientificCalculatorFirstOperandInputState(currentSCORSData)
+        val currentSCORSState = ScientificCalculatorFirstOperandPowerNumberInputState(currentSCORSData)
         val resultSCORSState = ScientificCalculatorFirstOperandReadState(resultSCFOISData)
 
         val prevSCMOSData = ScientificCalculatorDataEntity(
@@ -820,9 +817,9 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevSCMOSState
         )
-        val currentSCMOSState = ScientificCalculatorFirstOperandInputState(currentSCMOSData)
+        val currentSCMOSState = ScientificCalculatorFirstOperandPowerNumberInputState(currentSCMOSData)
         val resultSCMOSData = resultSCFOISData.copy(
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(3,3e+1)"
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(3,34e+4)"
         )
         val resultSCMOSState = ScientificCalculatorSecondOperandReadState(resultSCMOSData)
 
@@ -835,9 +832,9 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevSCSOISState
         )
-        val currentSCSOISState = ScientificCalculatorFirstOperandInputState(currentSCSOISData)
+        val currentSCSOISState = ScientificCalculatorFirstOperandPowerNumberInputState(currentSCSOISData)
         val resultSCSOISData = resultSCFOISData.copy(
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(3,3e+1)"
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(3,34e+4)"
         )
         val resultSCSOISState = ScientificCalculatorSecondOperandReadState(resultSCSOISData)
 
@@ -850,9 +847,9 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             historyString = "5,e+3$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevSCSOPNISState
         )
-        val currentSCSOPNISState = ScientificCalculatorFirstOperandInputState(currentSCSOPNISData)
+        val currentSCSOPNISState = ScientificCalculatorFirstOperandPowerNumberInputState(currentSCSOPNISData)
         val resultSCSOPNISData = resultSCFOISData.copy(
-            historyString = "5,e+3$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(3,3e+1)"
+            historyString = "5,e+3$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(3,34e+4)"
         )
         val resultSCSOPNISState = ScientificCalculatorSecondOperandReadState(resultSCSOPNISData)
 
@@ -866,54 +863,44 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevSCSORSState
         )
-        val currentSCSORSState = ScientificCalculatorFirstOperandInputState(currentSCSORSData)
+        val currentSCSORSState = ScientificCalculatorFirstOperandPowerNumberInputState(currentSCSORSData)
         val resultSCSORSData = resultSCFOISData.copy(
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(3,3e+1)"
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(3,34e+4)"
         )
         val resultSCSORSState = ScientificCalculatorSecondOperandReadState(resultSCSORSData)
 
-        assertTrue(
-            ReflectionEquals(nullPrevResultState).matches(
+        assertTrue(ReflectionEquals(nullPrevResultState).matches(
             nullPrevState.closeBracket(nullPrevData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCFOISState).matches(
+        assertTrue(ReflectionEquals(resultSCFOISState).matches(
             currentSCFOISState.closeBracket(currentSCFOISData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCFOPNISState).matches(
+        assertTrue(ReflectionEquals(resultSCFOPNISState).matches(
             currentSCFOPNISState.closeBracket(currentSCFOPNISData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCFORSState).matches(
+        assertTrue(ReflectionEquals(resultSCFORSState).matches(
             currentSCFORSState.closeBracket(currentSCFORSData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCISState).matches(
+        assertTrue(ReflectionEquals(resultSCISState).matches(
             currentSCISState.closeBracket(currentSCISData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCORSState).matches(
+        assertTrue(ReflectionEquals(resultSCORSState).matches(
             currentSCORSState.closeBracket(currentSCORSData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCMOSState).matches(
+        assertTrue(ReflectionEquals(resultSCMOSState).matches(
             currentSCMOSState.closeBracket(currentSCMOSData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCSOISState).matches(
+        assertTrue(ReflectionEquals(resultSCSOISState).matches(
             currentSCSOISState.closeBracket(currentSCSOISData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCSOPNISState).matches(
+        assertTrue(ReflectionEquals(resultSCSOPNISState).matches(
             currentSCSOPNISState.closeBracket(currentSCSOPNISData)
         ))
-        assertTrue(
-            ReflectionEquals(resultSCSORSState).matches(
+        assertTrue(ReflectionEquals(resultSCSORSState).matches(
             currentSCSORSState.closeBracket(currentSCSORSData)
         ))
     }
-
+/*
     @Test
     fun naturalLogarithmTest() {
         val negativeNumberData = ScientificCalculatorDataEntity(
