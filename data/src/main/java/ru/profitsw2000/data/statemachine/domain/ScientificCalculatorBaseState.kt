@@ -217,7 +217,7 @@ interface ScientificCalculatorBaseState : ScientificCalculatorState {
         return if (isScientificNotation)
             this.getNumberPart(functionCode).toScientificNotationString().toCalculatorFormat()
         else
-            this.numberPart(functionCode)
+            this.numberPart(functionCode).toString()
     }
 
     /**

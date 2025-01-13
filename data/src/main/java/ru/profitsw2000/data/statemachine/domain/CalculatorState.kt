@@ -375,7 +375,7 @@ interface CalculatorState {
             ((this.compareTo(minFractionValueBigDecimal) == -1) &&
                     (this.compareTo(maxFractionValueBigDecimal) == 1) &&
                     (this.compareTo(zeroBigDecimal) != 0)))
-            this.toString()
+            this.toScientificNotationString()
         else
             this.toPlainString()
     }

@@ -1048,48 +1048,64 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             bigNegativeInputState.calculateExponent(bigNegativeInputData)
         ))
     }
-/*
+
     @Test
     fun integerOfNumberTest() {
         val negativeInputData = ScientificCalculatorDataEntity(
-            mainString = "-33,452",
+            mainString = "-33,452e-1",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputState = ScientificCalculatorFirstOperandPowerNumberInputState(negativeInputData)
         val negativeInputResultData = ScientificCalculatorDataEntity(
-            mainString = "-3,3e+1",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(Int(-3,3452e+1)",
+            mainString = "-3,e+0",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(Int(-3,3452e+0)",
             prevState = prevState,
             isScientificNotation = true
         )
         val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
 
+        val posInputData = ScientificCalculatorDataEntity(
+            mainString = "33,452e+5",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
+            prevState = prevState,
+            isScientificNotation = true
+        )
+        val posInputState = ScientificCalculatorFirstOperandPowerNumberInputState(posInputData)
+        val posInputResultData = ScientificCalculatorDataEntity(
+            mainString = "3,3452e+6",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(Int(3,3452e+6)",
+            prevState = prevState,
+            isScientificNotation = true
+        )
+        val posInputResultState = ScientificCalculatorFirstOperandReadState(posInputResultData)
+
         val commaInputData = ScientificCalculatorDataEntity(
-            mainString = "33,",
+            mainString = "33,e+66",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState
         )
-        val commaInputState = ScientificCalculatorFirstOperandInputState(commaInputData)
+        val commaInputState = ScientificCalculatorFirstOperandPowerNumberInputState(commaInputData)
         val commaInputResultData = ScientificCalculatorDataEntity(
-            mainString = "33",
-            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(Int(33)",
+            mainString = "3,3e+67",
+            historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(Int(3,3e+67)",
             prevState = prevState
         )
         val commaInputResultState = ScientificCalculatorFirstOperandReadState(commaInputResultData)
 
 
-        assertTrue(
-            ReflectionEquals(negativeInputResultState).matches(
+        assertTrue(ReflectionEquals(negativeInputResultState).matches(
             negativeInputState.integerOfNumber(negativeInputData)
         ))
-        assertTrue(
-            ReflectionEquals(commaInputResultState).matches(
+        assertTrue(ReflectionEquals(posInputResultState).matches(
+            posInputState.integerOfNumber(posInputData)
+        ))
+        assertTrue(ReflectionEquals(commaInputResultState).matches(
             commaInputState.integerOfNumber(commaInputData)
         ))
     }
-
+/*
     @Test
     fun fractionOfNumberTest() {
         val negativeInputData = ScientificCalculatorDataEntity(
