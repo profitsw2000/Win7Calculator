@@ -2646,16 +2646,16 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             negativeErrorInputState.arcCosine(negativeErrorInputData, GRADS_ANGLE_CODE)
         ))
     }
-/*
+
     @Test
     fun piNumberTest() {
         val piData = ScientificCalculatorDataEntity(
-            mainString = "-0,5",
+            mainString = "-500,e-1",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val piState = ScientificCalculatorFirstOperandInputState(piData)
+        val piState = ScientificCalculatorFirstOperandPowerNumberInputState(piData)
         val piResultData = ScientificCalculatorDataEntity(
             mainString = "3,1415926535897932384626433832795e+0",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
@@ -2673,12 +2673,12 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
     @Test
     fun doublePiNumberTest() {
         val piData = ScientificCalculatorDataEntity(
-            mainString = "-0,5",
+            mainString = "-0,005e+2",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val piState = ScientificCalculatorFirstOperandInputState(piData)
+        val piState = ScientificCalculatorFirstOperandPowerNumberInputState(piData)
         val piResultData = ScientificCalculatorDataEntity(
             mainString = "6,283185307179586476925286766559e+0",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
@@ -2696,12 +2696,12 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
     @Test
     fun hyperbolicTangentTest() {
         val negativeInputData = ScientificCalculatorDataEntity(
-            mainString = "-3,",
+            mainString = "-3000,e-3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputState = ScientificCalculatorFirstOperandPowerNumberInputState(negativeInputData)
         val negativeInputResultData = ScientificCalculatorDataEntity(
             mainString = "-9,9505475368673045133188018525549e-1",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tanh(-3,e+0)",
@@ -2711,11 +2711,11 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
 
         val positiveInputData = ScientificCalculatorDataEntity(
-            mainString = "3,2",
+            mainString = "3200,e-3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState
         )
-        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputState = ScientificCalculatorFirstOperandPowerNumberInputState(positiveInputData)
         val positiveInputResultData = ScientificCalculatorDataEntity(
             mainString = "0,9966823978396511561809680630614",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tanh(3,2)",
@@ -2724,19 +2724,20 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
 
         val bigInputData = ScientificCalculatorDataEntity(
-            mainString = "999999,",
+            mainString = "9,99999e+5",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val bigInputState = ScientificCalculatorFirstOperandInputState(bigInputData)
+        val bigInputState = ScientificCalculatorFirstOperandPowerNumberInputState(bigInputData)
         val bigInputResultData = ScientificCalculatorDataEntity(
-            mainString = "1,e+0",
+            mainString = "9,99999e+5",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(tanh(9,99999e+5)",
             prevState = prevState,
+            errorCode = INVALID_INPUT_ERROR_CODE,
             isScientificNotation = true
         )
-        val bigInputResultState = ScientificCalculatorFirstOperandReadState(bigInputResultData)
+        val bigInputResultState = ScientificCalculatorErrorState(bigInputResultData)
 
         assertTrue(
             ReflectionEquals(positiveInputResultState).matches(
@@ -2746,20 +2747,20 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             ReflectionEquals(negativeInputResultState).matches(
             negativeInputState.hyperbolicTangent(negativeInputData)
         ))
-        *//*        assertTrue(ReflectionEquals(bigInputResultState).matches(
-                    bigInputState.hyperbolicTangent(bigInputData)
-                ))*//*
+        assertTrue(ReflectionEquals(bigInputResultState).matches(
+            bigInputState.hyperbolicTangent(bigInputData)
+        ))
     }
 
     @Test
     fun hyperbolicArcTangentTest() {
         val negativeInputData = ScientificCalculatorDataEntity(
-            mainString = "-0,9",
+            mainString = "-0,0009e+3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val negativeInputState = ScientificCalculatorFirstOperandInputState(negativeInputData)
+        val negativeInputState = ScientificCalculatorFirstOperandPowerNumberInputState(negativeInputData)
         val negativeInputResultData = ScientificCalculatorDataEntity(
             mainString = "-1,4722194895832202300045137159439e+0",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanh(-9,e-1)",
@@ -2769,11 +2770,11 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val negativeInputResultState = ScientificCalculatorFirstOperandReadState(negativeInputResultData)
 
         val positiveInputData = ScientificCalculatorDataEntity(
-            mainString = "0,9",
+            mainString = "900,e-3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState
         )
-        val positiveInputState = ScientificCalculatorFirstOperandInputState(positiveInputData)
+        val positiveInputState = ScientificCalculatorFirstOperandPowerNumberInputState(positiveInputData)
         val positiveInputResultData = ScientificCalculatorDataEntity(
             mainString = "1,4722194895832202300045137159439",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanh(0,9)",
@@ -2782,14 +2783,14 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val positiveInputResultState = ScientificCalculatorFirstOperandReadState(positiveInputResultData)
 
         val bigInputData = ScientificCalculatorDataEntity(
-            mainString = "2,",
+            mainString = "2000,e-3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState,
             isScientificNotation = true
         )
-        val bigInputState = ScientificCalculatorFirstOperandInputState(bigInputData)
+        val bigInputState = ScientificCalculatorFirstOperandPowerNumberInputState(bigInputData)
         val bigInputResultData = ScientificCalculatorDataEntity(
-            mainString = "2,",
+            mainString = "2000,e-3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanh(2,e+0)",
             errorCode = INVALID_INPUT_ERROR_CODE,
             prevState = prevState,
@@ -2798,13 +2799,13 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
         val bigInputResultState = ScientificCalculatorErrorState(bigInputResultData)
 
         val oneInputData = ScientificCalculatorDataEntity(
-            mainString = "1,",
+            mainString = "1000,e-3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(",
             prevState = prevState
         )
-        val oneInputState = ScientificCalculatorFirstOperandInputState(oneInputData)
+        val oneInputState = ScientificCalculatorFirstOperandPowerNumberInputState(oneInputData)
         val oneInputResultData = ScientificCalculatorDataEntity(
-            mainString = "1,",
+            mainString = "1000,e-3",
             historyString = "5$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(atanh(1)",
             errorCode = INVALID_INPUT_ERROR_CODE,
             prevState = prevState
@@ -2828,7 +2829,7 @@ class ScientificCalculatorFirstOperandPowerNumberInputStateTest {
             oneInputState.hyperbolicArcTangent(oneInputData)
         ))
     }
-
+/*
     @Test
     fun degreesTangentTest() {
         val positiveInputData = ScientificCalculatorDataEntity(

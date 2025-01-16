@@ -1130,18 +1130,30 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
      * successfully.
      */
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = scientificCalculatorDataEntity.mainString.mathFunction(
-                    HYPERBOLIC_TANGENT_FUNCTION_CODE,
-                    scientificCalculatorDataEntity.isScientificNotation
-                ),
-                historyString = "${scientificCalculatorDataEntity.historyString}tanh(" +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})"
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_TANGENT_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = "${scientificCalculatorDataEntity.historyString}tanh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})"
+                )
             )
-        )
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}tanh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        }
     }
 
     /**
