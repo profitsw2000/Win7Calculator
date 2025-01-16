@@ -654,6 +654,16 @@ class ScientificCalculatorFirstOperandInputState(
                     errorCode = UNKNOWN_ERROR_CODE
                 )
             )
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}sinh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
         }
     }
 
@@ -943,6 +953,16 @@ class ScientificCalculatorFirstOperandInputState(
                                 scientificCalculatorDataEntity.isScientificNotation
                             )})",
                     errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = "${scientificCalculatorDataEntity.historyString}cosh(" +
+                            "${scientificCalculatorDataEntity.mainString.calcFormat(
+                                scientificCalculatorDataEntity.isScientificNotation
+                            )})",
+                    errorCode = INVALID_INPUT_ERROR_CODE
                 )
             )
         }
