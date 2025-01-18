@@ -43,7 +43,61 @@ class ScientificCalculatorFirstOperandPowerNumberInputState(
         get() = SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 
     override fun consumeAction(action: CalculatorAction): CalculatorState {
-        TODO("Not yet implemented")
+        return when(action){
+            CalculatorAction.Add -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.PLUS, "+")
+            CalculatorAction.AddToMemory -> addNumberToMemory(scientificCalculatorDataEntity)
+            is CalculatorAction.ArcCosine -> arcCosine(scientificCalculatorDataEntity, action.angleUnitCode)
+            is CalculatorAction.ArcSinus -> arcSinus(scientificCalculatorDataEntity, action.angleUnitCode)
+            is CalculatorAction.ArcTangent -> arcTangent(scientificCalculatorDataEntity, action.angleUnitCode)
+            CalculatorAction.Backspace -> clearDigit(scientificCalculatorDataEntity)
+            CalculatorAction.Clear -> clearAll(scientificCalculatorDataEntity)
+            CalculatorAction.ClearEntered -> clearEntered(scientificCalculatorDataEntity)
+            CalculatorAction.ClearMemory -> clearMemory(scientificCalculatorDataEntity)
+            is CalculatorAction.Cosine -> cosine(scientificCalculatorDataEntity, action.angleUnitCode)
+            CalculatorAction.DecimalDegrees -> decimalToMinutes(scientificCalculatorDataEntity)
+            is CalculatorAction.Digit -> inputDigit(scientificCalculatorDataEntity, action.digit)
+            CalculatorAction.Divide -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.DIVIDE, "/")
+            CalculatorAction.Dms -> minutesToDecimal(scientificCalculatorDataEntity)
+            CalculatorAction.DoublePi -> doublePiNumber(scientificCalculatorDataEntity)
+            CalculatorAction.Equal -> calculateResult(scientificCalculatorDataEntity)
+            CalculatorAction.ExponentOfX -> calculateExponent(scientificCalculatorDataEntity)
+            CalculatorAction.ExponentialForm -> exponentialFormat(scientificCalculatorDataEntity)
+            CalculatorAction.Factorial -> factorial(scientificCalculatorDataEntity)
+            CalculatorAction.FixedToExponent -> fixedToExponentialFormat(scientificCalculatorDataEntity)
+            CalculatorAction.Fraction -> fractionOfNumber(scientificCalculatorDataEntity)
+            CalculatorAction.HyperbolicArcCosine -> hyperbolicArcCosine(scientificCalculatorDataEntity)
+            CalculatorAction.HyperbolicArcSinus -> hyperbolicArcSinus(scientificCalculatorDataEntity)
+            CalculatorAction.HyperbolicArcTangent -> hyperbolicArcTangent(scientificCalculatorDataEntity)
+            CalculatorAction.HyperbolicCosine -> hyperbolicCosine(scientificCalculatorDataEntity)
+            CalculatorAction.HyperbolicSinus -> hyperbolicSinus(scientificCalculatorDataEntity)
+            CalculatorAction.HyperbolicTangent -> hyperbolicTangent(scientificCalculatorDataEntity)
+            CalculatorAction.Integer -> integerOfNumber(scientificCalculatorDataEntity)
+            CalculatorAction.Inverse -> this
+            CalculatorAction.LeftBracket -> openBracket(scientificCalculatorDataEntity)
+            CalculatorAction.Logarithm -> logarithmBaseTen(scientificCalculatorDataEntity)
+            CalculatorAction.Modulus -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.MODULUS, "mod")
+            CalculatorAction.Multiply -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.MULTIPLY, "*")
+            CalculatorAction.NaturalLogarithm -> calculateNaturalLogarithm(scientificCalculatorDataEntity)
+            CalculatorAction.Percentage -> this
+            CalculatorAction.Pi -> piNumber(scientificCalculatorDataEntity)
+            CalculatorAction.PlusMinus -> negateOperand(scientificCalculatorDataEntity)
+            CalculatorAction.ReadMemory -> readMemory(scientificCalculatorDataEntity)
+            CalculatorAction.Recipoc -> reciprocOperation(scientificCalculatorDataEntity)
+            CalculatorAction.RightBracket -> closeBracket(scientificCalculatorDataEntity)
+            CalculatorAction.SaveToMemory -> saveToMemory(scientificCalculatorDataEntity)
+            is CalculatorAction.Sinus -> sinus(scientificCalculatorDataEntity, action.angleUnitCode)
+            CalculatorAction.SquareRoot -> calculateSquareRoot(scientificCalculatorDataEntity)
+            CalculatorAction.SquaredX -> squareNumber(scientificCalculatorDataEntity)
+            CalculatorAction.Subtract -> subtractNumberFromMemory(scientificCalculatorDataEntity)
+            CalculatorAction.SubtractFromMemory -> subtractNumberFromMemory(scientificCalculatorDataEntity)
+            is CalculatorAction.Tangent -> tangent(scientificCalculatorDataEntity, action.angleUnitCode)
+            CalculatorAction.TenToPowerOfX -> tenPowerX(scientificCalculatorDataEntity)
+            CalculatorAction.ThirdRootOfX -> cubeRoot(scientificCalculatorDataEntity)
+            CalculatorAction.XPowerThree -> cubeNumber(scientificCalculatorDataEntity)
+            CalculatorAction.XPowerY -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.POWER_OF, "^")
+            CalculatorAction.YRootOfX -> primitiveMathOperation(scientificCalculatorDataEntity, ScientificOperationType.ROOT_OF, "yroot")
+
+        }
     }
 
     /**
