@@ -33,18 +33,43 @@ class ScientificCalculatorFirstOperandReadState(
 
     /**
      * Copied parameter of function, which is a calculator data, reads memory field value and converts it
-     * to string value, which is recorded to mainString field of calculator data. Then created instance of
-     * ScientificCalculatorFirstOperandReadState with newly created calculator data as constructor and
+     * to string value, which is recorded to mainString field of calculator data. historyString field cleared.
+     * Then created instance of ScientificCalculatorFirstOperandReadState with newly created calculator data as constructor and
      * return it.
      * @param scientificCalculatorDataEntity - contains calculator data
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun readMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = if (scientificCalculatorDataEntity.memoryNumber == null) "0".calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
+                else scientificCalculatorDataEntity.memoryNumber.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = scientificCalculatorDataEntity.historyString.replaceAfterLast("(", "")
+            )
+        )
     }
 
+    /**
+     * Saved number from mainString of calculator data to memoryNumber field of calculator data and
+     * changes current state of calculator to ScientificCalculatorFirstOperandReadState. Number in
+     * mainString formatted according to isScientificNotation field value.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun saveToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                memoryNumber = if (scientificCalculatorDataEntity.mainString == "0") null
+                else scientificCalculatorDataEntity.mainString,
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
+            )
+        )
     }
 
     override fun addNumberToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
