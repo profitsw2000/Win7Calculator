@@ -1,5 +1,6 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
@@ -9,6 +10,9 @@ import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
 class ScientificCalculatorFirstOperandReadState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
 ) : ScientificCalculatorBaseState{
+
+    override val scale: Int
+        get() = SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         TODO("Not yet implemented")
@@ -72,23 +76,91 @@ class ScientificCalculatorFirstOperandReadState(
         )
     }
 
+    /**
+     * Add to calculator memory (memoryNumber field of calculator data) number, placed in mainString field.
+     * Number in mainString formatted according to isScientificNotation field value.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun addNumberToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val addedNumber = scientificCalculatorDataEntity.mainString
+        val calculatorData = if (addedNumber == "0") {
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
+            )
+        } else {
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) addedNumber
+                else scientificCalculatorDataEntity.memoryNumber.add(addedNumber)
+            )
+        }
+
+        return ScientificCalculatorFirstOperandReadState(calculatorData)
     }
 
+    /**
+     * Subtract from calculator memory (memoryNumber field of calculator data) number, placed in mainString field.
+     * Number in mainString formatted according to isScientificNotation field value.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun subtractNumberFromMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val subtractedNumber = scientificCalculatorDataEntity.mainString
+        val calculatorData = if (subtractedNumber == "0") {
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
+            )
+        } else {
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                memoryNumber = if (scientificCalculatorDataEntity.memoryNumber == null) "0".subtract(
+                    scientificCalculatorDataEntity.mainString
+                )
+                else scientificCalculatorDataEntity.memoryNumber.subtract(
+                    scientificCalculatorDataEntity.mainString
+                )
+            )
+        }
+
+        return ScientificCalculatorFirstOperandReadState(calculatorData)
     }
 
+    /**
+     * Clears all fields of calculator data (except memoryNumber) and reset current state to
+     * ScientificCalculatorInitialState.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorInitialState with default calculator data except memoryNumber field that
+     * saved old value.
+     */
     override fun clearAll(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorInitialState(
+            ScientificCalculatorDataEntity(
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber
+            )
+        )
     }
 
-    override val scale: Int
-        get() = TODO("Not yet implemented")
-
+    /**
+     * Changes sign number in mainString field of
+     * calculator data and writes operation to historyString field.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun negateOperand(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.negateExponent()
+            )
+        )
     }
 
     override fun calculateSquareRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
