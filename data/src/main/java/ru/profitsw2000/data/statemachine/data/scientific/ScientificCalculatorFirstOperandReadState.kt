@@ -1,5 +1,6 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
@@ -334,5 +335,28 @@ class ScientificCalculatorFirstOperandReadState(
 
     override fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
+    }
+
+    /**
+     * Inserts operationString to historyString to a certain place. This place is after
+     * last opening bracket (inserted to historyString when open bracket button of calculator and
+     * new state is created) and before string with last operation recording.
+     * @param historyString - string that need to be modified
+     * @param operationString - string to insert
+     * @return result string
+     */
+    private fun getHistoryStringWithInsertedOperationString(historyString: String, operationString: String): String {
+        val stringBeforeLastSpace = historyString.substringBeforeLast(HISTORY_STRING_SPACE_LETTER, "")
+        val stringAfterLastSpace = historyString.substringAfterLast(HISTORY_STRING_SPACE_LETTER)
+        val spaceBeforeOpeningBracket = if (stringBeforeLastSpace.isEmpty()) ""
+        else HISTORY_STRING_SPACE_LETTER
+        val prevStateOpeningBrackets = stringAfterLastSpace.takeWhile { !it.isLetterOrDigit() }
+        val stringAfterPrevStateOpeningBrackets = stringAfterLastSpace.substringAfter(prevStateOpeningBrackets)
+
+        return stringBeforeLastSpace +
+                spaceBeforeOpeningBracket +
+                prevStateOpeningBrackets +
+                operationString + "(" +
+                stringAfterPrevStateOpeningBrackets + ")"
     }
 }
