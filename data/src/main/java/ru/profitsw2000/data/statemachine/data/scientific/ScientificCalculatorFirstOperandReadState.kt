@@ -1,7 +1,9 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
@@ -157,15 +159,62 @@ class ScientificCalculatorFirstOperandReadState(
      * @return ScientificCalculatorFirstOperandReadState with updated calculator data
      */
     override fun negateOperand(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        val historyString = if (scientificCalculatorDataEntity.historyString.isEmpty())
+                "negate(${scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )})"
+            else getHistoryStringWithInsertedOperationString(
+                scientificCalculatorDataEntity.historyString,
+                "negate"
+            )
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = scientificCalculatorDataEntity.mainString.negateExponent()
+                mainString = scientificCalculatorDataEntity.mainString.negateExponent(),
+                historyString = historyString
             )
         )
     }
 
+    /**
+     * Calculate square root of entered to mainString number and write result number back to mainString.
+     * Completed operation writes to historyString, current state changed.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if
+     * number in mainString is equal or more than zero
+     * ScientificCalculatorErrorState with appropriate code in errorCode field
+     */
     override fun calculateSquareRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.isEmpty())
+            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "sqrt"
+        )
+
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.sqrt(scientificCalculatorDataEntity.isScientificNotation),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun inputDigit(
