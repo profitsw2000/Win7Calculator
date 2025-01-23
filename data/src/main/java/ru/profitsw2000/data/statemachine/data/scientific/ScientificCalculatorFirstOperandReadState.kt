@@ -345,7 +345,7 @@ class ScientificCalculatorFirstOperandReadState(
      * @param operationString - string to insert
      * @return result string
      */
-    private fun getHistoryStringWithInsertedOperationString(historyString: String, operationString: String): String {
+    fun getHistoryStringWithInsertedOperationString(historyString: String, operationString: String): String {
         val stringBeforeLastSpace = historyString.substringBeforeLast(HISTORY_STRING_SPACE_LETTER, "")
         val stringAfterLastSpace = historyString.substringAfterLast(HISTORY_STRING_SPACE_LETTER)
         val spaceBeforeOpeningBracket = if (stringBeforeLastSpace.isEmpty()) ""
