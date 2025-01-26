@@ -217,6 +217,14 @@ class ScientificCalculatorFirstOperandReadState(
         }
     }
 
+    /**
+     * Clears mainString field of calculator data and place there digitToAppend parameter of function
+     * Also clears all historyString field if prevState field is null or clears string after open bracket
+     * sign if not null. Changes current state to ScientificCalculatorFirstOperandInputState
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @param digitToAppend - string to insert to mainString field
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     */
     override fun inputDigit(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         digitToAppend: String
@@ -401,11 +409,15 @@ class ScientificCalculatorFirstOperandReadState(
         else HISTORY_STRING_SPACE_LETTER
         val prevStateOpeningBrackets = stringAfterLastSpace.takeWhile { !it.isLetterOrDigit() }
         val stringAfterPrevStateOpeningBrackets = stringAfterLastSpace.substringAfter(prevStateOpeningBrackets)
+        val openBracketString = "("
+        val closeBracketString = ")"
 
         return stringBeforeLastSpace +
                 spaceBeforeOpeningBracket +
                 prevStateOpeningBrackets +
-                operationString + "(" +
-                stringAfterPrevStateOpeningBrackets + ")"
+                operationString +
+                openBracketString +
+                stringAfterPrevStateOpeningBrackets +
+                closeBracketString
     }
 }
