@@ -323,23 +323,31 @@ class ScientificCalculatorFirstOperandReadState(
     }
 
     override fun calculateResult(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        var currentState: ScientificCalculatorBaseState = this
+        var prevState: ScientificCalculatorBaseState = this.scientificCalculatorDataEntity.prevState!!
         var currentOperand = scientificCalculatorDataEntity.mainString
 
-        while (currentState != null) {
-            currentState = currentState.scientificCalculatorDataEntity.prevState!!
-            currentOperand = when(currentState.scientificCalculatorDataEntity.scientificOperationType) {
-                ScientificOperationType.PLUS -> TODO()
-                ScientificOperationType.MINUS -> TODO()
-                ScientificOperationType.MULTIPLY -> TODO()
-                ScientificOperationType.DIVIDE -> TODO()
+        while (prevState != null) {
+            val prevOperand = prevState.scientificCalculatorDataEntity.operand
+            currentOperand = when(prevState.scientificCalculatorDataEntity.scientificOperationType) {
+                ScientificOperationType.PLUS -> prevOperand.add(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MINUS -> prevOperand.subtract(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MULTIPLY -> prevOperand.multiply(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.DIVIDE -> prevOperand.divide(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
                 ScientificOperationType.MODULUS -> TODO()
-                ScientificOperationType.ROOT_OF -> TODO()
-                ScientificOperationType.POWER_OF -> TODO()
-                ScientificOperationType.NO_OPERATION -> TODO()
+                ScientificOperationType.ROOT_OF -> prevOperand.rootOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.POWER_OF -> prevOperand.powerOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.NO_OPERATION -> currentOperand
             }
+            prevState = prevState.scientificCalculatorDataEntity.prevState!!
         }
-        return TODO()
+
+        return ScientificCalculatorOperationResultState(
+            scientificCalculatorDataEntity.copy(
+                mainString = currentOperand,
+                historyString = scientificCalculatorDataEntity.historyString,
+                prevState = null
+            )
+        )
     }
 
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
