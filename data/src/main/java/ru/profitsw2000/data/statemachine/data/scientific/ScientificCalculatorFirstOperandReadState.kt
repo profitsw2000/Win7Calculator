@@ -323,7 +323,23 @@ class ScientificCalculatorFirstOperandReadState(
     }
 
     override fun calculateResult(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        var currentState: ScientificCalculatorBaseState = this
+        var currentOperand = scientificCalculatorDataEntity.mainString
+
+        while (currentState != null) {
+            currentState = currentState.scientificCalculatorDataEntity.prevState!!
+            currentOperand = when(currentState.scientificCalculatorDataEntity.scientificOperationType) {
+                ScientificOperationType.PLUS -> TODO()
+                ScientificOperationType.MINUS -> TODO()
+                ScientificOperationType.MULTIPLY -> TODO()
+                ScientificOperationType.DIVIDE -> TODO()
+                ScientificOperationType.MODULUS -> TODO()
+                ScientificOperationType.ROOT_OF -> TODO()
+                ScientificOperationType.POWER_OF -> TODO()
+                ScientificOperationType.NO_OPERATION -> TODO()
+            }
+        }
+        return TODO()
     }
 
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
