@@ -1,5 +1,6 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
@@ -9,16 +10,28 @@ import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
+import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorReadState
 
 class ScientificCalculatorFirstOperandReadState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
-) : ScientificCalculatorBaseState{
+) : ScientificCalculatorReadState{
 
     override val scale: Int
         get() = SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 
     override fun consumeAction(action: CalculatorAction): CalculatorState {
         TODO("Not yet implemented")
+    }
+
+    override fun clearDigit(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        return ScientificCalculatorInitialState(
+            scientificCalculatorDataEntity.copy(
+                mainString = "0",
+                historyString = getHistoryStringWithRemovedLastMathFunctionHistory(
+                    scientificCalculatorDataEntity.historyString
+                )
+            )
+        )
     }
 
     /**
@@ -55,7 +68,9 @@ class ScientificCalculatorFirstOperandReadState(
                 else scientificCalculatorDataEntity.memoryNumber.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
-                historyString = scientificCalculatorDataEntity.historyString.replaceAfterLast("(", "")
+                historyString = getHistoryStringWithRemovedLastMathFunctionHistory(
+                    scientificCalculatorDataEntity.historyString
+                )
             )
         )
     }
@@ -229,19 +244,82 @@ class ScientificCalculatorFirstOperandReadState(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         digitToAppend: String
     ): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorFirstOperandInputState(
+            scientificCalculatorDataEntity.copy(
+                mainString = digitToAppend,
+                historyString = getHistoryStringWithRemovedLastMathFunctionHistory(
+                    scientificCalculatorDataEntity.historyString
+                )
+            )
+        )
     }
 
+    /**
+     * Changes current state and writes to historyString, scientificOperationType and firstOperand fields
+     * of calculator data appropriate info.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @param scientificOperationType - contains operation type that needs to execute
+     * @param operationString - string with corresponding sign, depended on operation type
+     * @return ScientificCalculatorMathOperationState with updated calculator data
+     */
     override fun primitiveMathOperation(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = scientificCalculatorDataEntity.historyString +
+                        scientificCalculatorDataEntity.mainString.calcFormat(
+                            scientificCalculatorDataEntity.isScientificNotation
+                        ) +
+                        "$HISTORY_STRING_SPACE_LETTER$operationString",
+                scientificOperationType = scientificOperationType,
+                operand = scientificCalculatorDataEntity.mainString.calcFormat(false)
+            )
+        )
     }
 
+    /**
+     * Calculates result of one divided on number in mainString field and
+     * writes it back to mainString. Designator of committed operation appended to history string.
+     * Changes current state depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data if
+     * divider is not equal to zero
+     * ScientificCalculatorErrorState with updated calculator data if divider equal 0
+     */
     override fun reciprocOperation(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.isEmpty())
+            "sqrt(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "sqrt"
+        )
+
+        return try {
+            ScientificCalculatorFirstOperandReadState(scientificCalculatorDataEntity.copy(
+                mainString = "1".divide(scientificCalculatorDataEntity.mainString,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            ))
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
+                historyString = historyString,
+                errorCode = DIVIDE_ON_ZERO_ERROR_CODE
+            ))
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
+                historyString = historyString,
+                errorCode = UNKNOWN_ERROR_CODE
+            ))
+        }
     }
 
     override fun calculateResult(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
@@ -419,5 +497,24 @@ class ScientificCalculatorFirstOperandReadState(
                 openBracketString +
                 stringAfterPrevStateOpeningBrackets +
                 closeBracketString
+    }
+
+    /**
+     * Removes from history string recordings about last commited math functions in current
+     * state. If there are had previous state, then removes recordings only after last
+     * opening bracket, that create new state.
+     * @param historyString - string that need to be modified
+     * @return result string
+     */
+    fun getHistoryStringWithRemovedLastMathFunctionHistory(historyString: String): String {
+        val stringBeforeLastSpace = historyString.substringBeforeLast(HISTORY_STRING_SPACE_LETTER, "")
+        val stringAfterLastSpace = historyString.substringAfterLast(HISTORY_STRING_SPACE_LETTER)
+        val spaceBeforeOpeningBracket = if (stringBeforeLastSpace.isEmpty()) ""
+        else HISTORY_STRING_SPACE_LETTER
+        val prevStateOpeningBrackets = stringAfterLastSpace.takeWhile { !it.isLetterOrDigit() }
+
+        return stringBeforeLastSpace +
+                spaceBeforeOpeningBracket +
+                prevStateOpeningBrackets
     }
 }
