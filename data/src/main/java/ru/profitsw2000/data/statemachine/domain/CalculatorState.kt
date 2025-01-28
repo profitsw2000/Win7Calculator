@@ -291,6 +291,31 @@ interface CalculatorState {
             this.sqrt()
     }
 
+    fun String.calculateModulus(divisor: String): BigDecimal {
+        val mathContext = MathContext(scale)
+        val dividendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val divisorBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val result = dividendBigDecimal.remainder(divisorBigDecimal, mathContext).stripTrailingZeros()
+
+        checkForOverflow(result)
+
+        return result
+    }
+
+    fun String.modulus(divisor: String): String {
+        return this
+            .calculateModulus(divisor)
+            .toResultString()
+            .toCalculatorFormat()
+    }
+
+    fun String.modulus(divisor: String, isScientificNotation: Boolean): String {
+        return if (isScientificNotation)
+            this.calculateModulus(divisor).toScientificNotationString().toCalculatorFormat()
+        else
+            this.modulus(divisor)
+    }
+
     /** Check if BigDecimal number is in certain range and throw exception if not.
      * @param number being checked
       */
