@@ -353,8 +353,27 @@ class ScientificCalculatorFirstOperandReadState(
         }
     }
 
+    /**
+     * Changes current state to ScientificCalculatorFirstOperandReadState while current
+     * state recorded to prevState field of new state. Calculator data of new state remains
+     * the same, except historyString field to which character '(' is appended.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = getHistoryStringWithRemovedLastMathFunctionHistory(
+            scientificCalculatorDataEntity.historyString
+        )
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = "$historyString(",
+                prevState = this
+            )
+        )
     }
 
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
