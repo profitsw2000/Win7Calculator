@@ -322,32 +322,35 @@ class ScientificCalculatorFirstOperandReadState(
         }
     }
 
+    /**
+     * Calculate number by commiting math operations in all states begins from last. Result
+     * of calculation records to mainString field, prevState field reset to default, which
+     * is null, historyString is set to empty string. Function changes current state
+     * to ScientificCalculatorOperationResultState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorOperationResultState with updated calculator data
+     */
     override fun calculateResult(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        var prevState: ScientificCalculatorBaseState = this.scientificCalculatorDataEntity.prevState!!
-        var currentOperand = scientificCalculatorDataEntity.mainString
 
-        while (prevState != null) {
-            val prevOperand = prevState.scientificCalculatorDataEntity.operand
-            currentOperand = when(prevState.scientificCalculatorDataEntity.scientificOperationType) {
-                ScientificOperationType.PLUS -> prevOperand.add(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.MINUS -> prevOperand.subtract(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.MULTIPLY -> prevOperand.multiply(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.DIVIDE -> prevOperand.divide(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.MODULUS -> TODO()
-                ScientificOperationType.ROOT_OF -> prevOperand.rootOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.POWER_OF -> prevOperand.powerOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.NO_OPERATION -> currentOperand
-            }
-            prevState = prevState.scientificCalculatorDataEntity.prevState!!
-        }
-
-        return ScientificCalculatorOperationResultState(
-            scientificCalculatorDataEntity.copy(
-                mainString = currentOperand,
-                historyString = scientificCalculatorDataEntity.historyString,
-                prevState = null
+        return try {
+            ScientificCalculatorOperationResultState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = getAllStatesCalculationResult(this),
+                    historyString = "",
+                    prevState = null
+                )
             )
-        )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
+                historyString = scientificCalculatorDataEntity.historyString,
+                errorCode = INVALID_INPUT_ERROR_CODE
+            ))
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(scientificCalculatorDataEntity.copy(
+                historyString = scientificCalculatorDataEntity.historyString,
+                errorCode = UNKNOWN_ERROR_CODE
+            ))
+        }
     }
 
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
@@ -540,5 +543,26 @@ class ScientificCalculatorFirstOperandReadState(
         return stringBeforeLastSpace +
                 spaceBeforeOpeningBracket +
                 prevStateOpeningBrackets
+    }
+
+    fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
+        var prevState: ScientificCalculatorBaseState = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState!!
+        var currentOperand = scientificCalculatorBaseState.scientificCalculatorDataEntity.mainString
+
+        while (!prevState.equals(null)) {
+            val prevOperand = prevState.scientificCalculatorDataEntity.operand
+            currentOperand = when(prevState.scientificCalculatorDataEntity.scientificOperationType) {
+                ScientificOperationType.PLUS -> prevOperand.add(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MINUS -> prevOperand.subtract(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MULTIPLY -> prevOperand.multiply(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.DIVIDE -> prevOperand.divide(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MODULUS -> prevOperand.modulus(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.ROOT_OF -> prevOperand.rootOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.POWER_OF -> prevOperand.powerOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.NO_OPERATION -> currentOperand
+            }
+            prevState = prevState.scientificCalculatorDataEntity.prevState!!
+        }
+        return currentOperand
     }
 }

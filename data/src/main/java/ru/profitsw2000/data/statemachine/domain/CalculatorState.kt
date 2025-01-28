@@ -291,6 +291,12 @@ interface CalculatorState {
             this.sqrt()
     }
 
+    /**
+     * Calculates modulus (remainder of integral valued division of two numbers)
+     * and return result in BigDecimal type.
+     * @param divisor
+     * @return result of modulus calculation in BigDecimal type
+     */
     fun String.calculateModulus(divisor: String): BigDecimal {
         val mathContext = MathContext(scale)
         val dividendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
@@ -302,6 +308,12 @@ interface CalculatorState {
         return result
     }
 
+    /**
+     * Calculates modulus (remainder of integral valued division of two numbers)
+     * and return result in String type.
+     * @param divisor
+     * @return result of modulus calculation in String type
+     */
     fun String.modulus(divisor: String): String {
         return this
             .calculateModulus(divisor)
@@ -309,6 +321,14 @@ interface CalculatorState {
             .toCalculatorFormat()
     }
 
+    /**
+     * Calculates modulus (remainder of integral valued division of two numbers)
+     * and return result in String type in plain or engineering format
+     * depending on second parameter of function..
+     * @param divisor
+     * @return result of modulus calculation in String type in appropriate
+     * format
+     */
     fun String.modulus(divisor: String, isScientificNotation: Boolean): String {
         return if (isScientificNotation)
             this.calculateModulus(divisor).toScientificNotationString().toCalculatorFormat()
