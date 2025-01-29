@@ -1,13 +1,23 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
+import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.DMS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
+import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
+import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
+import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
@@ -575,42 +585,323 @@ class ScientificCalculatorFirstOperandReadState(
         )
     }
 
+    /**
+     * Calculates hyperbolic sinus of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState with corresponding error code.
+     */
     override fun hyperbolicSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "sinh(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "sinh"
+        )
+
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_SINUS_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates hyperbolic arcsinus of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data.
+     */
     override fun hyperbolicArcSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "asinh(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "asinh"
+        )
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                    HYPERBOLIC_ARC_SINUS_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Calculate sinus of entered to mainString number. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data.
+     */
     override fun sinus(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "sind"
+            RADIANS_ANGLE_CODE -> "sinr"
+            GRADS_ANGLE_CODE -> "sing"
+            else -> "sind"
+        }
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "$operationString(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            operationString
+        )
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.trigonometricFunction(
+                    SINUS_FUNCTION_CODE,
+                    angleUnitCode,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Calculate arcsinus of entered to mainString number. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun arcSinus(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "asind"
+            RADIANS_ANGLE_CODE -> "asinr"
+            GRADS_ANGLE_CODE -> "asing"
+            else -> "asind"
+        }
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "$operationString(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            operationString
+        )
+
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .inverseTrigonometricFunction(
+                            ARC_SINUS_FUNCTION_CODE,
+                            angleUnitCode,
+                            scientificCalculatorDataEntity.isScientificNotation
+                        ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates number, entered to mainString of calculator data, to the power of 2. Operation
+     * recorded to historyString of calculator data. Return ScientificCalculatorFirstOperandReadState
+     * or ScientificCalculatorErrorState if number is too big and overflow occurred.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun squareNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "sqr(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "sqr"
+        )
+
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.powerOfNumber(
+                        "2",
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates factorial of number, entered to mainString of calculator data. Operation
+     * recorded to historyString of calculator data. Return same state
+     * or ScientificCalculatorErrorState if number is too big and overflow occurred.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun factorial(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "fact(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "fact"
+        )
+
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.factorial(
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = if (arithmeticException.message == "Overflow of calculated number.") OVERFLOW_ERROR_CODE
+                    else INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Converts number, entered to mainString field of calculator data, from degrees unit
+     * with decimal fractional part to degrees unit with fractional part presented in minutes.
+     * Operation recorded to historyString of calculator data. Returns same state.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun decimalToMinutes(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "dms(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "dms"
+        )
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(
+                    DMS_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Converts number, entered to mainString field of calculator data, from degrees
+     * with fractional part presented in minutes to degrees with decimal fractional part.
+     * Operation recorded to historyString of calculator data. Return same state.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun minutesToDecimal(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "deg(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "deg"
+        )
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(
+                    DEG_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
     override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
