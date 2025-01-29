@@ -2,7 +2,9 @@ package ru.profitsw2000.data.statemachine.data.scientific
 
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
 import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
+import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
@@ -519,12 +521,58 @@ class ScientificCalculatorFirstOperandReadState(
         }
     }
 
+    /**
+     * Rounds number, entered to the mainString of calculator data. Operation recorded to historyString
+     * of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandInputState with updated calculator data
+     */
     override fun integerOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "Int(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "Int"
+        )
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.numberPart(
+                    INTEGRAL_PART_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Discards whole part of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Changed current state to ScientificCalculatorFirstOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun fractionOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            "frac(${scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )})"
+        else getHistoryStringWithInsertedOperationString(
+            scientificCalculatorDataEntity.historyString,
+            "frac"
+        )
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.numberPart(
+                    FRACTIONAL_PART_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
     override fun hyperbolicSinus(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
