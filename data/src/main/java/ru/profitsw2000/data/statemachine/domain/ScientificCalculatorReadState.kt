@@ -4,6 +4,6 @@ import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 
 interface ScientificCalculatorReadState: ScientificCalculatorBaseState {
 
-    fun clearDigit(scientificCalculatorDataEntity: ScientificCalculatorDataEntity) : CalculatorState
+    fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity) : CalculatorState
 
 }

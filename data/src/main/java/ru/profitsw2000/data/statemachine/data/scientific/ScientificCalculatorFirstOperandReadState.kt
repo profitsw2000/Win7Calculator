@@ -46,7 +46,7 @@ class ScientificCalculatorFirstOperandReadState(
         TODO("Not yet implemented")
     }
 
-    override fun clearDigit(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+    override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorInitialState(
             scientificCalculatorDataEntity.copy(
                 mainString = "0",
@@ -1440,7 +1440,7 @@ class ScientificCalculatorFirstOperandReadState(
      * Inserts operationString to historyString to a certain place. This place is after
      * last opening bracket (inserted to historyString when open bracket button of calculator and
      * new state is created) and before string with last operation recording.
-     * @param historyString - string that need to be modified
+     * @param scientificCalculatorDataEntity - instance, that contain string, that need to be modified
      * @param operationString - string to insert
      * @return result string
      */
@@ -1455,6 +1455,9 @@ class ScientificCalculatorFirstOperandReadState(
         val closeBracketString = ")"
 
         return if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            stringBeforeLastSpace +
+            spaceBeforeOpeningBracket +
+            prevStateOpeningBrackets +
             "$operationString(${scientificCalculatorDataEntity.mainString.calcFormat(
                 scientificCalculatorDataEntity.isScientificNotation
             )})"
@@ -1486,7 +1489,7 @@ class ScientificCalculatorFirstOperandReadState(
                 prevStateOpeningBrackets
     }
 
-    fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
+    private fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
         var prevState: ScientificCalculatorBaseState = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState!!
         var currentOperand = scientificCalculatorBaseState.scientificCalculatorDataEntity.mainString
 
