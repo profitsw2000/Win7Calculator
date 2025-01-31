@@ -204,7 +204,7 @@ class ScientificCalculatorFirstOperandReadState(
 
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = scientificCalculatorDataEntity.mainString.negateExponent(),
+                mainString = scientificCalculatorDataEntity.mainString.negate(),
                 historyString = historyString
             )
         )
