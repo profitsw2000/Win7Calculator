@@ -47,7 +47,7 @@ class ScientificCalculatorFirstOperandReadState(
     }
 
     override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return ScientificCalculatorInitialState(
+        return ScientificCalculatorFirstOperandInputState(
             scientificCalculatorDataEntity.copy(
                 mainString = "0",
                 historyString = getHistoryStringWithRemovedLastMathFunctionHistory(
