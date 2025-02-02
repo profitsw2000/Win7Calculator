@@ -262,7 +262,8 @@ class ScientificCalculatorFirstOperandReadState(
     ): CalculatorState {
         return ScientificCalculatorFirstOperandInputState(
             scientificCalculatorDataEntity.copy(
-                mainString = digitToAppend,
+                mainString = if (digitToAppend != ",") digitToAppend
+                else "0,",
                 historyString = getHistoryStringWithRemovedLastMathFunctionHistory(
                     scientificCalculatorDataEntity.historyString
                 )
@@ -283,16 +284,18 @@ class ScientificCalculatorFirstOperandReadState(
         scientificOperationType: ScientificOperationType,
         operationString: String
     ): CalculatorState {
+        val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+            scientificCalculatorDataEntity.mainString.calcFormat(
+                scientificCalculatorDataEntity.isScientificNotation
+            )
+        else scientificCalculatorDataEntity.historyString
+
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
-                historyString = scientificCalculatorDataEntity.historyString +
-                        scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        ) +
-                        "$HISTORY_STRING_SPACE_LETTER$operationString",
+                historyString = historyString + HISTORY_STRING_SPACE_LETTER + operationString,
                 scientificOperationType = scientificOperationType,
                 operand = scientificCalculatorDataEntity.mainString.calcFormat(false)
             )
@@ -311,7 +314,7 @@ class ScientificCalculatorFirstOperandReadState(
     override fun reciprocOperation(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         val historyString = getHistoryStringWithInsertedOperationString(
             scientificCalculatorDataEntity,
-            "sqrt"
+            "reciproc"
         )
 
         return try {
@@ -1458,9 +1461,9 @@ class ScientificCalculatorFirstOperandReadState(
             stringBeforeLastSpace +
             spaceBeforeOpeningBracket +
             prevStateOpeningBrackets +
-            "$operationString(${scientificCalculatorDataEntity.mainString.calcFormat(
+            "$operationString$openBracketString${scientificCalculatorDataEntity.mainString.calcFormat(
                 scientificCalculatorDataEntity.isScientificNotation
-            )})"
+            )}$closeBracketString"
         else stringBeforeLastSpace +
                 spaceBeforeOpeningBracket +
                 prevStateOpeningBrackets +
