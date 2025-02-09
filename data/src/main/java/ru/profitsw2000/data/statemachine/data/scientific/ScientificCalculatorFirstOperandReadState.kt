@@ -1077,6 +1077,9 @@ class ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
                 mainString = piNumber(
                     scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = getHistoryStringWithRemovedLastMathFunctionHistory(
+                    scientificCalculatorDataEntity.historyString
                 )
             )
         )
@@ -1090,7 +1093,10 @@ class ScientificCalculatorFirstOperandReadState(
     override fun doublePiNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = doublePiNumber(scientificCalculatorDataEntity.isScientificNotation)
+                mainString = doublePiNumber(scientificCalculatorDataEntity.isScientificNotation),
+                historyString = getHistoryStringWithRemovedLastMathFunctionHistory(
+                    scientificCalculatorDataEntity.historyString
+                )
             )
         )
     }
@@ -1108,15 +1114,24 @@ class ScientificCalculatorFirstOperandReadState(
             "tanh"
         )
 
-        return ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = scientificCalculatorDataEntity.mainString.mathFunction(
-                    HYPERBOLIC_TANGENT_FUNCTION_CODE,
-                    scientificCalculatorDataEntity.isScientificNotation
-                ),
-                historyString = historyString
+        return try {
+            ScientificCalculatorFirstOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_TANGENT_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
             )
-        )
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        }
     }
 
     /**
