@@ -1,31 +1,102 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
 import ru.profitsw2000.data.statemachine.domain.CalculatorState
 import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorBaseState
+import ru.profitsw2000.data.statemachine.domain.ScientificCalculatorReadState
 
 class ScientificCalculatorMathOperationState(
     override val scientificCalculatorDataEntity: ScientificCalculatorDataEntity
-) : ScientificCalculatorBaseState {
+) : ScientificCalculatorReadState {
+
+    override val scale: Int
+        get() = SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
+
+    override fun consumeAction(action: CalculatorAction): CalculatorState {
+        TODO("Not yet implemented")
+    }
+
+    /**
+     * Set to null memoryNumber field of calculator data. State of calculator is not changed.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorMathOperationState with updated calculator data
+     */
     override fun clearMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                memoryNumber = null
+            )
+        )
     }
 
+    /**
+     * Copied number from memoryNumber field to mainString field of calculator data
+     * if it is not null, otherwise set mainString field to "0". Changes current state.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun readMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val memoryNumber = scientificCalculatorDataEntity.memoryNumber
+
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = if (memoryNumber != null) memoryNumber
+                else "0"
+            )
+        )
     }
 
+    /**
+     * Writes data from mainString field of calculator data to memoryNumber.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorMathOperationState with updated calculator data
+     */
     override fun saveToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                memoryNumber = scientificCalculatorDataEntity.mainString
+            )
+        )
     }
 
+    /**
+     * Add number from mainString field to number in memoryNumber field of calculator data.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorMathOperationState with updated calculator data
+     */
     override fun addNumberToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        val memoryNumber = scientificCalculatorDataEntity.memoryNumber
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                memoryNumber = if (memoryNumber != null) memoryNumber.add(scientificCalculatorDataEntity.mainString)
+                else scientificCalculatorDataEntity.mainString
+            )
+        )
+    }
+
+    /**
+     * Subtract number from memoryNumber field with number placed in mainString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorMathOperationState with updated calculator data
+     */
+    override fun subtractNumberFromMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        val memoryNumber = scientificCalculatorDataEntity.memoryNumber
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                memoryNumber = if (memoryNumber != null) memoryNumber.subtract(scientificCalculatorDataEntity.mainString)
+                else "0".subtract(scientificCalculatorDataEntity.mainString)
+            )
+        )
+    }
+
+    override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
-    override fun subtractNumberFromMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+    override fun clearAll(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
@@ -60,19 +131,19 @@ class ScientificCalculatorMathOperationState(
         TODO("Not yet implemented")
     }
 
-    override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
-    }
-
-    override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
-    }
-
     override fun calculateNaturalLogarithm(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
     override fun calculateExponent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        TODO("Not yet implemented")
+    }
+
+    override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
+        TODO("Not yet implemented")
+    }
+
+    override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
     }
 
@@ -203,17 +274,6 @@ class ScientificCalculatorMathOperationState(
     }
 
     override fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
-    }
-
-    override fun clearAll(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
-    }
-
-    override val scale: Int
-        get() = TODO("Not yet implemented")
-
-    override fun consumeAction(action: CalculatorAction): CalculatorState {
         TODO("Not yet implemented")
     }
 }
