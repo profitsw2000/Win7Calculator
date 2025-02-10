@@ -1,5 +1,6 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.entity.GeneralCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
@@ -11,13 +12,20 @@ class ScientificCalculatorErrorState(
 ) : ScientificCalculatorState {
 
     override fun clearAll(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorInitialState(
+            scientificCalculatorDataEntity.copy(
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber
+            )
+        )
     }
 
     override val scale: Int
-        get() = TODO("Not yet implemented")
+        get() = SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 
     override fun consumeAction(action: CalculatorAction): CalculatorState {
-        TODO("Not yet implemented")
+        return when(action) {
+            CalculatorAction.Clear -> clearAll(scientificCalculatorDataEntity)
+            else -> this
+        }
     }
 }
