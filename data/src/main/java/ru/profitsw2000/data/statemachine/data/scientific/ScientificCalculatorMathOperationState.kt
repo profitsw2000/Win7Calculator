@@ -1,6 +1,9 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
+import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
 import ru.profitsw2000.data.statemachine.action.CalculatorAction
@@ -92,20 +95,86 @@ class ScientificCalculatorMathOperationState(
         )
     }
 
+    /**
+     * Clears mainString field of calculator data (set to "0").
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorMathOperationState with updated calculator data
+     */
     override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorMathOperationState(
+            scientificCalculatorDataEntity.copy(
+                mainString = "0"
+            )
+        )
     }
 
+    /**
+     * Reset calculator to initial state, clears all calculator data fields, except memoryNumber.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorInitialState with updated calculator data
+     */
     override fun clearAll(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorInitialState(
+            ScientificCalculatorDataEntity(
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber
+            )
+        )
     }
 
+    /**
+     * Changes sign number in mainString field of
+     * calculator data and writes operation to historyString field.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun negateOperand(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = scientificCalculatorDataEntity.historyString +
+                HISTORY_STRING_SPACE_LETTER +
+                "negate(${scientificCalculatorDataEntity.mainString})"
+
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.negate(),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Calculate square root of entered to mainString number and write result number back to mainString.
+     * Completed operation writes to historyString, current state changed.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if
+     * number in mainString is equal or more than zero
+     * ScientificCalculatorErrorState with appropriate code in errorCode field
+     */
     override fun calculateSquareRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = scientificCalculatorDataEntity.historyString +
+                HISTORY_STRING_SPACE_LETTER +
+                "sqrt(${scientificCalculatorDataEntity.mainString})"
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.sqrt(scientificCalculatorDataEntity.isScientificNotation),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun inputDigit(
