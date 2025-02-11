@@ -1,8 +1,10 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
@@ -266,21 +268,10 @@ class ScientificCalculatorMathOperationState(
      * @return ScientificCalculatorOperationResultState with updated calculator data
      */
     override fun calculateResult(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        val result = when(scientificCalculatorDataEntity.scientificOperationType) {
-            ScientificOperationType.PLUS -> scientificCalculatorDataEntity.operand.add(scientificCalculatorDataEntity.mainString, scientificCalculatorDataEntity.isScientificNotation)
-            ScientificOperationType.MINUS -> scientificCalculatorDataEntity.operand.subtract(scientificCalculatorDataEntity.mainString, scientificCalculatorDataEntity.isScientificNotation)
-            ScientificOperationType.MULTIPLY -> scientificCalculatorDataEntity.operand.multiply(scientificCalculatorDataEntity.mainString, scientificCalculatorDataEntity.isScientificNotation)
-            ScientificOperationType.DIVIDE -> scientificCalculatorDataEntity.operand.divide(scientificCalculatorDataEntity.mainString, scientificCalculatorDataEntity.isScientificNotation)
-            ScientificOperationType.MODULUS -> scientificCalculatorDataEntity.operand.modulus(scientificCalculatorDataEntity.mainString, scientificCalculatorDataEntity.isScientificNotation)
-            ScientificOperationType.POWER_OF -> scientificCalculatorDataEntity.operand.powerOfNumber(scientificCalculatorDataEntity.mainString, scientificCalculatorDataEntity.isScientificNotation)
-            ScientificOperationType.ROOT_OF -> scientificCalculatorDataEntity.operand.rootOfNumber(scientificCalculatorDataEntity.mainString, scientificCalculatorDataEntity.isScientificNotation)
-            ScientificOperationType.NO_OPERATION -> "0"
-        }
-
         return try {
             ScientificCalculatorOperationResultState(
                 scientificCalculatorDataEntity.copy(
-                    mainString = result,
+                    mainString = getAllStatesCalculationResult(this),
                     historyString = "",
                     prevState = null
                 )
@@ -298,12 +289,83 @@ class ScientificCalculatorMathOperationState(
         }
     }
 
+
+    /**
+     * Calculates natural logarithm of number placed in mainString field of calculator data and
+     * place result back to the same field. History of operation appends to historyString field.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState if error occurred.
+     */
     override fun calculateNaturalLogarithm(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        NATURAL_LOGARITHM_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = appendOperationString(scientificCalculatorDataEntity, "ln")
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = appendOperationString(scientificCalculatorDataEntity, "ln"),
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = appendOperationString(scientificCalculatorDataEntity, "ln"),
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates exponent raised to the power of number in mainString field.
+     * History of operation appends to historyString field.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorSecondOperandReadState with operation saved in historyString and calculation result in mainString field
+     * if calculation completed successfully
+     * ScientificCalculatorErrorState if calculation completed with error
+     */
     override fun calculateExponent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        EXPONENT_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = appendOperationString(scientificCalculatorDataEntity, "powe")
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = appendOperationString(scientificCalculatorDataEntity, "powe"),
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = appendOperationString(scientificCalculatorDataEntity, "powe"),
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
@@ -442,5 +504,35 @@ class ScientificCalculatorMathOperationState(
 
     override fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         TODO("Not yet implemented")
+    }
+
+    private fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
+        var prevState: ScientificCalculatorBaseState = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState!!
+        var currentOperand = scientificCalculatorBaseState.scientificCalculatorDataEntity.mainString
+
+        while (!prevState.equals(null)) {
+            val prevOperand = prevState.scientificCalculatorDataEntity.operand
+            currentOperand = when(prevState.scientificCalculatorDataEntity.scientificOperationType) {
+                ScientificOperationType.PLUS -> prevOperand.add(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MINUS -> prevOperand.subtract(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MULTIPLY -> prevOperand.multiply(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.DIVIDE -> prevOperand.divide(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MODULUS -> prevOperand.modulus(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.ROOT_OF -> prevOperand.rootOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.POWER_OF -> prevOperand.powerOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.NO_OPERATION -> currentOperand
+            }
+            prevState = prevState.scientificCalculatorDataEntity.prevState!!
+        }
+        return currentOperand
+    }
+
+    private fun appendOperationString(
+        scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
+        operationString: String
+    ): String {
+        return scientificCalculatorDataEntity.historyString +
+                "$operationString(" +
+                "${scientificCalculatorDataEntity.mainString})"
     }
 }
