@@ -368,12 +368,62 @@ class ScientificCalculatorMathOperationState(
         }
     }
 
+    /**
+     * Changes current state to ScientificCalculatorFirstOperandReadState while current
+     * state recorded to prevState field of new state. mainString field of calculator data set
+     * to "0", '(' is appended to historyString field.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorFirstOperandReadState with updated calculator data
+     */
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = "${scientificCalculatorDataEntity.historyString}${HISTORY_STRING_SPACE_LETTER}("
+
+        return ScientificCalculatorFirstOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = "0",
+                historyString = historyString,
+                prevState = this
+            )
+        )
     }
 
+    /**
+     * If bracket was not opened before, then do nothing. Otherwise changes state, depending on state
+     * that was before opening bracket(contains in prevState field of calculator data). Execute
+     * math operation between number in operand field and mainString field of calculator data.
+     * History of operation recorded in historyString field. prevState field of calculator data
+     * of state preceded to opening bracket recorded to calculator data of newly created state.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return this - if bracket was not opened,
+     * otherwise - ScientificCalculatorFirstOperandReadState or
+     * ScientificCalculatorSecondOperandReadState
+     * (depending on state preceded bracket opening)with updated calculator data
+     */
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return if (scientificCalculatorDataEntity.prevState == null) this
+        else {
+            val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
+                scientificCalculatorDataEntity.historyString +
+                        "${scientificCalculatorDataEntity.mainString.calcFormat(
+                            scientificCalculatorDataEntity.isScientificNotation
+                        )})"
+            else "${scientificCalculatorDataEntity.historyString})"
+            val returnData = scientificCalculatorDataEntity.prevState.scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+                historyString = historyString,
+                isScientificNotation = scientificCalculatorDataEntity.isScientificNotation
+            )
+            when(scientificCalculatorDataEntity.prevState){
+                is ScientificCalculatorMathOperationState -> ScientificCalculatorSecondOperandReadState(returnData)
+                is ScientificCalculatorSecondOperandInputState -> ScientificCalculatorSecondOperandReadState(returnData)
+                is ScientificCalculatorSecondOperandReadState -> ScientificCalculatorSecondOperandReadState(returnData)
+                is ScientificCalculatorSecondOperandPowerNumberInputState -> ScientificCalculatorSecondOperandReadState(returnData)
+                else -> ScientificCalculatorFirstOperandReadState(returnData)
+            }
+        }
     }
 
     override fun integerOfNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
