@@ -402,16 +402,22 @@ class ScientificCalculatorMathOperationState(
     override fun closeBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return if (scientificCalculatorDataEntity.prevState == null) this
         else {
-            val historyString = if (scientificCalculatorDataEntity.historyString.substringAfterLast("(", "").isEmpty())
-                scientificCalculatorDataEntity.historyString +
-                        "${scientificCalculatorDataEntity.mainString.calcFormat(
-                            scientificCalculatorDataEntity.isScientificNotation
-                        )})"
-            else "${scientificCalculatorDataEntity.historyString})"
+            val historyString = scientificCalculatorDataEntity.historyString +
+                    HISTORY_STRING_SPACE_LETTER +
+                    "${scientificCalculatorDataEntity.operand})"
+            val result = when(scientificCalculatorDataEntity.scientificOperationType) {
+                ScientificOperationType.PLUS -> scientificCalculatorDataEntity.mainString.add(scientificCalculatorDataEntity.operand,scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MINUS -> scientificCalculatorDataEntity.mainString.subtract(scientificCalculatorDataEntity.operand,scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MULTIPLY -> scientificCalculatorDataEntity.mainString.multiply(scientificCalculatorDataEntity.operand,scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.DIVIDE -> scientificCalculatorDataEntity.mainString.divide(scientificCalculatorDataEntity.operand,scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.MODULUS -> scientificCalculatorDataEntity.mainString.modulus(scientificCalculatorDataEntity.operand,scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.POWER_OF -> scientificCalculatorDataEntity.mainString.powerOfNumber(scientificCalculatorDataEntity.operand,scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.ROOT_OF -> scientificCalculatorDataEntity.mainString.rootOfNumber(scientificCalculatorDataEntity.operand,scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.NO_OPERATION -> scientificCalculatorDataEntity.mainString
+            }
+
             val returnData = scientificCalculatorDataEntity.prevState.scientificCalculatorDataEntity.copy(
-                mainString = scientificCalculatorDataEntity.mainString.calcFormat(
-                    scientificCalculatorDataEntity.isScientificNotation
-                ),
+                mainString = result,
                 memoryNumber = scientificCalculatorDataEntity.memoryNumber,
                 historyString = historyString,
                 isScientificNotation = scientificCalculatorDataEntity.isScientificNotation
