@@ -1609,6 +1609,11 @@ class ScientificCalculatorFirstOperandReadState(
                 prevStateOpeningBrackets
     }
 
+    /**
+     * Calculates result of consecutive math operations with numbers, placed in all states variables and returns it.
+     * @param scientificCalculatorBaseState - calculator state, that contains numbers and operation types
+     * @return String with result number
+     */
     private fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
         var prevState: ScientificCalculatorBaseState = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState!!
         var currentOperand = scientificCalculatorBaseState.scientificCalculatorDataEntity.mainString

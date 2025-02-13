@@ -1,6 +1,9 @@
 package ru.profitsw2000.data.statemachine.data.scientific
 
+import ru.profitsw2000.data.constants.ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.ARC_TANGENT_FUNCTION_CODE
+import ru.profitsw2000.data.constants.COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
 import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
@@ -11,15 +14,19 @@ import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_TANGENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_TANGENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
+import ru.profitsw2000.data.constants.LOGARITHM_BASE_10_FUNCTION_CODE
 import ru.profitsw2000.data.constants.NATURAL_LOGARITHM_FUNCTION_CODE
 import ru.profitsw2000.data.constants.OVERFLOW_ERROR_CODE
 import ru.profitsw2000.data.constants.RADIANS_ANGLE_CODE
 import ru.profitsw2000.data.constants.SCIENTIFIC_CALCULATOR_MAIN_STRING_MAX_DIGIT_NUMBER
 import ru.profitsw2000.data.constants.SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.TANGENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.UNKNOWN_ERROR_CODE
 import ru.profitsw2000.data.entity.ScientificCalculatorDataEntity
 import ru.profitsw2000.data.entity.ScientificOperationType
@@ -884,18 +891,96 @@ class ScientificCalculatorMathOperationState(
         }
     }
 
+    /**
+     * Calculate cosine of number in mainString field. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data.
+     */
     override fun cosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "cosd"
+            RADIANS_ANGLE_CODE -> "cosr"
+            GRADS_ANGLE_CODE -> "cosg"
+            else -> "cosd"
+        }
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            operationString
+        )
+
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.trigonometricFunction(
+                    COSINE_FUNCTION_CODE,
+                    angleUnitCode,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Calculate arccosine of number in mainString field. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads. Return ScientificCalculatorSecondOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun arcCosine(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "acosd"
+            RADIANS_ANGLE_CODE -> "acosr"
+            GRADS_ANGLE_CODE -> "acosg"
+            else -> "acosd"
+        }
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            operationString
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .inverseTrigonometricFunction(
+                            ARC_COSINE_FUNCTION_CODE,
+                            angleUnitCode,
+                            scientificCalculatorDataEntity.isScientificNotation
+                        ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun mathOperation(
@@ -906,60 +991,391 @@ class ScientificCalculatorMathOperationState(
         TODO("Not yet implemented")
     }
 
+    /**
+     * Placed PI number to mainString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun piNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = piNumber(
+                    scientificCalculatorDataEntity.isScientificNotation
+                )
+            )
+        )
     }
 
+    /**
+     * Placed double PI number to mainString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun doublePiNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = doublePiNumber(scientificCalculatorDataEntity.isScientificNotation)
+            )
+        )
     }
 
+    /**
+     * Calculates hyperbolic tangent of number in mainString field of calculator data. Operation recorded to
+     * historyString of calculator data. Return ScientificCalculatorSecondOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if operation completed
+     * successfully.
+     */
     override fun hyperbolicTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "tanh"
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_TANGENT_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates hyperbolic arctangent of number in the mainString field of calculator data. Operation recorded to
+     * historyString of calculator data. Return ScientificCalculatorSecondOperandReadState
+     * or ScientificCalculatorErrorState, depending on entered to mainString number.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if modulus of a number
+     * of entered to mainString number is less than 1
+     * ScientificCalculatorErrorState with corresponding error code otherwise.
+     */
     override fun hyperbolicArcTangent(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "atanh"
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_ARC_TANGENT_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculate tangent of number in mainString field. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads. Return ScientificCalculatorSecondOperandReadState
+     * or ScientificCalculatorErrorState, depending on entered number.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if
+     * entered number is not multiple to PI/2 or to 3*PI/2
+     * ScientificCalculatorErrorState with corresponding error code in calculator data if otherwise.
+     */
     override fun tangent(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "tand"
+            RADIANS_ANGLE_CODE -> "tanr"
+            GRADS_ANGLE_CODE -> "tang"
+            else -> "tand"
+        }
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            operationString
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .trigonometricFunction(
+                            TANGENT_FUNCTION_CODE,
+                            angleUnitCode,
+                            scientificCalculatorDataEntity.isScientificNotation
+                        ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception){
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates arctangent of number in mainString field. Operation recorded to historyString
+     * field of calculator data. Result of operation depends on angleUnitCode parameter -
+     * it contains code of applied angle units and defines whether number is in degrees,
+     * radians or grads.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @param angleUnitCode - contains code of angle units(can be degrees, radians or grads)
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun arcTangent(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         angleUnitCode: Int
     ): CalculatorState {
-        TODO("Not yet implemented")
+        val operationString = when(angleUnitCode) {
+            DEGREES_ANGLE_CODE -> "atand"
+            RADIANS_ANGLE_CODE -> "atanr"
+            GRADS_ANGLE_CODE -> "atang"
+            else -> "atand"
+        }
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            operationString
+        )
+
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString
+                    .inverseTrigonometricFunction(
+                        ARC_TANGENT_FUNCTION_CODE,
+                        angleUnitCode,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Calculates number in mainString field of calculator data, to the power of 3. Operation
+     * recorded to historyString of calculator data. Return ScientificCalculatorSecondOperandReadState
+     * or ScientificCalculatorErrorState if number is too big and overflow occurred.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState if error occurred with corresponding error code in calculator data.
+     */
     override fun cubeNumber(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "cube"
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .powerOfNumber(
+                            "3",
+                            scientificCalculatorDataEntity.isScientificNotation
+                        ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates cube root of number in mainString field and write result number back to mainString.
+     * Completed operation writes to historyString, current state not changed.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun cubeRoot(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "cuberoot"
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString
+                        .rootOfNumber(
+                            "3",
+                            scientificCalculatorDataEntity.isScientificNotation
+                        ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Changes the number display format of number in mainString field of calculator data
+     * from conventional to scientific notation and backward. Return ScientificCalculatorSecondOperandReadState.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun fixedToExponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val isScientificNotation = !(scientificCalculatorDataEntity.isScientificNotation)
+
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.formatStringNumber(isScientificNotation),
+                isScientificNotation = isScientificNotation
+            )
+        )
     }
 
+    /**
+     * Do nothing
+     **/
     override fun exponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        return this
     }
 
+    /**
+     * Calculates logarithm base 10 of the number in mainString field of calculator data.
+     * Operation recorded to historyString field of calculator data. Return
+     * ScientificCalculatorSecondOperandReadState or ScientificCalculatorErrorState, depending on
+     * number in mainString field.
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if
+     * number in mainString is more than zero
+     * ScientificCalculatorErrorState with appropriate code in errorCode field if otherwise
+     */
     override fun logarithmBaseTen(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "log"
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        LOGARITHM_BASE_10_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates 10 to the power of number in mainString field of calculator data. Operation
+     * recorded to historyString field of calculator data. Changes calculator state to ScientificCalculatorSecondOperandReadState
+     * or ScientificCalculatorErrorState if number is too big and overflow occurred.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if operation completed
+     * successfully;
+     * ScientificCalculatorErrorState with corresponding error code in calculator data if error occurred.
+     */
     override fun tenPowerX(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "powten"
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = "10".powerOfNumber(
+                        scientificCalculatorDataEntity.mainString,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = OVERFLOW_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates result of consecutive math operations with numbers, placed in all states variables and returns it.
+     * @param scientificCalculatorBaseState - calculator state, that contains numbers and operation types
+     * @return String with result number
+     */
     private fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
         var prevState: ScientificCalculatorBaseState = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState!!
         var currentOperand = scientificCalculatorBaseState.scientificCalculatorDataEntity.mainString
@@ -981,6 +1397,12 @@ class ScientificCalculatorMathOperationState(
         return currentOperand
     }
 
+    /**
+     * Appends designator of operation with number in mainString as parameter of operation
+     * to historyString field of calculator data.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @param operationString - string with designator of commited math operation
+     */
     private fun appendOperationString(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         operationString: String
