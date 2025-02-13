@@ -2,12 +2,16 @@ package ru.profitsw2000.data.statemachine.data.scientific
 
 import ru.profitsw2000.data.constants.ARC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DEGREES_ANGLE_CODE
+import ru.profitsw2000.data.constants.DEG_FUNCTION_CODE
 import ru.profitsw2000.data.constants.DIVIDE_ON_ZERO_ERROR_CODE
+import ru.profitsw2000.data.constants.DMS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.EXPONENT_FUNCTION_CODE
 import ru.profitsw2000.data.constants.FRACTIONAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.GRADS_ANGLE_CODE
 import ru.profitsw2000.data.constants.HISTORY_STRING_SPACE_LETTER
+import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_ARC_SINUS_FUNCTION_CODE
+import ru.profitsw2000.data.constants.HYPERBOLIC_COSINE_FUNCTION_CODE
 import ru.profitsw2000.data.constants.HYPERBOLIC_SINUS_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INTEGRAL_PART_FUNCTION_CODE
 import ru.profitsw2000.data.constants.INVALID_INPUT_ERROR_CODE
@@ -741,20 +745,143 @@ class ScientificCalculatorMathOperationState(
         }
     }
 
+    /**
+     * Converts number in mainString field of calculator data, from degrees unit
+     * with decimal fractional part to degrees unit with fractional part presented in minutes.
+     * Operation recorded to historyString of calculator data.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun decimalToMinutes(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "dms"
+        )
+
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(
+                    DMS_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Converts number in mainString field of calculator data, from degrees
+     * with fractional part presented in minutes to degrees with decimal fractional part.
+     * Operation recorded to historyString of calculator data.
+     * @param scientificCalculatorDataEntity - contains current calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data
+     */
     override fun minutesToDecimal(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "deg"
+        )
+
+        return ScientificCalculatorSecondOperandReadState(
+            scientificCalculatorDataEntity.copy(
+                mainString = scientificCalculatorDataEntity.mainString.decimalMinutes(
+                    DEG_FUNCTION_CODE,
+                    scientificCalculatorDataEntity.isScientificNotation
+                ),
+                historyString = historyString
+            )
+        )
     }
 
+    /**
+     * Calculates hyperbolic cosine of number in the mainString field of calculator data. Operation recorded to
+     * historyString of calculator data. Returns ScientificCalculatorSecondOperandReadState or
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState with corresponding error code.
+     */
     override fun hyperbolicCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "cosh"
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_COSINE_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                ScientificCalculatorDataEntity(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        }
     }
 
+    /**
+     * Calculates hyperbolic arccosine of entered to the mainString number of calculator data. Operation recorded to
+     * historyString of calculator data. Return ScientificCalculatorSecondOperandReadState
+     * or ScientificCalculatorErrorState, depending on result.
+     * @param scientificCalculatorDataEntity - contains calculator data
+     * @return ScientificCalculatorSecondOperandReadState with updated calculator data if operation completed
+     * successfully
+     * ScientificCalculatorErrorState with corresponding error code if error occurred.
+     */
     override fun hyperbolicArcCosine(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        TODO("Not yet implemented")
+        val historyString = appendOperationString(
+            scientificCalculatorDataEntity,
+            "acosh"
+        )
+
+        return try {
+            ScientificCalculatorSecondOperandReadState(
+                scientificCalculatorDataEntity.copy(
+                    mainString = scientificCalculatorDataEntity.mainString.mathFunction(
+                        HYPERBOLIC_ARC_COSINE_FUNCTION_CODE,
+                        scientificCalculatorDataEntity.isScientificNotation
+                    ),
+                    historyString = historyString
+                )
+            )
+        } catch (arithmeticException: ArithmeticException) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = INVALID_INPUT_ERROR_CODE
+                )
+            )
+        } catch (exception: Exception) {
+            ScientificCalculatorErrorState(
+                scientificCalculatorDataEntity.copy(
+                    historyString = historyString,
+                    errorCode = UNKNOWN_ERROR_CODE
+                )
+            )
+        }
     }
 
     override fun cosine(
