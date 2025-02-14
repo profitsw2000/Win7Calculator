@@ -1376,7 +1376,7 @@ class ScientificCalculatorMathOperationState(
      * @param scientificCalculatorBaseState - calculator state, that contains numbers and operation types
      * @return String with result number
      */
-    private fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
+    fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
         var prevState: ScientificCalculatorBaseState = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState!!
         var currentOperand = scientificCalculatorBaseState.scientificCalculatorDataEntity.mainString
 
@@ -1403,7 +1403,7 @@ class ScientificCalculatorMathOperationState(
      * @param scientificCalculatorDataEntity - contains calculator data
      * @param operationString - string with designator of commited math operation
      */
-    private fun appendOperationString(
+    fun appendOperationString(
         scientificCalculatorDataEntity: ScientificCalculatorDataEntity,
         operationString: String
     ): String {
