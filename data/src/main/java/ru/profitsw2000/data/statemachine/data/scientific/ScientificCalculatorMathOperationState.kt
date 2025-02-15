@@ -70,7 +70,7 @@ class ScientificCalculatorMathOperationState(
 
         return ScientificCalculatorSecondOperandReadState(
             scientificCalculatorDataEntity.copy(
-                mainString = if (memoryNumber != null) memoryNumber
+                mainString = if (memoryNumber != null) memoryNumber.calcFormat(scientificCalculatorDataEntity.isScientificNotation)
                 else "0"
             )
         )
@@ -84,7 +84,8 @@ class ScientificCalculatorMathOperationState(
     override fun saveToMemory(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
-                memoryNumber = scientificCalculatorDataEntity.mainString
+                memoryNumber = if (scientificCalculatorDataEntity.mainString == "0") null
+                else scientificCalculatorDataEntity.mainString
             )
         )
     }
@@ -99,7 +100,10 @@ class ScientificCalculatorMathOperationState(
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
                 memoryNumber = if (memoryNumber != null) memoryNumber.add(scientificCalculatorDataEntity.mainString)
-                else scientificCalculatorDataEntity.mainString
+                else {
+                    if (scientificCalculatorDataEntity.mainString == "0") memoryNumber
+                    else "0".add(scientificCalculatorDataEntity.mainString)
+                }
             )
         )
     }
@@ -113,8 +117,11 @@ class ScientificCalculatorMathOperationState(
         val memoryNumber = scientificCalculatorDataEntity.memoryNumber
         return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
-                memoryNumber = if (memoryNumber != null) memoryNumber.subtract(scientificCalculatorDataEntity.mainString)
-                else "0".subtract(scientificCalculatorDataEntity.mainString)
+                memoryNumber = if (memoryNumber != null) memoryNumber.subtract(scientificCalculatorDataEntity.mainString, scientificCalculatorDataEntity.isScientificNotation)
+                else {
+                    if (scientificCalculatorDataEntity.mainString == "0") memoryNumber
+                    else "0".subtract(scientificCalculatorDataEntity.mainString)
+                }
             )
         )
     }
@@ -125,7 +132,7 @@ class ScientificCalculatorMathOperationState(
      * @return ScientificCalculatorMathOperationState with updated calculator data
      */
     override fun clearEntered(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
-        return ScientificCalculatorMathOperationState(
+        return ScientificCalculatorSecondOperandInputState(
             scientificCalculatorDataEntity.copy(
                 mainString = "0"
             )
