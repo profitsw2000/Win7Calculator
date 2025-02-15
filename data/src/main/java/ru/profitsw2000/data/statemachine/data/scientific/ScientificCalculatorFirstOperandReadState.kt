@@ -1614,11 +1614,11 @@ class ScientificCalculatorFirstOperandReadState(
      * @param scientificCalculatorBaseState - calculator state, that contains numbers and operation types
      * @return String with result number
      */
-    private fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
-        var prevState: ScientificCalculatorBaseState = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState!!
+    fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
+        var prevState: ScientificCalculatorBaseState? = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState
         var currentOperand = scientificCalculatorBaseState.scientificCalculatorDataEntity.mainString
 
-        while (!prevState.equals(null)) {
+        while (prevState != null) {
             val prevOperand = prevState.scientificCalculatorDataEntity.operand
             currentOperand = when(prevState.scientificCalculatorDataEntity.scientificOperationType) {
                 ScientificOperationType.PLUS -> prevOperand.add(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
@@ -1630,7 +1630,7 @@ class ScientificCalculatorFirstOperandReadState(
                 ScientificOperationType.POWER_OF -> prevOperand.powerOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
                 ScientificOperationType.NO_OPERATION -> currentOperand
             }
-            prevState = prevState.scientificCalculatorDataEntity.prevState!!
+            prevState = prevState.scientificCalculatorDataEntity.prevState
         }
         return currentOperand
     }

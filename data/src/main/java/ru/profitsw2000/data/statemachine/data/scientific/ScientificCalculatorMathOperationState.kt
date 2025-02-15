@@ -1377,22 +1377,23 @@ class ScientificCalculatorMathOperationState(
      * @return String with result number
      */
     fun getAllStatesCalculationResult(scientificCalculatorBaseState: ScientificCalculatorBaseState): String {
-        var prevState: ScientificCalculatorBaseState = scientificCalculatorBaseState.scientificCalculatorDataEntity.prevState!!
+        var prevState: ScientificCalculatorBaseState? = scientificCalculatorBaseState
         var currentOperand = scientificCalculatorBaseState.scientificCalculatorDataEntity.mainString
+        val isScientificNotation = scientificCalculatorBaseState.scientificCalculatorDataEntity.isScientificNotation
 
-        while (!prevState.equals(null)) {
+        while (prevState !=null) {
             val prevOperand = prevState.scientificCalculatorDataEntity.operand
             currentOperand = when(prevState.scientificCalculatorDataEntity.scientificOperationType) {
-                ScientificOperationType.PLUS -> prevOperand.add(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.MINUS -> prevOperand.subtract(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.MULTIPLY -> prevOperand.multiply(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.DIVIDE -> prevOperand.divide(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.MODULUS -> prevOperand.modulus(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.ROOT_OF -> prevOperand.rootOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
-                ScientificOperationType.POWER_OF -> prevOperand.powerOfNumber(currentOperand, prevState.scientificCalculatorDataEntity.isScientificNotation)
+                ScientificOperationType.PLUS -> prevOperand.add(currentOperand, isScientificNotation)
+                ScientificOperationType.MINUS -> prevOperand.subtract(currentOperand, isScientificNotation)
+                ScientificOperationType.MULTIPLY -> prevOperand.multiply(currentOperand, isScientificNotation)
+                ScientificOperationType.DIVIDE -> prevOperand.divide(currentOperand, isScientificNotation)
+                ScientificOperationType.MODULUS -> prevOperand.modulus(currentOperand, isScientificNotation)
+                ScientificOperationType.ROOT_OF -> prevOperand.rootOfNumber(currentOperand, isScientificNotation)
+                ScientificOperationType.POWER_OF -> prevOperand.powerOfNumber(currentOperand, isScientificNotation)
                 ScientificOperationType.NO_OPERATION -> currentOperand
             }
-            prevState = prevState.scientificCalculatorDataEntity.prevState!!
+            prevState = prevState.scientificCalculatorDataEntity.prevState
         }
         return currentOperand
     }

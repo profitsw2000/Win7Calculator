@@ -95,16 +95,17 @@ class ScientificCalculatorMathOperationStateTest {
 
     @Test
     fun allStatesCalculationTest(){
-        val negOperation = "negate"
-        val sqrtOperation = "sqrt"
-        val reciprocOperation = "reciproc"
 
+        val nullState = ScientificCalculatorInitialState(
+            ScientificCalculatorDataEntity()
+        )
         val firstState = ScientificCalculatorMathOperationState(
             ScientificCalculatorDataEntity(
                 mainString = "6",
                 operand = "6",
-                historyString = "6$HISTORY_STRING_SPACE_LETTER+",
-                scientificOperationType = ScientificOperationType.PLUS
+                historyString = "(6$HISTORY_STRING_SPACE_LETTER+",
+                scientificOperationType = ScientificOperationType.PLUS,
+                prevState = nullState
             )
         )
         val secondState = ScientificCalculatorMathOperationState(
@@ -139,6 +140,65 @@ class ScientificCalculatorMathOperationStateTest {
                 scientificOperationType = ScientificOperationType.MINUS,
                 prevState = thirdState
             )
+        )
+        val fifthState = ScientificCalculatorMathOperationState(
+            ScientificCalculatorDataEntity(
+                mainString = "14",
+                historyString = "6$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER" +
+                        "(5$HISTORY_STRING_SPACE_LETTER*" +
+                        "(4$HISTORY_STRING_SPACE_LETTER/" +
+                        "(22$HISTORY_STRING_SPACE_LETTER-" +
+                        "(14${HISTORY_STRING_SPACE_LETTER}mod",
+                operand = "14",
+                scientificOperationType = ScientificOperationType.MODULUS,
+                prevState = fourthState
+            )
+        )
+        val sixthState = ScientificCalculatorMathOperationState(
+            ScientificCalculatorDataEntity(
+                mainString = "2",
+                historyString = "6$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER" +
+                        "(5$HISTORY_STRING_SPACE_LETTER*" +
+                        "(4$HISTORY_STRING_SPACE_LETTER/" +
+                        "(22$HISTORY_STRING_SPACE_LETTER-" +
+                        "(14${HISTORY_STRING_SPACE_LETTER}mod" +
+                        "(2${HISTORY_STRING_SPACE_LETTER}root",
+                operand = "2",
+                scientificOperationType = ScientificOperationType.ROOT_OF,
+                prevState = fifthState
+            )
+        )
+        val seventhState = ScientificCalculatorMathOperationState(
+            ScientificCalculatorDataEntity(
+                mainString = "3",
+                historyString = "6$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER" +
+                        "(5$HISTORY_STRING_SPACE_LETTER*" +
+                        "(4$HISTORY_STRING_SPACE_LETTER/" +
+                        "(22$HISTORY_STRING_SPACE_LETTER-" +
+                        "(14${HISTORY_STRING_SPACE_LETTER}mod" +
+                        "(2${HISTORY_STRING_SPACE_LETTER}root" +
+                        "(3${HISTORY_STRING_SPACE_LETTER}^",
+                operand = "3",
+                scientificOperationType = ScientificOperationType.POWER_OF,
+                prevState = sixthState
+            )
+        )
+
+        val resultString = "6,9372924057894815643192036113543"
+        val resultString1 = "11"
+        val resultString2 = "6,9090909090909090909090909090909"
+
+        assertEquals(
+            resultString,
+            seventhState.getAllStatesCalculationResult(seventhState)
+        )
+        assertEquals(
+            resultString1,
+            thirdState.getAllStatesCalculationResult(thirdState)
+        )
+        assertEquals(
+            resultString2,
+            fifthState.getAllStatesCalculationResult(fifthState)
         )
     }
 /*

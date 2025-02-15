@@ -174,7 +174,7 @@ interface CalculatorState {
         return if (isScientificNotation)
             this.calculateSubtract(subtrahend).toScientificNotationString().toCalculatorFormat()
         else
-            this.add(subtrahend)
+            this.subtract(subtrahend)
     }
 
     /** Calculates multiplication of @this and multiplicand and return result in BigDecimal type.
@@ -300,7 +300,7 @@ interface CalculatorState {
     fun String.calculateModulus(divisor: String): BigDecimal {
         val mathContext = MathContext(scale)
         val dividendBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
-        val divisorBigDecimal = BigDecimalMath.toBigDecimal(this.toStandardFormat())
+        val divisorBigDecimal = BigDecimalMath.toBigDecimal(divisor.toStandardFormat())
         val result = dividendBigDecimal.remainder(divisorBigDecimal, mathContext).stripTrailingZeros()
 
         checkForOverflow(result)
