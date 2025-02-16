@@ -468,50 +468,55 @@ class ScientificCalculatorMathOperationStateTest {
             )
         )
     }
-/*
+
     @Test
     fun changeSignTest() {
         val zeroInputData = ScientificCalculatorDataEntity(
             mainString = "0",
+            historyString = "0$HISTORY_STRING_SPACE_LETTER*",
+            scientificOperationType = ScientificOperationType.MULTIPLY
         )
-        val zeroInputState = ScientificCalculatorFirstOperandReadState(zeroInputData)
+        val zeroInputState = ScientificCalculatorMathOperationState(zeroInputData)
         val zeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "0",
-            historyString = "negate(0)"
+            historyString = "0$HISTORY_STRING_SPACE_LETTER*${HISTORY_STRING_SPACE_LETTER}negate(0)",
+            scientificOperationType = ScientificOperationType.MULTIPLY
         )
-        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val zeroInputResultState = ScientificCalculatorSecondOperandReadState(zeroInputResultData)
         val nonZeroInputData = ScientificCalculatorDataEntity(
             mainString = "6,427",
-            historyString = "sqrt(5)"
+            historyString = "6,427$HISTORY_STRING_SPACE_LETTER+",
+            scientificOperationType = ScientificOperationType.PLUS
         )
-        val nonZeroInputState = ScientificCalculatorFirstOperandReadState(nonZeroInputData)
+        val nonZeroInputState = ScientificCalculatorMathOperationState(nonZeroInputData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "-6,427",
-            historyString = "negate(sqrt(5))"
+            historyString = "6,427$HISTORY_STRING_SPACE_LETTER+${HISTORY_STRING_SPACE_LETTER}negate(6,427)",
+            scientificOperationType = ScientificOperationType.PLUS
         )
-        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val nonZeroInputResultState = ScientificCalculatorSecondOperandReadState(nonZeroInputResultData)
         val nonZeroNegativeInputData = ScientificCalculatorDataEntity(
             mainString = "-5,68",
-            historyString = "43$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(reciproc(reciproc(6))"
+            historyString = "43$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(reciproc(reciproc(6))$HISTORY_STRING_SPACE_LETTER/"
         )
-        val nonZeroNegativeInputState = ScientificCalculatorFirstOperandReadState(nonZeroInputData)
+        val nonZeroNegativeInputState = ScientificCalculatorMathOperationState(nonZeroInputData)
         val nonZeroNegativeInputResultData = ScientificCalculatorDataEntity(
             mainString = "5,68",
-            historyString = "43$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(negate(reciproc(reciproc(6)))"
+            historyString = "43$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(reciproc(reciproc(6))$HISTORY_STRING_SPACE_LETTER/${HISTORY_STRING_SPACE_LETTER}negate(-5,68)"
         )
-        val nonZeroNegativeInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroNegativeInputResultData)
+        val nonZeroNegativeInputResultState = ScientificCalculatorSecondOperandReadState(nonZeroNegativeInputResultData)
 
         assertTrue(ReflectionEquals(zeroInputResultState).matches(
-            zeroInputState.negateOperand(zeroInputData)
-        )
+                zeroInputState.negateOperand(zeroInputData)
+            )
         )
         assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
-            nonZeroInputState.negateOperand(nonZeroInputData)
-        )
+                nonZeroInputState.negateOperand(nonZeroInputData)
+            )
         )
         assertTrue(ReflectionEquals(nonZeroNegativeInputResultState).matches(
-            nonZeroNegativeInputState.negateOperand(nonZeroNegativeInputData)
-        )
+                nonZeroNegativeInputState.negateOperand(nonZeroNegativeInputData)
+            )
         )
     }
 
@@ -519,52 +524,58 @@ class ScientificCalculatorMathOperationStateTest {
     fun squareRootTest() {
         val zeroInputData = ScientificCalculatorDataEntity(
             mainString = "0",
-            historyString = "sqrt(0)"
+            historyString = "0${HISTORY_STRING_SPACE_LETTER}mod",
+            scientificOperationType = ScientificOperationType.MODULUS
         )
-        val zeroInputState = ScientificCalculatorFirstOperandReadState(zeroInputData)
+        val zeroInputState = ScientificCalculatorMathOperationState(zeroInputData)
         val zeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "0",
-            historyString = "sqrt(sqrt(0))"
+            historyString = "0${HISTORY_STRING_SPACE_LETTER}mod${HISTORY_STRING_SPACE_LETTER}sqrt(0)",
+            scientificOperationType = ScientificOperationType.MODULUS
         )
-        val zeroInputResultState = ScientificCalculatorFirstOperandReadState(zeroInputResultData)
+        val zeroInputResultState = ScientificCalculatorSecondOperandReadState(zeroInputResultData)
         val nonZeroInputData = ScientificCalculatorDataEntity(
             mainString = "9",
-            historyString = "sqrt(81)"
+            historyString = "9${HISTORY_STRING_SPACE_LETTER}/",
+            scientificOperationType = ScientificOperationType.DIVIDE
         )
-        val nonZeroInputState = ScientificCalculatorFirstOperandReadState(nonZeroInputData)
+        val nonZeroInputState = ScientificCalculatorMathOperationState(nonZeroInputData)
         val nonZeroInputResultData = ScientificCalculatorDataEntity(
             mainString = "3",
-            historyString = "sqrt(sqrt(81))"
+            historyString = "9${HISTORY_STRING_SPACE_LETTER}/${HISTORY_STRING_SPACE_LETTER}sqrt(9)",
+            scientificOperationType = ScientificOperationType.DIVIDE
         )
-        val nonZeroInputResultState = ScientificCalculatorFirstOperandReadState(nonZeroInputResultData)
+        val nonZeroInputResultState = ScientificCalculatorSecondOperandReadState(nonZeroInputResultData)
         val nonZeroNegativeInputData = ScientificCalculatorDataEntity(
             mainString = "-5,68e+0",
-            historyString = "43$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(negate(reciproc(reciproc(6)))",
+            historyString = "-5,68e+0$HISTORY_STRING_SPACE_LETTER-",
+            scientificOperationType = ScientificOperationType.MINUS,
             isScientificNotation = true
         )
-        val nonZeroNegativeInputState = ScientificCalculatorFirstOperandReadState(nonZeroNegativeInputData)
+        val nonZeroNegativeInputState = ScientificCalculatorMathOperationState(nonZeroNegativeInputData)
         val nonZeroNegativeInputResultData = ScientificCalculatorDataEntity(
             mainString = "-5,68e+0",
-            historyString = "43$HISTORY_STRING_SPACE_LETTER+$HISTORY_STRING_SPACE_LETTER(sqrt(negate(reciproc(reciproc(6))))",
+            historyString = "-5,68e+0$HISTORY_STRING_SPACE_LETTER-${HISTORY_STRING_SPACE_LETTER}sqrt(-5,68e+0)",
+            scientificOperationType = ScientificOperationType.MINUS,
             errorCode = INVALID_INPUT_ERROR_CODE,
             isScientificNotation = true
         )
         val nonZeroNegativeInputResultState = ScientificCalculatorErrorState(nonZeroNegativeInputResultData)
 
         assertTrue(ReflectionEquals(zeroInputResultState).matches(
-            zeroInputState.calculateSquareRoot(zeroInputData)
-        )
+                zeroInputState.calculateSquareRoot(zeroInputData)
+            )
         )
         assertTrue(ReflectionEquals(nonZeroInputResultState).matches(
-            nonZeroInputState.calculateSquareRoot(nonZeroInputData)
-        )
+                nonZeroInputState.calculateSquareRoot(nonZeroInputData)
+            )
         )
         assertTrue(ReflectionEquals(nonZeroNegativeInputResultState).matches(
-            nonZeroNegativeInputState.calculateSquareRoot(nonZeroNegativeInputData)
-        )
+                nonZeroNegativeInputState.calculateSquareRoot(nonZeroNegativeInputData)
+            )
         )
     }
-
+/*
     @Test
     fun digitInputTest() {
         val zeroData = ScientificCalculatorDataEntity(
