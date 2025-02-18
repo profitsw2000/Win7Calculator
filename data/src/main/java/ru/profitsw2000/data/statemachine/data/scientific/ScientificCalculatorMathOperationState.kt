@@ -420,9 +420,11 @@ class ScientificCalculatorMathOperationState(
         val historyString = "${scientificCalculatorDataEntity.historyString}${HISTORY_STRING_SPACE_LETTER}("
 
         return ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
-                mainString = "0",
+            ScientificCalculatorDataEntity(
+                mainString = "0".calcFormat(scientificCalculatorDataEntity.isScientificNotation),
                 historyString = historyString,
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+                isScientificNotation = scientificCalculatorDataEntity.isScientificNotation,
                 prevState = this
             )
         )

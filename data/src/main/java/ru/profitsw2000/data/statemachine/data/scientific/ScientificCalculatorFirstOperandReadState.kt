@@ -488,6 +488,8 @@ class ScientificCalculatorFirstOperandReadState(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 historyString = "$historyString(",
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+                isScientificNotation = scientificCalculatorDataEntity.isScientificNotation,
                 prevState = this
             )
         )

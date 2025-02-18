@@ -421,11 +421,13 @@ class ScientificCalculatorFirstOperandInputState(
      */
     override fun openBracket(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         return ScientificCalculatorFirstOperandReadState(
-            scientificCalculatorDataEntity.copy(
+            ScientificCalculatorDataEntity(
                 mainString = scientificCalculatorDataEntity.mainString.calcFormat(
                     scientificCalculatorDataEntity.isScientificNotation
                 ),
                 historyString = "${scientificCalculatorDataEntity.historyString}(",
+                memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+                isScientificNotation = scientificCalculatorDataEntity.isScientificNotation,
                 prevState = this
             )
         )

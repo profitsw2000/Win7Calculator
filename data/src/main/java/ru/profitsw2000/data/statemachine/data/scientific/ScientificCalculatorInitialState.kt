@@ -325,6 +325,7 @@ class ScientificCalculatorInitialState(
             ScientificCalculatorDataEntity(
                 historyString = "${scientificCalculatorDataEntity.historyString}(",
                 memoryNumber = scientificCalculatorDataEntity.memoryNumber,
+                isScientificNotation = scientificCalculatorDataEntity.isScientificNotation,
                 prevState = this
             )
         )
