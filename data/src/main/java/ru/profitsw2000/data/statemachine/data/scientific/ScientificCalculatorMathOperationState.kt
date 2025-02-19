@@ -1288,7 +1288,7 @@ class ScientificCalculatorMathOperationState(
     override fun fixedToExponentialFormat(scientificCalculatorDataEntity: ScientificCalculatorDataEntity): CalculatorState {
         val isScientificNotation = !(scientificCalculatorDataEntity.isScientificNotation)
 
-        return ScientificCalculatorSecondOperandReadState(
+        return ScientificCalculatorMathOperationState(
             scientificCalculatorDataEntity.copy(
                 mainString = scientificCalculatorDataEntity.mainString.formatStringNumber(isScientificNotation),
                 isScientificNotation = isScientificNotation
